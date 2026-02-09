@@ -862,7 +862,6 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // honeypot
     if (document.querySelector('[name="_gotcha"]').value) {
       alert('Обнаружен спам!');
       return;
@@ -897,7 +896,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       const result = await response.json();
-      console.log('FormSubmit result:', result);
 
       if (response.ok && String(result.success) === 'true') { // success как строка[web:16]
         form.reset();
@@ -905,24 +903,13 @@ document.addEventListener('DOMContentLoaded', () => {
         successMsg.querySelector('span').textContent =
           'Сообщение отправлено! Отвечу в течение 24 часов.';
 
-        // Показ: ждём отрисовку, меряем высоту + небольшой запас
-        requestAnimationFrame(() => {
-          const fullHeight = successMsg.offsetHeight + 8; // запас
-          successContainer.style.maxHeight = fullHeight + 'px';
-          successContainer.classList.add('open');
-        });
+        // ПРОСТО ДАЁМ БОЛЬШОЙ ЗАПАС ПО ВЫСОТЕ
+        successContainer.style.maxHeight = '200px'; // точно больше, чем высота сообщения
+        successContainer.classList.add('open');
 
-        // Сворачивание через 5 секунд
         setTimeout(() => {
-          requestAnimationFrame(() => {
-            const currentHeight = successMsg.offsetHeight + 8;
-            successContainer.style.maxHeight = currentHeight + 'px';
-
-            requestAnimationFrame(() => {
-              successContainer.style.maxHeight = '0px';
-              successContainer.classList.remove('open');
-            });
-          });
+          successContainer.style.maxHeight = '0px';
+          successContainer.classList.remove('open');
         }, 5000);
       } else {
         throw new Error(result.message || 'Ошибка отправки');
