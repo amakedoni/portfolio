@@ -2156,7 +2156,6 @@ footer {
   opacity: 1;
 }
 
-/* Сообщение об успехе — фиолетовая тема с плавными переходами */
 .form-success {
   display: flex;
   align-items: center;
@@ -2170,24 +2169,19 @@ footer {
   margin-top: 1.25rem;
   width: 100%;
   font-weight: 500;
-	
 
-  /* Начальное состояние: скрыто */
   opacity: 0;
-  transform: translateY(-12px);
-  max-height: 0;
-  overflow: hidden;
-
+  transform: translateY(-8px);
+  pointer-events: none;
   transition:
-    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .form-success.show {
   opacity: 1;
   transform: translateY(0);
-  /* max-height задаём из JS */
+  pointer-events: auto;
 }
 
 .form-success svg {
@@ -2201,6 +2195,7 @@ footer {
 .form-success span {
   line-height: 1.4;
 }
+
 
 @keyframes fadeIn {
   from { 
