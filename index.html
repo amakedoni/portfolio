@@ -852,11 +852,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
-    data._captcha = false; // отключаем капчу FormSubmit[web:9]
+    data._captcha = false;
     data._subject = `Новое сообщение от ${data.name}`;
     data._template = 'table';
 
-    // Визуальная индикация отправки
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalBtnContent = submitBtn.innerHTML;
     submitBtn.disabled = true;
@@ -878,15 +877,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       const result = await response.json();
-      console.log('FormSubmit result:', result);
 
-      // success часто строка "true"[web:16][web:26]
       if (response.ok && String(result.success) === 'true') {
-        // Удаляем старое сообщение, если есть
+        // Удаляем старое сообщение
         const oldSuccess = form.querySelector('.form-success');
         if (oldSuccess) oldSuccess.remove();
 
-        // Создаём новое сообщение
         const successMsg = document.createElement('div');
         successMsg.className = 'form-success';
         successMsg.innerHTML = `
@@ -899,32 +895,34 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
         form.appendChild(successMsg);
 
-        // Раскрытие (плавное появление)
+        // Появление: из 0 в scrollHeight
         successMsg.style.maxHeight = '0px';
-
         requestAnimationFrame(() => {
           const fullHeight = successMsg.scrollHeight;
           successMsg.style.maxHeight = fullHeight + 'px';
-          successMsg.classList.add('show');
+          successMsg.classList.add('show'); // только при открытии
         });
 
-        // Сворачивание (плавное исчезновение)
+        // Через 5 секунд начинаем закрывать
         setTimeout(() => {
-          // фиксируем текущую высоту перед коллапсом
-          const currentHeight = successMsg.scrollHeight;
-          successMsg.style.maxHeight = currentHeight + 'px';
+          const fullHeight = successMsg.scrollHeight;
+          successMsg.style.maxHeight = fullHeight + 'px'; // фиксируем
           // форсим reflow
           // eslint-disable-next-line no-unused-expressions
           successMsg.offsetHeight;
-
-          successMsg.classList.remove('show');
+          // закрываем только через max-height
           successMsg.style.maxHeight = '0px';
 
-          setTimeout(() => {
-            if (successMsg.parentNode === form) {
-              form.removeChild(successMsg);
+          // по завершении transition удаляем элемент
+          const onTransitionEnd = (ev) => {
+            if (ev.propertyName === 'max-height') {
+              successMsg.removeEventListener('transitionend', onTransitionEnd);
+              if (successMsg.parentNode === form) {
+                form.removeChild(successMsg);
+              }
             }
-          }, 400); // совпадает с transition в CSS
+          };
+          successMsg.addEventListener('transitionend', onTransitionEnd);
         }, 5000);
       } else {
         throw new Error(result.message || 'Ошибка отправки');
