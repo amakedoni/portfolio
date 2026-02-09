@@ -2016,3 +2016,189 @@ footer {
     0 0 0 8px var(--accent),
     0 0 20px rgba(126, 58, 242, 0.65);
 }
+
+/* === Поддержка безопасных зон для устройств с вырезом (iPhone и др.) === */
+@supports (padding: max(0px)) {
+  :root {
+    --safe-top: max(12px, env(safe-area-inset-top));
+    --safe-bottom: max(16px, env(safe-area-inset-bottom));
+    --safe-left: max(16px, env(safe-area-inset-left));
+    --safe-right: max(16px, env(safe-area-inset-right));
+  }
+  
+  body {
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bottom);
+  }
+  
+  header {
+    padding-left: var(--safe-left) !important;
+    padding-right: var(--safe-right) !important;
+  }
+  
+  .scroll-to-top {
+    bottom: calc(25px + var(--safe-bottom)) !important;
+    right: calc(25px + var(--safe-right)) !important;
+  }
+  
+  footer {
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
+    padding-bottom: calc(2rem + var(--safe-bottom));
+  }
+}
+
+/* === Улучшение тактильных целей (обязательно для мобильных) === */
+@media (hover: none) and (pointer: coarse) {
+  /* Увеличиваем зоны касания до рекомендуемых 48x48px */
+  .nav-links a,
+  .resume-toggle,
+  .theme-toggle,
+  .cta-button,
+  .contact-social a,
+  .social-links a,
+  .project-link,
+  .contact-item,
+  .skill-tag {
+    min-height: 48px !important;
+    min-width: 48px !important;
+    touch-action: manipulation;
+  }
+  
+  /* Убираем "прилипание" при касании */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Отключаем анимации наведения (они не работают на тач) */
+  .nav-links a:hover::after,
+  .skill-tag:hover::before,
+  .skill-tag:hover::after,
+  .timeline-item:hover::before,
+  .contact-item:hover,
+  .contact-item:hover .contact-icon {
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: var(--border) !important;
+  }
+  
+  /* Заменяем эффекты наведения на активные состояния */
+  .skill-tag:active,
+  .contact-item:active,
+  .project-link:active {
+    transform: scale(0.97) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+}
+
+/* === Адаптация для планшетов (768px - 1024px) === */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    width: 95%;
+    padding: 0 16px;
+  }
+  
+  .about-content {
+    gap: 3.5rem;
+  }
+  
+  .about-image {
+    height: 500px;
+  }
+  
+  .contact-container {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  
+  .timeline::before {
+    left: 10px;
+  }
+  
+  .timeline-item {
+    padding-left: 56px;
+  }
+  
+  .timeline-item::before {
+    left: 10px;
+    transform: translateX(-50%);
+  }
+}
+
+/* === Финальные штрихи для малых экранов === */
+@media (max-width: 375px) {
+  :root {
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.5rem !important;
+    line-height: 1.1;
+  }
+  
+  .section-title {
+    font-size: 1.95rem !important;
+    width: 90%;
+  }
+  
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem;
+  }
+  
+  .skill-tag {
+    padding: 0.85rem 0.75rem !important;
+    font-size: 0.95rem !important;
+    min-height: 44px;
+  }
+  
+  .contact-icon {
+    min-width: 52px !important;
+    height: 52px !important;
+  }
+  
+  .contact-social a {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 0.9rem !important;
+  }
+  
+  /* Предотвращаем горизонтальный скролл */
+  body, html, .container {
+    overflow-x: hidden !important;
+    max-width: 100vw;
+  }
+  
+  /* Гарантируем читаемость текста */
+  p, li, .contact-text p {
+    font-size: 0.98rem !important;
+    line-height: 1.65 !important;
+  }
+}
+
+/* === Оптимизация производительности на слабых устройствах === */
+@media (max-width: 768px) {
+  /* Упрощаем тяжелые анимации */
+  #hero::before,
+  .skills-unified::before,
+  .projects-unified::before,
+  .education-unified::before {
+    animation: none !important;
+    background: radial-gradient(circle, rgba(126, 58, 242, 0.03) 0%, transparent 70%);
+  }
+  
+  /* Отключаем частицы (уже скрыты, но для надежности) */
+  .particles-background {
+    display: none !important;
+  }
+  
+  /* Упрощаем тени */
+  * {
+    box-shadow: none !important;
+  }
+  .about-image,
+  .skills-unified,
+  .contact-item {
+    box-shadow: var(--shadow-sm) !important;
+  }
+}
