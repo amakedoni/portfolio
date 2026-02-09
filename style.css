@@ -2163,29 +2163,30 @@ footer {
   justify-content: center;
   gap: 0.75rem;
   background: rgba(126, 58, 242, 0.12);
-  border: 1px solid var(--accent);
-  color: var(--accent);
+  border: 1px solid var(--accent, #7e3af2);
+  color: var(--accent, #7e3af2);
   padding: 1rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-md, 8px);
   margin-top: 1.25rem;
   width: 100%;
   font-weight: 500;
+
+  /* Начальное состояние: скрыто */
   opacity: 0;
-  transform: translateY(-8px);
-  transition: 
+  transform: translateY(-12px);
+  max-height: 0;
+  overflow: hidden;
+
+  transition:
     opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
     max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  max-height: 0;
-  overflow: hidden;
-  pointer-events: none;
 }
 
 .form-success.show {
   opacity: 1;
   transform: translateY(0);
-  max-height: 100px;
-  pointer-events: auto;
+  /* max-height задаём из JS */
 }
 
 .form-success svg {
@@ -2194,7 +2195,6 @@ footer {
   flex-shrink: 0;
   stroke: currentColor;
   stroke-width: 2.5;
-  flex-shrink: 0;
 }
 
 .form-success span {

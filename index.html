@@ -843,7 +843,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     // Защита от спама
     if (document.querySelector('[name="_gotcha"]').value) {
       alert('Обнаружен спам!');
@@ -878,12 +878,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       const result = await response.json();
-      
-      if (response.ok && result.success) {
+      console.log('FormSubmit result:', result);
+
+      // success может быть строкой "true"
+      if (response.ok && String(result.success) === 'true') {
         // Удаляем старые сообщения
         const oldSuccess = form.querySelector('.form-success');
         if (oldSuccess) oldSuccess.remove();
-        
+
         // Создаём новое сообщение
         const successMsg = document.createElement('div');
         successMsg.className = 'form-success';
@@ -893,21 +895,29 @@ document.addEventListener('DOMContentLoaded', () => {
           </svg>
           <span>Сообщение отправлено! Отвечу в течение 24 часов.</span>
         `;
-        
+
         form.reset();
         form.appendChild(successMsg);
-        
-        // Плавное появление
-        setTimeout(() => successMsg.classList.add('show'), 10);
-        
+
+        // Начальное значение max-height
+        successMsg.style.maxHeight = '0px';
+
+        // Даем браузеру применить начальное состояние, затем анимируем
+        requestAnimationFrame(() => {
+          const fullHeight = successMsg.scrollHeight;
+          successMsg.style.maxHeight = fullHeight + 'px';
+          successMsg.classList.add('show');
+        });
+
         // Плавное исчезновение через 5 секунд
         setTimeout(() => {
           successMsg.classList.remove('show');
+          successMsg.style.maxHeight = '0px';
           setTimeout(() => {
-            if (successMsg.parentNode) {
-              successMsg.remove();
+            if (successMsg.parentNode === form) {
+              form.removeChild(successMsg);
             }
-          }, 400); // совпадает с длительностью transition
+          }, 400); // длительность transition
         }, 5000);
       } else {
         throw new Error(result.message || 'Ошибка отправки');
@@ -916,7 +926,6 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Ошибка:', error);
       alert('Не удалось отправить сообщение. Напишите напрямую: aleximlord@gmail.com');
     } finally {
-      // Восстанавливаем кнопку через 1 секунду
       setTimeout(() => {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnContent;
