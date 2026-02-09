@@ -844,7 +844,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Защита от спама
+    // Защита от спама (honeypot)
     if (document.querySelector('[name="_gotcha"]').value) {
       alert('Обнаружен спам!');
       return;
@@ -852,9 +852,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
-    data._captcha = false;
+    data._captcha = false; // отключаем капчу FormSubmit[web:9]
     data._subject = `Новое сообщение от ${data.name}`;
-    data._template = "table";
+    data._template = 'table';
 
     // Визуальная индикация отправки
     const submitBtn = form.querySelector('button[type="submit"]');
@@ -870,7 +870,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const response = await fetch('https://formsubmit.co/ajax/aleximlord@gmail.com', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
@@ -880,9 +880,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = await response.json();
       console.log('FormSubmit result:', result);
 
-      // success может быть строкой "true"
+      // success часто строка "true"[web:16][web:26]
       if (response.ok && String(result.success) === 'true') {
-        // Удаляем старые сообщения
+        // Удаляем старое сообщение, если есть
         const oldSuccess = form.querySelector('.form-success');
         if (oldSuccess) oldSuccess.remove();
 
@@ -899,25 +899,32 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
         form.appendChild(successMsg);
 
-        // Начальное значение max-height
+        // Раскрытие (плавное появление)
         successMsg.style.maxHeight = '0px';
 
-        // Даем браузеру применить начальное состояние, затем анимируем
         requestAnimationFrame(() => {
           const fullHeight = successMsg.scrollHeight;
           successMsg.style.maxHeight = fullHeight + 'px';
           successMsg.classList.add('show');
         });
 
-        // Плавное исчезновение через 5 секунд
+        // Сворачивание (плавное исчезновение)
         setTimeout(() => {
+          // фиксируем текущую высоту перед коллапсом
+          const currentHeight = successMsg.scrollHeight;
+          successMsg.style.maxHeight = currentHeight + 'px';
+          // форсим reflow
+          // eslint-disable-next-line no-unused-expressions
+          successMsg.offsetHeight;
+
           successMsg.classList.remove('show');
           successMsg.style.maxHeight = '0px';
+
           setTimeout(() => {
             if (successMsg.parentNode === form) {
               form.removeChild(successMsg);
             }
-          }, 400); // длительность transition
+          }, 400); // совпадает с transition в CSS
         }, 5000);
       } else {
         throw new Error(result.message || 'Ошибка отправки');
