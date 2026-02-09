@@ -286,8 +286,17 @@
     </button>
   </form>
 
-  <!-- просто блок под сообщение, без max-height -->
-  <div class="form-success-wrapper"></div>
+  <!-- Контейнер, который будет раскрываться/сворачиваться -->
+  <div class="form-success-container">
+    <div class="form-success">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>Сообщение отправлено! Отвечу в течение 24 часов.</span>
+    </div>
+  </div>
 </div>
     </section>
 
@@ -847,12 +856,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
-  const successWrapper = document.querySelector('.form-success-wrapper');
+  const successContainer = document.querySelector('.form-success-container');
+  const successMsg = successContainer.querySelector('.form-success');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // honeypot
     if (document.querySelector('[name="_gotcha"]').value) {
       alert('Обнаружен спам!');
       return;
@@ -891,32 +900,24 @@ document.addEventListener('DOMContentLoaded', () => {
       if (response.ok && String(result.success) === 'true') {
         form.reset();
 
-        // один и тот же элемент, переиспользуем
-        let successMsg = successWrapper.querySelector('.form-success');
-        if (!successMsg) {
-          successMsg = document.createElement('div');
-          successMsg.className = 'form-success';
-          successMsg.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                 fill="none" stroke="currentColor" stroke-width="2.5"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-            <span>Сообщение отправлено! Отвечу в течение 24 часов.</span>
-          `;
-          successWrapper.appendChild(successMsg);
-        }
+        // Обновим текст при желании
+        successMsg.querySelector('span').textContent =
+          'Сообщение отправлено! Отвечу в течение 24 часов.';
 
-        // сброс и показ
-        successMsg.classList.remove('show');
-        requestAnimationFrame(() => {
-          successMsg.classList.add('show');
-        });
+        // Показ: считаем высоту и анимируем max-height контейнера
+        const fullHeight = successMsg.offsetHeight;
+        successContainer.style.maxHeight = fullHeight + 'px';
+        successContainer.classList.add('open');
 
-        // скрытие через 5 секунд
+        // Сворачивание через 5 секунд
         setTimeout(() => {
-          successMsg.classList.remove('show');
-          // можно оставить DOM‑элемент, он просто станет прозрачным
+          const currentHeight = successMsg.offsetHeight;
+          successContainer.style.maxHeight = currentHeight + 'px'; // фиксируем
+          // следующий тик — в 0
+          requestAnimationFrame(() => {
+            successContainer.style.maxHeight = '0px';
+            successContainer.classList.remove('open');
+          });
         }, 5000);
       } else {
         throw new Error(result.message || 'Ошибка отправки');

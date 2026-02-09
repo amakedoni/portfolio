@@ -2156,6 +2156,47 @@ footer {
   opacity: 1;
 }
 
+.form-success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: rgba(126, 58, 242, 0.12);
+  border: 1px solid var(--accent, #7e3af2);
+  color: var(--accent, #7e3af2);
+  padding: 1rem;
+  border-radius: var(--radius-md, 8px);
+  margin-top: 1.25rem;
+  width: 100%;
+  font-weight: 500;
+
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition:
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.form-success.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.form-success svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  stroke-width: 2.5;
+}
+
+.form-success span {
+  line-height: 1.4;
+}
+
+
 @keyframes fadeIn {
   from { 
     opacity: 0; 
@@ -2203,7 +2244,14 @@ footer {
   margin-top: 1.25rem;
 }
 
-/* Сообщение занимает всю свою высоту, ничего не обрезаем */
+.form-success-container {
+  margin-top: 1.25rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* само сообщение — внутри контейнера, без обрезания */
 .form-success {
   display: flex;
   align-items: center;
@@ -2218,17 +2266,15 @@ footer {
   font-weight: 500;
 
   opacity: 0;
-  transform: translateY(-8px);
-  pointer-events: none;
+  transform: translateY(-6px);
   transition:
     opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.form-success.show {
+.form-success-container.open .form-success {
   opacity: 1;
   transform: translateY(0);
-  pointer-events: auto;
 }
 
 .form-success svg {
