@@ -862,6 +862,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    // honeypot
     if (document.querySelector('[name="_gotcha"]').value) {
       alert('Обнаружен спам!');
       return;
@@ -871,7 +872,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = Object.fromEntries(formData.entries());
     data._captcha = false;
     data._subject = `Новое сообщение от ${data.name}`;
-    data._template = 'table';
+    data._template = 'table'; // поддерживаемый параметр FormSubmit[web:9]
 
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalBtnContent = submitBtn.innerHTML;
@@ -896,27 +897,31 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       const result = await response.json();
+      console.log('FormSubmit result:', result);
 
-      if (response.ok && String(result.success) === 'true') {
+      if (response.ok && String(result.success) === 'true') { // success как строка[web:16]
         form.reset();
 
-        // Обновим текст при желании
         successMsg.querySelector('span').textContent =
           'Сообщение отправлено! Отвечу в течение 24 часов.';
 
-        // Показ: считаем высоту и анимируем max-height контейнера
-        const fullHeight = successMsg.offsetHeight;
-        successContainer.style.maxHeight = fullHeight + 'px';
-        successContainer.classList.add('open');
+        // Показ: ждём отрисовку, меряем высоту + небольшой запас
+        requestAnimationFrame(() => {
+          const fullHeight = successMsg.offsetHeight + 8; // запас
+          successContainer.style.maxHeight = fullHeight + 'px';
+          successContainer.classList.add('open');
+        });
 
         // Сворачивание через 5 секунд
         setTimeout(() => {
-          const currentHeight = successMsg.offsetHeight;
-          successContainer.style.maxHeight = currentHeight + 'px'; // фиксируем
-          // следующий тик — в 0
           requestAnimationFrame(() => {
-            successContainer.style.maxHeight = '0px';
-            successContainer.classList.remove('open');
+            const currentHeight = successMsg.offsetHeight + 8;
+            successContainer.style.maxHeight = currentHeight + 'px';
+
+            requestAnimationFrame(() => {
+              successContainer.style.maxHeight = '0px';
+              successContainer.classList.remove('open');
+            });
           });
         }, 5000);
       } else {
