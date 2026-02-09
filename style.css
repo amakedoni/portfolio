@@ -2248,7 +2248,7 @@ footer {
   margin-top: 1.25rem;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: max-height 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .form-success {
@@ -2268,8 +2268,8 @@ footer {
   opacity: 0;
   transform: translateY(-6px);
   transition:
-    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),   /* было 0.25s */
-    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); /* было 0.25s */
+    opacity 0.45s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s,  /* лёгкая задержка */
+    transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s;
 }
 
 .form-success-container.open .form-success {
