@@ -269,6 +269,7 @@
                 <div class="contact-message">
   <h2>Свяжитесь со мной</h2>
   <p>Открыт к интересным проектам в области разработки и машинного обучения. Готов обсудить возможности сотрудничества.</p>
+
   <form id="contact-form">
     <input type="text" name="name" placeholder="Имя" required>
     <input type="email" name="email" placeholder="Email" required>
@@ -276,12 +277,17 @@
     <input type="text" name="_gotcha" style="display:none">
     <button type="submit">
       <span>отправить</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+           viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="5" y1="12" x2="19" y2="12"></line>
         <polyline points="12 5 19 12 12 19"></polyline>
       </svg>
     </button>
   </form>
+
+  <!-- Обёртка под сообщение об успехе -->
+  <div class="form-success-wrapper"></div>
 </div>
     </section>
 
@@ -841,6 +847,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
+  const successWrapper = document.querySelector('.form-success-wrapper');
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -878,9 +886,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = await response.json();
 
       if (response.ok && String(result.success) === 'true') {
-        let successMsg = form.querySelector('.form-success');
+        form.reset();
 
-        // если нет — создаём
+        // переиспользуем один элемент сообщения
+        let successMsg = successWrapper.querySelector('.form-success');
         if (!successMsg) {
           successMsg = document.createElement('div');
           successMsg.className = 'form-success';
@@ -890,22 +899,20 @@ document.addEventListener('DOMContentLoaded', () => {
             </svg>
             <span>Сообщение отправлено! Отвечу в течение 24 часов.</span>
           `;
-          form.appendChild(successMsg);
+          successWrapper.appendChild(successMsg);
         }
 
-        form.reset();
-
-        // показываем (только opacity/transform)
+        // сбрасываем состояние и плавно показываем
+        successMsg.classList.remove('show');
+        // даём тик браузеру
         requestAnimationFrame(() => {
           successMsg.classList.add('show');
         });
 
-        // скрываем через 5 секунд
+        // скрываем через 5 секунд (только opacity/transform)
         setTimeout(() => {
           successMsg.classList.remove('show');
-          // можно не удалять элемент — он просто будет скрыт
-          // если хочешь удалять:
-          // successMsg.addEventListener('transitionend', () => successMsg.remove(), { once: true });
+          // не удаляем wrapper, он держит место и не дёргает layout
         }, 5000);
       } else {
         throw new Error(result.message || 'Ошибка отправки');

@@ -2238,3 +2238,49 @@ footer {
 #contact-form button:hover svg {
   transform: translateX(3px);
 }
+
+/* Обёртка под сообщение — фиксированная зона под формой */
+.form-success-wrapper {
+  margin-top: 1.25rem;
+  min-height: 0;       /* можно 0, можно чуть больше, если хочешь запас */
+}
+
+/* Само сообщение — анимируется, но не меняет высоту wrapper */
+.form-success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: rgba(126, 58, 242, 0.12);
+  border: 1px solid var(--accent, #7e3af2);
+  color: var(--accent, #7e3af2);
+  padding: 1rem;
+  border-radius: var(--radius-md, 8px);
+  width: 100%;
+  font-weight: 500;
+
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition:
+    opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.form-success.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.form-success svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  stroke-width: 2.5;
+}
+
+.form-success span {
+  line-height: 1.4;
+}
