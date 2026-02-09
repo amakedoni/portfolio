@@ -2158,18 +2158,67 @@ footer {
 
 /* Сообщение об успехе */
 .form-success {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
   background: rgba(74, 222, 128, 0.1);
   border: 1px solid #4ade80;
   color: #16a34a;
   padding: 1rem;
   border-radius: var(--radius-md);
-  margin-top: 1rem;
-  text-align: center;
-  animation: fadeIn 0.3s ease-out;
+  margin-top: 1.25rem;
+  animation: fadeIn 0.35s ease-out;
+  font-weight: 500;
+  width: 100%;
+}
+
+.form-success svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  stroke-width: 2.5;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { 
+    opacity: 0; 
+    transform: translateY(-8px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
+}
+
+/* Стиль кнопки с иконкой */
+#contact-form button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  background: var(--accent-gradient);
+  color: white;
+  border: none;
+  padding: 0.95rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1rem;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+#contact-form button svg {
+  transition: transform 0.3s ease;
+}
+
+#contact-form button:hover svg {
+  transform: translateX(3px);
 }

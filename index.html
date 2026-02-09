@@ -267,15 +267,20 @@
                     </div>
                 </div>
                 <div class="contact-message">
-  <h2>Свяжитесь Со Мной</h2>
+  <h2>Свяжитесь со мной</h2>
   <p>Открыт к интересным проектам в области разработки и машинного обучения. Готов обсудить возможности сотрудничества.</p>
   <form id="contact-form">
     <input type="text" name="name" placeholder="Имя" required>
     <input type="email" name="email" placeholder="Email" required>
     <textarea name="message" placeholder="Сообщение" rows="4" required></textarea>
-    <!-- Защита от спама (скрытое поле) -->
     <input type="text" name="_gotcha" style="display:none">
-    <button type="submit">отправить</button>
+    <button type="submit">
+      <span>отправить</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </button>
   </form>
 </div>
     </section>
@@ -832,53 +837,86 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script>
-document.getElementById('contact-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
 
-  const form = e.target;
-
-  // Honeypot: если скрытое поле заполнено — считаем спамом
-  if (form.querySelector('[name="_gotcha"]').value) {
-    alert('Spam detected!');
-    return;
-  }
-
-  // Собираем данные формы
-  const formData = new FormData(form);
-
-  // Дополнительные поля FormSubmit
-  formData.set('_captcha', 'false'); // отключаем reCAPTCHA[web:21]
-  formData.set('_subject', `Новое сообщение от ${formData.get('name')}`); // тема письма[web:9]
-  formData.set('_template', 'table'); // человекочитаемый шаблон письма[web:9]
-
-  try {
-    const response = await fetch('https://formsubmit.co/ajax/aleximlord@gmail.com', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
-
-    const result = await response.json();
-
-    // FormSubmit в AJAX-режиме возвращает JSON с полем success[web:16][web:17]
-    if (response.ok && String(result.success) === 'true') {
-      const successMsg = document.createElement('div');
-      successMsg.className = 'form-success';
-      successMsg.textContent = '✅ Сообщение отправлено! Отвечу в течение 24 часов.';
-
-      form.reset();
-      form.appendChild(successMsg);
-
-      setTimeout(() => successMsg.remove(), 5000);
-    } else {
-      throw new Error(result.message || 'Ошибка отправки');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Защита от спама
+    if (document.querySelector('[name="_gotcha"]').value) {
+      alert('Обнаружен спам!');
+      return;
     }
-  } catch (error) {
-    console.error('Ошибка:', error);
-    alert('❌ Не удалось отправить сообщение. Напишите напрямую: aleximlord@gmail.com');
-  }
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    data._captcha = false;
+    data._subject = `Новое сообщение от ${data.name}`;
+    data._template = "table";
+
+    // Визуальная индикация отправки
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `
+      <span>отправляется</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+      </svg>
+    `;
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/aleximlord@gmail.com', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
+        // Удаляем старые сообщения
+        const oldSuccess = form.querySelector('.form-success');
+        if (oldSuccess) oldSuccess.remove();
+        
+        // Создаем новое сообщение с SVG
+        const successMsg = document.createElement('div');
+        successMsg.className = 'form-success';
+        successMsg.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Сообщение отправлено! Отвечу в течение 24 часов.</span>
+        `;
+        
+        form.reset();
+        form.appendChild(successMsg);
+        
+        // Автоскрытие через 5 секунд
+        setTimeout(() => {
+          successMsg.style.opacity = '0';
+          successMsg.style.transform = 'translateY(-10px)';
+          setTimeout(() => successMsg.remove(), 300);
+        }, 5000);
+      } else {
+        throw new Error(result.message || 'Ошибка отправки');
+      }
+    } catch (error) {
+      console.error('Ошибка:', error);
+      alert('Не удалось отправить сообщение. Напишите напрямую: aleximlord@gmail.com');
+    } finally {
+      // Восстанавливаем кнопку
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }, 1000);
+    }
+  });
 });
 </script>
 </body>
