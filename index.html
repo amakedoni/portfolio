@@ -858,7 +858,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Визуальная индикация отправки
     const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
+    const originalBtnContent = submitBtn.innerHTML;
     submitBtn.disabled = true;
     submitBtn.innerHTML = `
       <span>отправляется</span>
@@ -884,7 +884,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const oldSuccess = form.querySelector('.form-success');
         if (oldSuccess) oldSuccess.remove();
         
-        // Создаем новое сообщение с SVG
+        // Создаём новое сообщение
         const successMsg = document.createElement('div');
         successMsg.className = 'form-success';
         successMsg.innerHTML = `
@@ -897,11 +897,17 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
         form.appendChild(successMsg);
         
-        // Автоскрытие через 5 секунд
+        // Плавное появление
+        setTimeout(() => successMsg.classList.add('show'), 10);
+        
+        // Плавное исчезновение через 5 секунд
         setTimeout(() => {
-          successMsg.style.opacity = '0';
-          successMsg.style.transform = 'translateY(-10px)';
-          setTimeout(() => successMsg.remove(), 300);
+          successMsg.classList.remove('show');
+          setTimeout(() => {
+            if (successMsg.parentNode) {
+              successMsg.remove();
+            }
+          }, 400); // совпадает с длительностью transition
         }, 5000);
       } else {
         throw new Error(result.message || 'Ошибка отправки');
@@ -910,10 +916,10 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Ошибка:', error);
       alert('Не удалось отправить сообщение. Напишите напрямую: aleximlord@gmail.com');
     } finally {
-      // Восстанавливаем кнопку
+      // Восстанавливаем кнопку через 1 секунду
       setTimeout(() => {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
+        submitBtn.innerHTML = originalBtnContent;
       }, 1000);
     }
   });
