@@ -286,7 +286,7 @@
     </button>
   </form>
 
-  <!-- Обёртка под сообщение об успехе -->
+  <!-- просто блок под сообщение, без max-height -->
   <div class="form-success-wrapper"></div>
 </div>
     </section>
@@ -852,6 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    // honeypot
     if (document.querySelector('[name="_gotcha"]').value) {
       alert('Обнаружен спам!');
       return;
@@ -868,7 +869,9 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.disabled = true;
     submitBtn.innerHTML = `
       <span>отправляется</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+           viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 12a 9 9 0 1 1-6.219-8.56"></path>
       </svg>
     `;
@@ -888,13 +891,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (response.ok && String(result.success) === 'true') {
         form.reset();
 
-        // переиспользуем один элемент сообщения
+        // один и тот же элемент, переиспользуем
         let successMsg = successWrapper.querySelector('.form-success');
         if (!successMsg) {
           successMsg = document.createElement('div');
           successMsg.className = 'form-success';
           successMsg.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
             <span>Сообщение отправлено! Отвечу в течение 24 часов.</span>
@@ -902,17 +907,16 @@ document.addEventListener('DOMContentLoaded', () => {
           successWrapper.appendChild(successMsg);
         }
 
-        // сбрасываем состояние и плавно показываем
+        // сброс и показ
         successMsg.classList.remove('show');
-        // даём тик браузеру
         requestAnimationFrame(() => {
           successMsg.classList.add('show');
         });
 
-        // скрываем через 5 секунд (только opacity/transform)
+        // скрытие через 5 секунд
         setTimeout(() => {
           successMsg.classList.remove('show');
-          // не удаляем wrapper, он держит место и не дёргает layout
+          // можно оставить DOM‑элемент, он просто станет прозрачным
         }, 5000);
       } else {
         throw new Error(result.message || 'Ошибка отправки');
@@ -928,6 +932,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
 </script>
 </body>
 </html>
