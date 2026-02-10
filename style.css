@@ -1073,7 +1073,7 @@ section {
     color: var(--text-secondary);
     line-height: 1.8;
     max-width: 550px;
-    margin: 1.5rem auto 0;
+    margin: -2rem auto 0;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeInMessage 0.9s ease-out 0.4s forwards;
@@ -2294,4 +2294,33 @@ footer {
 
 .form-success span {
   line-height: 1.4;
+}
+
+.lang-toggle {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  width: 64px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  user-select: none;
+}
+
+.lang-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+  color: var(--accent);
 }
