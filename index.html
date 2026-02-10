@@ -904,13 +904,24 @@ document.addEventListener('DOMContentLoaded', () => {
           'Сообщение отправлено! Отвечу в течение 24 часов.';
 
         // ПРОСТО ДАЁМ БОЛЬШОЙ ЗАПАС ПО ВЫСОТЕ
-        successContainer.style.maxHeight = '200px'; // точно больше, чем высота сообщения
-        successContainer.classList.add('open');
+        // ПОКАЗАТЬ
+const fullHeight = successMsg.scrollHeight;
+successContainer.style.height = fullHeight + 'px';
+successContainer.classList.add('open');
 
-        setTimeout(() => {
-          successContainer.style.maxHeight = '0px';
-          successContainer.classList.remove('open');
-        }, 5000);
+// СКРЫТЬ ЧЕРЕЗ 5 СЕКУНД
+setTimeout(() => {
+  // фиксируем текущую высоту
+  const currentHeight = successMsg.scrollHeight;
+  successContainer.style.height = currentHeight + 'px';
+
+  // следующий кадр — до 0
+  requestAnimationFrame(() => {
+    successContainer.style.height = '0px';
+    successContainer.classList.remove('open');
+  });
+}, 5000);
+
       } else {
         throw new Error(result.message || 'Ошибка отправки');
       }

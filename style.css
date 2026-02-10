@@ -2252,7 +2252,7 @@ footer {
 
 .form-success-container {
   margin-top: 1.25rem;
-  max-height: 0;
+  height: 0;
   overflow: hidden;
   transition: max-height 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
