@@ -6,7 +6,7 @@
 	<script src="script.js?v=1"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Македонский Александр | Full-Stack Developer & ML Enthusiast</title>
+    <title>Alexander Makedonskiy | Developer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Pirata+One&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -271,20 +271,26 @@
   <p>Открыт к интересным проектам в области разработки и машинного обучения. Готов обсудить возможности сотрудничества.</p>
 
   <form id="contact-form">
-    <input type="text" name="name" placeholder="Имя" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <textarea name="message" placeholder="Сообщение" rows="4" required></textarea>
-    <input type="text" name="_gotcha" style="display:none">
-    <button type="submit">
-      <span>отправить</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-           viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-        <polyline points="12 5 19 12 12 19"></polyline>
-      </svg>
-    </button>
-  </form>
+  <!-- Web3Forms access key -->
+  <input type="hidden" name="access_key" value="fa82ee15-753e-4de8-96c8-4afa2dd1f19c">
+
+  <input type="text" name="name" placeholder="Имя" required>
+  <input type="email" name="email" placeholder="Email" required>
+  <textarea name="message" placeholder="Сообщение" rows="4" required></textarea>
+
+  <!-- honeypot -->
+  <input type="text" name="_gotcha" style="display:none">
+
+  <button type="submit">
+    <span>отправить</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  </button>
+</form>
 
   <!-- Контейнер, который будет раскрываться/сворачиваться -->
   <div class="form-success-container">
@@ -460,6 +466,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+<!-- Добавить ПЕРЕД закрывающим </body> -->
+<!-- Добавить ПЕРЕД закрывающим </body> -->
+<!-- Mobile Menu: Styles + Script -->
 <style>
   /* Бургер-кнопка: по умолчанию скрыта */
   .mobile-menu-toggle {
@@ -854,21 +863,26 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!form) return;
 
   const successContainer = document.querySelector('.form-success-container');
-  const successMsg = successContainer.querySelector('.form-success');
+  const successMsg = successContainer?.querySelector('.form-success');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    if (document.querySelector('[name="_gotcha"]').value) {
+    // honeypot (_gotcha)
+    const gotcha = form.querySelector('[name="_gotcha"]');
+    if (gotcha && gotcha.value) {
       alert('Обнаружен спам!');
       return;
     }
 
     const formData = new FormData(form);
+
+    // subject для письма
+    const name = formData.get('name') || 'без имени';
+    formData.append('subject', `Новое сообщение от ${name}`);
+
     const data = Object.fromEntries(formData.entries());
-    data._captcha = false;
-    data._subject = `Новое сообщение от ${data.name}`;
-    data._template = 'table'; // поддерживаемый параметр FormSubmit[web:9]
+    const json = JSON.stringify(data);
 
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalBtnContent = submitBtn.innerHTML;
@@ -883,37 +897,41 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     try {
-      const response = await fetch('https://formsubmit.co/ajax/aleximlord@gmail.com', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: json
       });
 
       const result = await response.json();
+      console.log(result);
 
-      if (response.ok && String(result.success) === 'true') { // success как строка[web:16]
+      if (response.ok && result.success === true) { // формат ответа Web3Forms[web:40]
         form.reset();
 
-        successMsg.querySelector('span').textContent =
-          'Сообщение отправлено! Отвечу в течение 24 часов.';
+        if (successMsg) {
+          successMsg.querySelector('span').textContent =
+            'Сообщение отправлено! Отвечу в течение 24 часов.';
+        }
 
-        // ПРОСТО ДАЁМ БОЛЬШОЙ ЗАПАС ПО ВЫСОТЕ
-        successContainer.style.maxHeight = '200px'; // точно больше, чем высота сообщения
-        successContainer.classList.add('open');
+        if (successContainer) {
+          successContainer.style.maxHeight = '200px';
+          successContainer.classList.add('open');
 
-        setTimeout(() => {
-          successContainer.style.maxHeight = '0px';
-          successContainer.classList.remove('open');
-        }, 5000);
+          setTimeout(() => {
+            successContainer.style.maxHeight = '0px';
+            successContainer.classList.remove('open');
+          }, 5000);
+        }
       } else {
         throw new Error(result.message || 'Ошибка отправки');
       }
     } catch (error) {
       console.error('Ошибка:', error);
-      alert('Не удалось отправить сообщение. Напишите напрямую: aleximlord@gmail.com');
+      alert('Не удалось отправить сообщение. Напишите напрямую на email.');
     } finally {
       setTimeout(() => {
         submitBtn.disabled = false;
@@ -922,9 +940,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-</script>
-<script>	
-
 </script>
 </body>
 </html>
