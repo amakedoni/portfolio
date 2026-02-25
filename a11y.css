@@ -1,0 +1,126 @@
+/* Accessibility Enhancements */
+
+/* Visually hidden class for screen readers */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus visible styles for keyboard navigation */
+body.keyboard-nav *:focus {
+    outline: 2px solid var(--accent) !important;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Skip to main content link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent);
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    z-index: 10000;
+    border-radius: 0 0 4px 0;
+    font-weight: 600;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+/* Improve focus visibility for interactive elements */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Remove default focus outline when not using keyboard */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Ensure sufficient color contrast for links */
+a {
+    text-decoration-skip-ink: auto;
+}
+
+/* Improve readability for reduced motion users */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --border: #000000;
+        --text-primary: #000000;
+        --text-secondary: #1a1a1a;
+    }
+    
+    .dark-theme {
+        --border: #ffffff;
+        --text-primary: #ffffff;
+        --text-secondary: #e0e0e0;
+    }
+    
+    button,
+    a,
+    input,
+    textarea {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Screen reader only content */
+[aria-hidden="true"] {
+    pointer-events: none;
+}
+
+/* Ensure proper ARIA live region announcements */
+[role="status"],
+[role="alert"],
+[aria-live] {
+    position: relative;
+}
+
+/* Make sure scrollable regions are keyboard accessible */
+[role="region"][tabindex="0"] {
+    overflow: auto;
+}
+
+/* Improve touch targets for mobile accessibility */
+@media (pointer: coarse) {
+    button,
+    a,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"] {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
