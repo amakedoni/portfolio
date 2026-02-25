@@ -2323,4 +2323,15 @@ footer {
   box-shadow: var(--shadow-md);
   border-color: var(--accent);
   color: var(--accent);
+
+}
+
+.projects-unified .timeline,
+.education-unified .timeline {
+    list-style: none;
+}
+
+.projects-unified .timeline-item,
+.education-unified .timeline-item {
+    list-style-type: none;
 }
