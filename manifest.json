@@ -1,0 +1,22 @@
+{
+  "name": "Alexander Makedonskiy - Portfolio",
+  "short_name": "AM Portfolio",
+  "description": "Full-Stack Developer Portfolio - Alexander Makedonskiy",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7e3af2",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["portfolio", "developer", "technology"],
+  "lang": "ru",
+  "dir": "ltr",
+  "scope": "/"
+}

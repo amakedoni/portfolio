@@ -1,0 +1,13 @@
+# robots.txt for amakedoni.com
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://amakedoni.com/sitemap.xml
+
+# Block access to sensitive files
+Disallow: /resume.docx
+Disallow: /*.docx$
+
+# Crawl-delay for bots
+Crawl-delay: 1
