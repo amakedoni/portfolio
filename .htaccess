@@ -83,8 +83,8 @@
     # Permissions Policy (formerly Feature-Policy)
     Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
     
-    # HSTS (HTTP Strict Transport Security) - uncomment if using HTTPS
-    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    HSTS (HTTP Strict Transport Security) - uncomment if using HTTPS
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 </IfModule>
 
 # ==============================================================================
