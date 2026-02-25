@@ -17,7 +17,7 @@
     <meta property="og:url" content="https://amakedoni.com/">
     <meta property="og:title" content="Alexander Makedonskiy | Full-Stack Developer">
     <meta property="og:description" content="Студент МАИ, Full-Stack разработчик. Создаю современные веб-приложения и изучаю машинное обучение.">
-    <meta property="og:image" content="https://amakedoni.com/photo%20(1).jpg">
+    <meta property="og:image" content="https://amakedoni.com/photo.webp">
     <meta property="og:locale" content="ru_RU">
     <meta property="og:site_name" content="Alexander Makedonskiy Portfolio">
     
@@ -26,7 +26,7 @@
     <meta name="twitter:url" content="https://amakedoni.com/">
     <meta name="twitter:title" content="Alexander Makedonskiy | Developer">
     <meta name="twitter:description" content="Full-Stack разработчик, студент МАИ">
-    <meta name="twitter:image" content="https://amakedoni.com/photo%20(1).jpg">
+    <meta name="twitter:image" content="https://amakedoni.com/photo.webp">
     
     <!-- Theme Color -->
     <meta name="theme-color" content="#7e3af2">
@@ -34,7 +34,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="AM Portfolio">
     
-    <!-- Favicon -->
+    <!-- Favicon - WebP with PNG fallback -->
+    <link rel="icon" type="image/webp" sizes="512x512" href="/favicon.webp">
     <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
     <link rel="apple-touch-icon" href="/favicon.png">
     
@@ -44,6 +45,9 @@
     <!-- Preconnect for fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Preload critical images -->
+    <link rel="preload" as="image" type="image/webp" href="photo.webp" imagesrcset="photo.webp" imagesizes="(max-width: 600px) 400px, 600px">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Pirata+One&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -138,7 +142,11 @@
                 </div>
                 <div class="about-image">
                     <div class="profile-photo-wrapper">
-                        <img src="photo (1).jpg" alt="Alexander Makedonskiy - Full-Stack Developer" class="profile-photo" loading="lazy">
+                        <picture>
+                            <source srcset="photo.webp" type="image/webp">
+                            <source srcset="photo (1).jpg" type="image/jpeg">
+                            <img src="photo (1).jpg" alt="Alexander Makedonskiy - Full-Stack Developer" class="profile-photo" loading="lazy" width="400" height="400">
+                        </picture>
                     </div>
                 </div>
             </div>
