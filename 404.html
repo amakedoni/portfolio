@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 — Страница не найдена | Alexander Makedonskiy</title>
+    <title data-i18n="404_title">404 — Страница не найдена | Alexander Makedonskiy</title>
     <meta name="robots" content="noindex, nofollow">
     
     <link rel="icon" type="image/webp" sizes="512x512" href="/favicon.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Language System -->
+    <script src="translations.js"></script>
+    <script src="lang.js"></script>
     
     <style>
         :root {
@@ -168,10 +172,17 @@
             transform: translateY(-3px);
         }
         
-        .theme-toggle-404 {
+        .controls-404 {
             position: fixed;
             top: 2rem;
             right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 10;
+        }
+        
+        .theme-toggle-404,
+        .lang-toggle-404 {
             background: transparent;
             border: 2px solid var(--accent);
             width: 50px;
@@ -182,12 +193,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
+            color: var(--accent);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
         }
         
-        .theme-toggle-404:hover {
-            transform: rotate(15deg) scale(1.1);
+        .theme-toggle-404:hover,
+        .lang-toggle-404:hover {
+            transform: scale(1.1);
             background: var(--accent);
+            color: white;
         }
         
         .theme-toggle-404 svg {
@@ -222,9 +238,13 @@
                 justify-content: center;
             }
             
-            .theme-toggle-404 {
+            .controls-404 {
                 top: 1rem;
                 right: 1rem;
+            }
+            
+            .theme-toggle-404,
+            .lang-toggle-404 {
                 width: 44px;
                 height: 44px;
             }
@@ -239,27 +259,32 @@
         <div class="particle-404 p404-4"></div>
     </div>
     
-    <button class="theme-toggle-404" aria-label="Переключить тему">
-        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-    </button>
+    <div class="controls-404">
+        <button class="lang-toggle-404" data-i18n="aria_lang" aria-label="Переключить язык">
+            <span class="lang-text">RU</span>
+        </button>
+        <button class="theme-toggle-404" data-i18n="aria_theme" aria-label="Переключить тему">
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+        </button>
+    </div>
     
     <div class="error-container">
         <div class="error-code">404</div>
-        <h1 class="error-message">Страница не найдена</h1>
-        <p class="error-description">
+        <h1 class="error-message" data-i18n="404_heading">Страница не найдена</h1>
+        <p class="error-description" data-i18n="404_description">
             Кажется, вы заблудились в цифровом пространстве. Страница, которую вы ищете, не существует или была перемещена.
         </p>
         <div class="error-actions">
@@ -268,14 +293,14 @@
                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                 </svg>
-                На главную
+                <span data-i18n="404_home">На главную</span>
             </a>
             <a href="javascript:history.back()" class="btn btn-secondary">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
                     <polyline points="12 19 5 12 12 5"></polyline>
                 </svg>
-                Назад
+                <span data-i18n="404_back">Назад</span>
             </a>
         </div>
     </div>
