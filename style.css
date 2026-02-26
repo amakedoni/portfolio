@@ -268,6 +268,228 @@ nav {
     transform: scale(1);
 }
 
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1002;
+    position: relative;
+    width: 40px;
+    height: 40px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+.burger-line {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-open .burger-line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.mobile-menu-open .burger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-open .burger-line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    max-width: 85vw;
+    height: 100vh;
+    background: var(--bg-primary);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+}
+
+.mobile-menu-open .mobile-menu {
+    right: 0;
+}
+
+.mobile-menu-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.mobile-menu-open .mobile-menu-backdrop {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-menu-header {
+    padding: 2rem 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.mobile-menu-logo {
+    font-family: 'Pirata One', sans-serif;
+    font-size: 1.75rem;
+    background: var(--accent-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-weight: 700;
+}
+
+.mobile-nav-links {
+    flex: 1;
+    padding: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile-nav-links > a {
+    padding: 1rem 1.5rem;
+    color: var(--text-primary);
+    font-size: 1.125rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.mobile-nav-links > a:hover,
+.mobile-nav-links > a:active {
+    background: var(--bg-secondary);
+    border-left-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Mobile Resume Dropdown */
+.mobile-resume-dropdown {
+    margin: 0.5rem 0;
+}
+
+.mobile-resume-toggle {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    border-left: 3px solid transparent;
+    color: var(--text-primary);
+    font-size: 1.125rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mobile-resume-toggle::after {
+    content: '▼';
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+}
+
+.mobile-resume-dropdown.open .mobile-resume-toggle::after {
+    transform: rotate(180deg);
+}
+
+.mobile-resume-toggle:hover,
+.mobile-resume-toggle:active {
+    background: var(--bg-secondary);
+    border-left-color: var(--accent);
+    color: var(--accent);
+}
+
+.mobile-resume-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: var(--bg-secondary);
+}
+
+.mobile-resume-dropdown.open .mobile-resume-menu {
+    max-height: 200px;
+}
+
+.mobile-resume-menu a {
+    display: block;
+    padding: 0.875rem 1.5rem 0.875rem 3rem;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.mobile-resume-menu a:hover,
+.mobile-resume-menu a:active {
+    background: var(--bg-tertiary);
+    color: var(--accent);
+    padding-left: 3.5rem;
+}
+
+/* Mobile Controls */
+.mobile-controls {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.mobile-theme-toggle,
+.mobile-lang-toggle {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.875rem;
+    font-weight: 600;
+    position: relative;
+}
+
+.mobile-theme-toggle:hover,
+.mobile-lang-toggle:hover {
+    transform: scale(1.1);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+}
+
+.mobile-theme-toggle svg {
+    position: absolute;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
 /* Hero Section */
 #hero {
     min-height: 100vh;
@@ -393,7 +615,7 @@ nav {
     transform: translateY(-3px) scale(1.04);
     box-shadow: 0 12px 35px rgba(126, 58, 242, 0.4);
     background: linear-gradient(135deg, var(--accent-hover), #5b21b6);
-    animation-play-state: paused; /* Остановка пульсации при наведении */
+    animation-play-state: paused;
 }
 
 .cta-button:active {
@@ -502,7 +724,6 @@ section {
     transform: translateX(0);
 }
 
-/* Стили для фотографии в секции "Обо мне" */
 .about-image {
     flex: 1;
     min-width: 300px;
@@ -544,7 +765,6 @@ section {
     opacity: 1;
 }
 
-/* Обёртка для изображения */
 .profile-photo-wrapper {
     width: 90%;
     height: 90%;
@@ -563,7 +783,6 @@ section {
     box-shadow: 0 12px 35px rgba(126, 58, 242, 0.25);
 }
 
-/* Стили для изображения */
 .profile-photo {
     width: 100%;
     height: 100%;
@@ -578,7 +797,6 @@ section {
     transform: scale(1.08);
 }
 
-/* Эффект свечения */
 .profile-photo-wrapper::after {
     content: '';
     position: absolute;
@@ -605,7 +823,6 @@ section {
     100% { transform: rotate(45deg) translateX(300%); opacity: 0.7; }
 }
 
-/* Для тёмной темы */
 .dark-theme .profile-photo-wrapper {
     border-color: var(--border-light);
     box-shadow: var(--shadow-sm);
@@ -630,7 +847,6 @@ section {
     position: relative;
     overflow: hidden;
 }
-/* Unified Education Block — в стиле Skills и Projects */
 
 .education-unified::before {
   content: '';
@@ -654,6 +870,7 @@ section {
   box-shadow: var(--shadow-lg);
   border-color: var(--accent);
 }
+
 .skills-unified::before {
     content: '';
     position: absolute;
@@ -794,7 +1011,6 @@ section {
     font-style: italic;
 }
 
-/* Responsive Skills Block */
 @media (max-width: 768px) {
     .skills-unified {
         padding: 2.25rem 1.75rem;
@@ -847,7 +1063,6 @@ section {
 .timeline {
   position: relative;
   padding-left: 0;
-  /* Убрали max-width и margin — теперь он растягивается на 100% родителя */
 }
 
 .timeline::before {
@@ -865,7 +1080,7 @@ section {
 .timeline-item {
   position: relative;
   margin-bottom: 4.5rem;
-  padding-left: 64px; /* 24px (ось) + 40px (отступ текста) */
+  padding-left: 64px;
 }
 
 .timeline-item.appear {
@@ -1160,7 +1375,7 @@ footer {
     opacity: 1;
 }
 
-/* Кнопка "Вверх" */
+/* Scroll to Top Button */
 .scroll-to-top {
     position: fixed;
     bottom: 40px;
@@ -1208,7 +1423,7 @@ footer {
     transform: translateY(-2px);
 }
 
-/* Анимации для основных секций */
+/* Animations */
 .fade-in {
     opacity: 0;
     transform: translateY(50px);
@@ -1222,7 +1437,6 @@ footer {
     transform: translateY(0);
 }
 
-/* Поддержка prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -1246,17 +1460,6 @@ footer {
     .scroll-to-top {
         transition: none !important;
     }
-}
-
-/* Mobile Menu Placeholder (для будущей реализации в HTML) */
-.mobile-menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: var(--text-primary);
-    cursor: pointer;
-    z-index: 1002;
 }
 
 /* Responsive Design */
@@ -1291,14 +1494,15 @@ footer {
     }
 
     .mobile-menu-toggle {
-        display: block;
+        display: flex;
     }
     
     .controls {
         gap: 12px;
     }
     
-    .theme-toggle {
+    .theme-toggle,
+    .lang-toggle {
         width: 44px;
         height: 44px;
     }
@@ -1440,7 +1644,7 @@ footer {
     }
 }
 
-/* === Resume Dropdown — идеально выровненный с .nav-links a === */
+/* Resume Dropdown */
 .resume-dropdown {
     position: relative;
     display: inline-block;
@@ -1475,7 +1679,6 @@ footer {
     color: var(--accent);
 }
 
-/* Подчёркивание — точно как у .nav-links a */
 .resume-toggle::after {
     content: '';
     position: absolute;
@@ -1493,7 +1696,6 @@ footer {
     width: 100%;
 }
 
-/* Меню */
 .resume-menu {
     position: absolute;
     top: 100%;
@@ -1543,12 +1745,11 @@ footer {
     padding-left: 1.5rem;
 }
 
-/* Dark theme support */
 .dark-theme .resume-menu {
     background: var(--bg-secondary);
     border-color: var(--border-light);
 }
-/* === Дополнительная оптимизация для малых экранов (< 320px) === */
+
 @media (max-width: 320px) {
   :root {
     --radius-lg: 16px;
@@ -1560,23 +1761,26 @@ footer {
     padding: 0 8px;
   }
 
-  /* Hero section */
   #hero {
     padding: 4rem 0 3rem;
   }
+  
   .hero-content h1 {
     font-size: 2.375rem !important;
     line-height: 1.15;
   }
+  
   .hero-content h2 {
     font-size: 1.375rem !important;
     margin-bottom: 1.5rem;
   }
+  
   .hero-content p {
     font-size: 1.05rem !important;
     margin-bottom: 2rem;
     padding: 0 5px;
   }
+  
   .cta-button {
     padding: 1rem 1.75rem !important;
     font-size: 1rem !important;
@@ -1584,110 +1788,123 @@ footer {
     margin: 0 auto;
   }
 
-  /* Sections */
   section {
     padding: 4.5rem 0 !important;
   }
+  
   .section-title {
     font-size: 1.875rem !important;
     margin-bottom: 3rem !important;
   }
 
-  /* About section */
   .about-image {
     height: 300px !important;
     border-radius: var(--radius-lg) !important;
   }
+  
   .profile-photo-wrapper {
     width: 96% !important;
     height: 96% !important;
     border-radius: var(--radius-md) !important;
   }
+  
   .about-text p {
     font-size: 1rem !important;
     margin-bottom: 1.25rem !important;
   }
 
-  /* Timeline */
   .timeline {
     padding-left: 28px !important;
   }
+  
   .timeline::before {
     left: 6px !important;
     width: 2px !important;
   }
+  
   .timeline-item::before {
     left: -10px !important;
     width: 20px !important;
     height: 20px !important;
   }
+  
   .timeline-item h3 {
     font-size: 1.45rem !important;
   }
+  
   .timeline-item h4 {
     font-size: 1.15rem !important;
   }
+  
   .timeline-item .date {
     font-size: 0.925rem !important;
   }
 
-  /* Skills */
   .skills-unified {
     padding: 1.75rem !important;
     border-radius: var(--radius-lg) !important;
   }
+  
   .skills-header h3 {
     font-size: 1.625rem !important;
   }
+  
   .skill-tag {
     padding: 0.875rem !important;
     font-size: 0.95rem !important;
   }
 
-  /* Contacts */
   .contact-item {
     padding: 1rem !important;
     gap: 1rem !important;
   }
+  
   .contact-icon {
     min-width: 48px !important;
     height: 48px !important;
   }
+  
   .contact-icon svg {
     width: 22px !important;
     height: 22px !important;
   }
+  
   .contact-text h3 {
     font-size: 1.2rem !important;
   }
+  
   .contact-text p,
   .contact-text a {
     font-size: 0.975rem !important;
   }
+  
   .contact-social a {
     width: 34px !important;
     height: 34px !important;
     font-size: 0.85rem !important;
   }
+  
   .contact-message {
     font-size: 1.15rem !important;
     padding: 1.5rem !important;
     margin-top: 1rem !important;
   }
 
-  /* Footer & UI */
   footer {
     padding: 2rem 0 1.5rem !important;
   }
+  
   .social-links a {
     width: 44px !important;
     height: 44px !important;
     font-size: 1.2rem !important;
   }
+  
   .copyright {
     font-size: 0.925rem !important;
     padding: 0 8px;
   }
+  
   .scroll-to-top {
     width: 44px !important;
     height: 44px !important;
@@ -1696,7 +1913,6 @@ footer {
     font-size: 1.15rem !important;
   }
 
-  /* Улучшение тактильных целей */
   .nav-links a,
   .resume-toggle,
   .theme-toggle,
@@ -1706,14 +1922,13 @@ footer {
     min-height: 44px;
     min-width: 44px;
   }
+  
   .contact-item:hover {
     transform: none !important;
   }
 }
 
-/* === Критически важные улучшения для всех мобильных устройств === */
 @media (hover: none) and (pointer: coarse) {
-  /* Убираем анимации наведения на тач-устройствах */
   .nav-links a:hover::after,
   .skill-tag:hover::before,
   .skill-tag:hover::after,
@@ -1725,7 +1940,6 @@ footer {
     border-color: var(--border) !important;
   }
   
-  /* Увеличиваем зоны касания */
   .theme-toggle,
   .scroll-to-top,
   .resume-toggle {
@@ -1733,32 +1947,26 @@ footer {
     min-height: 44px;
   }
   
-  /* Отключаем пульсацию кнопки на мобильных */
   .cta-button {
     animation: none !important;
   }
 }
 
-/* === Исправление потенциальных проблем === */
 @media (max-width: 480px) {
-  /* Гарантируем, что контент не выходит за границы */
   body, html {
     overflow-x: hidden !important;
   }
   
-  /* Защита от случайного увеличения текста в полях ввода */
   input, textarea, select, button {
     font-size: 16px !important;
   }
   
-  /* Улучшение читаемости на ярком солнце */
   .dark-theme .hero-content h1,
   .dark-theme .section-title {
     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
   }
 }
 
-/* Анимированный фон с плавающими частицами */
 .particles-background {
   position: fixed;
   top: 0;
@@ -1780,7 +1988,6 @@ footer {
   will-change: transform;
 }
 
-/* Разные размеры и позиции для частиц */
 .p1 { width: 180px; height: 180px; top: 15%; left: 10%; animation-delay: 0s; animation-duration: 35s; }
 .p2 { width: 120px; height: 120px; top: 65%; left: 85%; animation-delay: -7s; animation-duration: 40s; }
 .p3 { width: 90px; height: 90px; top: 35%; left: 75%; animation-delay: -15s; animation-duration: 30s; opacity: 0.25; }
@@ -1792,7 +1999,6 @@ footer {
 .p9 { width: 100px; height: 100px; top: 25%; left: 60%; animation-delay: -3s; animation-duration: 36s; opacity: 0.28; }
 .p10 { width: 75px; height: 75px; top: 90%; left: 35%; animation-delay: -14s; animation-duration: 33s; }
 
-/* Анимация плавающего движения */
 @keyframes float {
   0%, 100% {
     transform: translate(0, 0) scale(1) rotate(0deg);
@@ -1808,7 +2014,6 @@ footer {
   }
 }
 
-/* Эффект свечения для частиц */
 .particle::after {
   content: '';
   position: absolute;
@@ -1820,7 +2025,6 @@ footer {
   z-index: -1;
 }
 
-/* Адаптация для темной темы */
 .dark-theme .particle {
   opacity: 0.22;
   box-shadow: 0 0 35px var(--accent);
@@ -1830,14 +2034,12 @@ footer {
   opacity: 0.75;
 }
 
-/* Оптимизация для мобильных устройств */
 @media (max-width: 768px) {
   .particles-background {
     display: none;
   }
 }
 
-/* Дополнительная оптимизация производительности */
 @media (prefers-reduced-motion: reduce) {
   .particle {
     animation: none !important;
@@ -1863,7 +2065,6 @@ footer {
   color: var(--accent);
 }
 
-/* Unified Projects Block — в стиле Skills */
 .projects-unified,
 .education-unified {
   background: var(--bg-secondary);
@@ -1873,7 +2074,7 @@ footer {
   box-shadow: var(--shadow-md);
   transition: var(--transition-slow);
   margin-top: 3.5rem;
-  max-width: 950px;      /* ← УБЕРИТЕ ЭТО */
+  max-width: 950px;
   margin-left: auto;
   margin-right: auto;
   position: relative;
@@ -1903,14 +2104,12 @@ footer {
   border-color: var(--accent);
 }
 
-/* Timeline внутри unified блока */
 .projects-unified .timeline {
   padding-left: 0;
   max-width: none;
   margin: 0;
   position: relative;
 }
-
 
 .projects-unified .timeline-item {
   padding-left: 64px;
@@ -1921,9 +2120,6 @@ footer {
   margin-bottom: 0;
 }
 
-
-
-/* Стили ссылок проектов */
 .project-links {
   display: flex;
   gap: 1.25rem;
@@ -1959,7 +2155,6 @@ footer {
   flex-shrink: 0;
 }
 
-/* === Unified Timeline — линия строго по центру маркеров === */
 .timeline {
   max-width: 900px;
   margin: 4rem auto 0;
@@ -1967,13 +2162,12 @@ footer {
   padding-left: 0;
 }
 
-/* Вертикальная линия — ось таймлайна */
 .timeline::before {
   content: '';
   position: absolute;
   top: 20px;
   bottom: 0;
-  left: 24px; /* ← основная ось */
+  left: 24px;
   width: 3px;
   background: var(--accent-gradient);
   border-radius: 3px;
@@ -1984,7 +2178,7 @@ footer {
 .timeline-item {
   position: relative;
   margin-bottom: 4.5rem;
-  padding-left: 64px; /* 24px (ось) + 40px (отступ текста) */
+  padding-left: 64px;
   opacity: 0;
   transform: translateX(-25px);
   transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.17, 0.88, 0.32, 1.28);
@@ -1995,12 +2189,11 @@ footer {
   transform: translateX(0);
 }
 
-/* Маркер — круг, центрированный по оси */
 .timeline-item::before {
   content: '';
   position: absolute;
   top: 8px;
-  left: 24px; /* ← центр маркера на оси */
+  left: 24px;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -2011,7 +2204,7 @@ footer {
     0 0 0 8px var(--accent),
     0 0 15px rgba(126, 58, 242, 0.45);
   z-index: 1;
-  transform: translateX(-50%); /* ← ключевой момент: центрирует по left */
+  transform: translateX(-50%);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -2023,19 +2216,17 @@ footer {
     0 0 20px rgba(126, 58, 242, 0.65);
 }
 
-/* Сдвиг содержимого влево на мобильных */
 @media (max-width: 768px) {
   .projects-unified .timeline,
   .education-unified .timeline {
-    padding-left: 20px; /* вместо 0 или 35–40px по умолчанию */
+    padding-left: 20px;
   }
 
   .projects-unified .timeline-item,
   .education-unified .timeline-item {
-    padding-left: 52px; /* 20px (ось) + 32px (текст) — чуть уже, чем раньше */
+    padding-left: 52px;
   }
 
-  /* Центрируем маркер относительно новой оси */
   .projects-unified .timeline::before,
   .education-unified .timeline::before {
     left: 16px;
@@ -2069,7 +2260,6 @@ footer {
   }
 }
 
-/* Стили формы контактов */
 .contact-message h2 {
   font-family: 'Space Mono', monospace;
   font-size: 2.5rem;
@@ -2202,7 +2392,6 @@ footer {
   line-height: 1.4;
 }
 
-
 @keyframes fadeIn {
   from { 
     opacity: 0; 
@@ -2214,7 +2403,6 @@ footer {
   }
 }
 
-/* Стиль кнопки с иконкой */
 #contact-form button {
   display: flex;
   align-items: center;
@@ -2245,7 +2433,6 @@ footer {
   transform: translateX(3px);
 }
 
-/* Обёртка под сообщение — фиксированная зона под формой */
 .form-success-wrapper {
   margin-top: 1.25rem;
 }
@@ -2275,7 +2462,7 @@ footer {
   opacity: 0;
   transform: translateY(-6px);
   transition:
-    opacity 0.45s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s,  /* лёгкая задержка */
+    opacity 0.45s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s,
     transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s;
 }
 
@@ -2323,7 +2510,6 @@ footer {
   box-shadow: var(--shadow-md);
   border-color: var(--accent);
   color: var(--accent);
-
 }
 
 .projects-unified .timeline,
@@ -2336,10 +2522,7 @@ footer {
     list-style-type: none;
 }
 
-/* ==================== */
-/* LOADING SCREEN STYLES */
-/* ==================== */
-
+/* Loading Screen */
 .loading-screen {
     position: fixed;
     top: 0;
@@ -2446,10 +2629,6 @@ footer {
     100% { width: 100%; }
 }
 
-/* ==================== */
-/* LANGUAGE TOGGLE STYLES */
-/* ==================== */
-
 .lang-toggle {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
@@ -2488,7 +2667,6 @@ footer {
     display: inline-block;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .lang-toggle {
         width: 44px;
