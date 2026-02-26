@@ -68,14 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!document.querySelector('.mobile-menu')) {
         const mobileMenu = document.createElement('div');
         mobileMenu.className = 'mobile-menu';
-        mobileMenu.innerHTML = `
-            <div class="mobile-nav-links">
-                <a href="#about">Обо мне</a>
-                <a href="#projects">Проекты</a>
-                <a href="#education">Образование</a>
-                <a href="#skills">Навыки</a>
-                <a href="#contact">Контакты</a>
-            </div>
+        
             <div class="mobile-controls">
                 <button class="mobile-theme-toggle" aria-label="Переключить тему">
                     <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
