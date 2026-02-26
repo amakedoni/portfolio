@@ -91,11 +91,43 @@
     }
     </script>
     
+    <!-- Language System -->
+    <script src="translations.js"></script>
+    <script src="lang.js"></script>
+    
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="style.css?v=1.0.0">
+    <link rel="stylesheet" href="style.css?v=1.0.1">
     <link rel="stylesheet" href="a11y.css?v=1.0.0">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader-container">
+            <div class="loader-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#7e3af2;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path class="logo-path" d="M 25 75 L 35 25 L 50 60 L 65 25 L 75 75" 
+                          stroke="url(#logoGradient)" 
+                          stroke-width="4" 
+                          fill="none" 
+                          stroke-linecap="round" 
+                          stroke-linejoin="round"/>
+                    <circle class="logo-dot" cx="50" cy="70" r="4" fill="url(#logoGradient)"/>
+                </svg>
+            </div>
+            <div class="loader-text" data-i18n="loading_text">Alexander Makedonskiy</div>
+            <div class="loader-progress">
+                <div class="loader-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="particles-background">
         <div class="particle p1"></div>
         <div class="particle p2"></div>
@@ -113,17 +145,17 @@
         <div class="container">
             <nav>
                 <a href="#" class="logo">Alexander Makedonskiy</a>
-                <button class="mobile-menu-toggle" aria-label="Меню" aria-expanded="false">
+                <button class="mobile-menu-toggle" data-i18n="aria_menu" aria-label="Меню" aria-expanded="false">
                     <span class="burger-line"></span>
                     <span class="burger-line"></span>
                     <span class="burger-line"></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="#about">Обо мне</a></li>
-                    <li><a href="#projects">Проекты</a></li>
-                    <li><a href="#education">Образование</a></li>
+                    <li><a href="#about" data-i18n="nav_about">Обо мне</a></li>
+                    <li><a href="#projects" data-i18n="nav_projects">Проекты</a></li>
+                    <li><a href="#education" data-i18n="nav_education">Образование</a></li>
                     <li class="nav-item resume-dropdown" role="menu">
-                        <button class="resume-toggle" aria-haspopup="true" aria-expanded="false">
+                        <button class="resume-toggle" data-i18n="nav_resume" aria-haspopup="true" aria-expanded="false">
                             Резюме
                         </button>
                         <ul class="resume-menu" role="menu">
@@ -135,11 +167,14 @@
                             </li>
                         </ul>
                     </li>                   
-                    <li><a href="#skills">Навыки</a></li>
-                    <li><a href="#contact">Контакты</a></li>
+                    <li><a href="#skills" data-i18n="nav_skills">Навыки</a></li>
+                    <li><a href="#contact" data-i18n="nav_contact">Контакты</a></li>
                 </ul>
                 <div class="controls">
-                    <button class="theme-toggle" aria-label="Переключить тему">
+                    <button class="lang-toggle" data-i18n="aria_lang" aria-label="Переключить язык">
+                        <span class="lang-text">RU</span>
+                    </button>
+                    <button class="theme-toggle" data-i18n="aria_theme" aria-label="Переключить тему">
                         <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                         </svg>
@@ -163,22 +198,22 @@
     <section id="hero" class="fade-in">
         <div class="container">
             <div class="hero-content">
-                <h1>Создаю технологии, которые улучшают жизнь</h1>
-                <h2>Full-Stack Developer & Machine Learning Enthusiast</h2>
-                <p>Разрабатываю полнофункциональные приложения с использованием современных технологий. Углубленно изучаю машинное обучение и создаю решения, решающие реальные задачи. Сочетаю техническую экспертизу с креативным подходом к проблемам.</p>
-                <a href="#contact" class="cta-button">Связаться со мной</a>
+                <h1 data-i18n="hero_title">Создаю технологии, которые улучшают жизнь</h1>
+                <h2 data-i18n="hero_subtitle">Full-Stack Developer & Machine Learning Enthusiast</h2>
+                <p data-i18n="hero_description">Разрабатываю полнофункциональные приложения с использованием современных технологий. Углубленно изучаю машинное обучение и создаю решения, решающие реальные задачи. Сочетаю техническую экспертизу с креативным подходом к проблемам.</p>
+                <a href="#contact" class="cta-button" data-i18n="hero_cta">Связаться со мной</a>
             </div>
         </div>
     </section>
 
     <section id="about" class="fade-in">
         <div class="container">
-            <h2 class="section-title">Обо мне</h2>
+            <h2 class="section-title" data-i18n="about_title">Обо мне</h2>
             <div class="about-content">
                 <div class="about-text">
-                    <p>Я — студент НИУ МАИ по направлению «Прикладная математика и информатика» с глубокими знаниями в программировании и анализе данных. Специализируюсь на разработке клиент-серверных приложений и изучении методов машинного обучения.</p>
-                    <p>Мой подход основан на постоянном обучении, применении лучших практик и внимании к деталям. Верю, что сильные технические решения рождаются на стыке фундаментальных знаний и креативного мышления. Участвую в олимпиадах и хакатонах для развития профессиональных навыков.</p>
-                    <p>Свободно владею английским языком (Upper-Intermediate/B2). В свободное время играю на гитаре, слушаю музыку и углубляю знания в области машинного обучения и анализа данных.</p>
+                    <p data-i18n="about_p1">Я — студент НИУ МАИ по направлению «Прикладная математика и информатика» с глубокими знаниями в программировании и анализе данных. Специализируюсь на разработке клиент-серверных приложений и изучении методов машинного обучения.</p>
+                    <p data-i18n="about_p2">Мой подход основан на постоянном обучении, применении лучших практик и внимании к деталям. Верю, что сильные технические решения рождаются на стыке фундаментальных знаний и креативного мышления. Участвую в олимпиадах и хакатонах для развития профессиональных навыков.</p>
+                    <p data-i18n="about_p3">Свободно владею английским языком (Upper-Intermediate/B2). В свободное время играю на гитаре, слушаю музыку и углубляю знания в области машинного обучения и анализа данных.</p>
                 </div>
                 <div class="about-image">
                     <div class="profile-photo-wrapper">
@@ -201,7 +236,7 @@
 
     <section id="projects" class="fade-in">
         <div class="container">
-            <h2 class="section-title">Проекты и достижения</h2>
+            <h2 class="section-title" data-i18n="projects_title">Проекты и достижения</h2>
             <div class="projects-unified">
                 <ol class="timeline" role="list">
                     <li class="timeline-item">
@@ -244,7 +279,7 @@
 
     <section id="education" class="fade-in">
         <div class="container">
-            <h2 class="section-title">Образование</h2>
+            <h2 class="section-title" data-i18n="education_title">Образование</h2>
             <div class="education-unified">
                 <ol class="timeline" role="list">
                     <li class="timeline-item">
@@ -272,7 +307,7 @@
 
     <section id="skills" class="fade-in">
         <div class="container">
-            <h2 class="section-title">Навыки</h2>
+            <h2 class="section-title" data-i18n="skills_title">Навыки</h2>
             <div class="skills-unified">
                 <div class="skills-header">
                     <div class="skills-icon" aria-hidden="true">
@@ -280,7 +315,7 @@
                             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
                         </svg>
                     </div>
-                    <h3>Мой технический стек</h3>
+                    <h3 data-i18n="skills_header">Мой технический стек</h3>
                 </div>
                 <div class="skills-grid">
                     <div class="skill-tag"><span class="tag-text">Python</span></div>
@@ -297,7 +332,7 @@
                     <div class="skill-tag"><span class="tag-text">SQLAlchemy</span></div>
                 </div>
                 <div class="skills-footer">
-                    <p>Постоянно расширяю компетенции в backend-разработке и машинном обучении</p>
+                    <p data-i18n="skills_footer">Постоянно расширяю компетенции в backend-разработке и машинном обучении</p>
                 </div>
             </div>
         </div>
@@ -305,7 +340,7 @@
 
     <section id="contact" class="fade-in">
         <div class="container">
-            <h2 class="section-title">Контакты</h2>
+            <h2 class="section-title" data-i18n="contact_title">Контакты</h2>
             <div class="contact-container">
                 <div class="contact-info">
                     <div class="contact-item">
@@ -315,7 +350,7 @@
                             </svg>
                         </div>
                         <div class="contact-text">
-                            <h3>Email и телефон</h3>
+                            <h3 data-i18n="contact_email_title">Email и телефон</h3>
                             <a href="mailto:aleximlord@gmail.com">aleximlord@gmail.com</a><br>
                             <a href="tel:+79255053027">+7 925 505-30-27</a>
                         </div>
@@ -327,8 +362,8 @@
                             </svg>
                         </div>
                         <div class="contact-text">
-                            <h3>Местоположение</h3>
-                            <p>Москва, Российская Федерация</p>
+                            <h3 data-i18n="contact_location_title">Местоположение</h3>
+                            <p data-i18n="contact_location">Москва, Российская Федерация</p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -338,7 +373,7 @@
                             </svg>
                         </div>
                         <div class="contact-text">
-                            <h3>Социальные сети</h3>
+                            <h3 data-i18n="contact_social_title">Социальные сети</h3>
                             <div class="social-links contact-social">
                                 <a href="https://github.com/amakedoni" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
                                 <a href="https://t.me/makedoni0" target="_blank" rel="noopener" aria-label="Telegram">TG</a>
@@ -348,20 +383,20 @@
                     </div>
                 </div>
                 <div class="contact-message">
-                    <h2>Свяжитесь со мной</h2>
-                    <p>Открыт к интересным проектам в области разработки и машинного обучения. Готов обсудить возможности сотрудничества.</p>
+                    <h2 data-i18n="contact_message_title">Свяжитесь со мной</h2>
+                    <p data-i18n="contact_message_text">Открыт к интересным проектам в области разработки и машинного обучения. Готов обсудить возможности сотрудничества.</p>
 
                     <form id="contact-form">
                         <input type="hidden" name="access_key" value="fa82ee15-753e-4de8-96c8-4afa2dd1f19c">
                         <label for="contact-name" class="visually-hidden">Имя</label>
-                        <input type="text" id="contact-name" name="name" placeholder="Имя" required aria-label="Ваше имя">
+                        <input type="text" id="contact-name" name="name" data-i18n="contact_form_name" placeholder="Имя" required aria-label="Ваше имя">
                         <label for="contact-email" class="visually-hidden">Email</label>
-                        <input type="email" id="contact-email" name="email" placeholder="Email" required aria-label="Ваш email">
+                        <input type="email" id="contact-email" name="email" data-i18n="contact_form_email" placeholder="Email" required aria-label="Ваш email">
                         <label for="contact-message" class="visually-hidden">Сообщение</label>
-                        <textarea id="contact-message" name="message" placeholder="Сообщение" rows="4" required aria-label="Ваше сообщение"></textarea>
+                        <textarea id="contact-message" name="message" data-i18n="contact_form_message" placeholder="Сообщение" rows="4" required aria-label="Ваше сообщение"></textarea>
                         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
                         <button type="submit">
-                            <span>отправить</span>
+                            <span data-i18n="contact_form_submit">отправить</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                                 <polyline points="12 5 19 12 12 19"></polyline>
@@ -374,7 +409,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            <span>Сообщение отправлено! Отвечу в течение 24 часов.</span>
+                            <span data-i18n="contact_form_success">Сообщение отправлено! Отвечу в течение 24 часов.</span>
                         </div>
                     </div>
                 </div>
@@ -391,19 +426,19 @@
                     <a href="https://m.vk.com/amakedoni" target="_blank" rel="noopener" aria-label="VKontakte">VK</a>
                     <a href="mailto:aleximlord@gmail.com" aria-label="Email">✉</a>
                 </div>
-                <p class="copyright">© 2026 Македонский Александр. Все права защищены.</p>
+                <p class="copyright" data-i18n="footer_copyright">© 2026 Македонский Александр. Все права защищены.</p>
             </div>
         </div>
     </footer>
 
-    <button class="scroll-to-top" aria-label="Вернуться наверх">
+    <button class="scroll-to-top" data-i18n="aria_scroll_top" aria-label="Вернуться наверх">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M12 19V5M5 12l7-7 7 7"></path>
         </svg>
     </button>
 
     <!-- JavaScript -->
-    <script src="script.js?v=1.0.0" defer></script>
+    <script src="script.js?v=1.0.1" defer></script>
     
     <!-- Service Worker Registration -->
     <script>
