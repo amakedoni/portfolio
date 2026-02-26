@@ -90,6 +90,13 @@ const translations = {
         // Footer
         footer_copyright: "© 2026 Македонский Александр. Все права защищены.",
         
+        // 404 Page
+        "404_title": "404 — Страница не найдена | Alexander Makedonskiy",
+        "404_heading": "Страница не найдена",
+        "404_description": "Кажется, вы заблудились в цифровом пространстве. Страница, которую вы ищете, не существует или была перемещена.",
+        "404_home": "На главную",
+        "404_back": "Назад",
+        
         // Aria Labels
         aria_menu: "Меню",
         aria_theme: "Переключить тему",
@@ -193,6 +200,13 @@ const translations = {
         
         // Footer
         footer_copyright: "© 2026 Alexander Makedonskiy. All rights reserved.",
+        
+        // 404 Page
+        "404_title": "404 — Page Not Found | Alexander Makedonskiy",
+        "404_heading": "Page Not Found",
+        "404_description": "Looks like you got lost in the digital space. The page you're looking for doesn't exist or has been moved.",
+        "404_home": "Home",
+        "404_back": "Go Back",
         
         // Aria Labels
         aria_menu: "Menu",
