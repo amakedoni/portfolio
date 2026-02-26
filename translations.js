@@ -27,8 +27,45 @@ const translations = {
         // Projects Section
         projects_title: "Проекты и достижения",
         
+        // Project 1: MAI Tablets
+        project1_title: "МАИ Таблетки — Приложение для контроля лечения",
+        project1_role: "Full-Stack Разработчик",
+        project1_desc: "Полнофункциональная система для контроля приёма лекарств с синхронизацией данных между пациентами и доверенными лицами («мед-друзьями»).",
+        project1_feat1: "Клиент-серверная архитектура с оффлайн-режимом и автоматической синхронизацией",
+        project1_feat2: "Система QR-кодов с временным ограничением (3 минуты) для безопасного подключения",
+        project1_feat3: "Настраиваемые push-уведомления и гибкое расписание приёма (ежедневный/периодический режимы)",
+        project1_feat4: "Реализация принципов сохранения медицинской тайны",
+        project1_stack_label: "Стек:",
+        project1_link_backend: "Backend",
+        project1_link_client: "Клиент",
+        
+        // Project 2: Olympiads
+        project2_title: "Олимпиадные достижения",
+        project2_subtitle: "Информатика и математика",
+        project2_item1: "Финалист олимпиады ИТМО (2024–2025)",
+        project2_item2: "Финалист олимпиады РОСАТОМА по информатике и математике (2022–2024)",
+        project2_item3: "Участник финала Московской предпрофессиональной олимпиады по программе «Аэрокосмос»: разработка прототипа кубсата для расшифровки сообщений",
+        
         // Education Section
         education_title: "Образование",
+        
+        // Education 1: MAI
+        edu1_degree: "Прикладная математика и информатика",
+        edu1_institution: "НИУ Московский авиационный институт (МАИ)",
+        edu1_period: "2025 – настоящее время",
+        edu1_desc: "Профильные дисциплины: высшая математика, программирование на Python, фундаментальная информатика, архитектура вычислительных систем.",
+        
+        // Education 2: MEPHI Course
+        edu2_title: "Дополнительное образование",
+        edu2_course: "Очный курс по машинному обучению и анализу данных",
+        edu2_period: "2022 – 2025",
+        edu2_desc: "НИЯУ МИФИ, институт ИНТЭЛ. Практическое применение алгоритмов ML: регрессия (Random Forest), классификация (KNN, Random Forest), кластеризация (K-Means), визуализация данных (Matplotlib, Seaborn).",
+        
+        // Education 3: Pre-university
+        edu3_title: "Предуниверситарий",
+        edu3_institution: "НИЯУ МИФИ",
+        edu3_period: "2021 – 2025",
+        edu3_desc: "Углублённая подготовка по математике, информатике и физике перед поступлением в вуз.",
         
         // Skills Section
         skills_title: "Навыки",
@@ -94,8 +131,45 @@ const translations = {
         // Projects Section
         projects_title: "Projects and Achievements",
         
+        // Project 1: MAI Tablets
+        project1_title: "MAI Tablets — Treatment Control App",
+        project1_role: "Full-Stack Developer",
+        project1_desc: "Full-featured system for medication intake control with data synchronization between patients and trusted persons ('med-friends').",
+        project1_feat1: "Client-server architecture with offline mode and automatic synchronization",
+        project1_feat2: "QR code system with time limit (3 minutes) for secure connection",
+        project1_feat3: "Customizable push notifications and flexible schedule (daily/periodic modes)",
+        project1_feat4: "Implementation of medical confidentiality principles",
+        project1_stack_label: "Stack:",
+        project1_link_backend: "Backend",
+        project1_link_client: "Client",
+        
+        // Project 2: Olympiads
+        project2_title: "Olympiad Achievements",
+        project2_subtitle: "Computer Science and Mathematics",
+        project2_item1: "Finalist of ITMO olympiad (2024–2025)",
+        project2_item2: "Finalist of ROSATOM olympiad in computer science and mathematics (2022–2024)",
+        project2_item3: "Participant in the final of Moscow pre-professional olympiad in the 'Aerospace' program: development of a cubesat prototype for message decryption",
+        
         // Education Section
         education_title: "Education",
+        
+        // Education 1: MAI
+        edu1_degree: "Applied Mathematics and Computer Science",
+        edu1_institution: "Moscow Aviation Institute (MAI)",
+        edu1_period: "2025 – present",
+        edu1_desc: "Core disciplines: higher mathematics, Python programming, fundamental computer science, computer architecture.",
+        
+        // Education 2: MEPHI Course
+        edu2_title: "Additional Education",
+        edu2_course: "On-site course in machine learning and data analysis",
+        edu2_period: "2022 – 2025",
+        edu2_desc: "NRNU MEPhI, INTEL Institute. Practical application of ML algorithms: regression (Random Forest), classification (KNN, Random Forest), clustering (K-Means), data visualization (Matplotlib, Seaborn).",
+        
+        // Education 3: Pre-university
+        edu3_title: "Pre-university",
+        edu3_institution: "NRNU MEPhI",
+        edu3_period: "2021 – 2025",
+        edu3_desc: "In-depth preparation in mathematics, computer science and physics before university admission.",
         
         // Skills Section
         skills_title: "Skills",
