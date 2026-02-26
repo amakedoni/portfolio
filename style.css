@@ -320,6 +320,8 @@ nav {
     flex-direction: column;
     transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     overflow-y: auto;
+    border-top-left-radius: var(--radius-xl);
+    border-bottom-left-radius: var(--radius-xl);
 }
 
 .mobile-menu-open .mobile-menu {
@@ -337,6 +339,7 @@ nav {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
+    backdrop-filter: blur(4px);
 }
 
 .mobile-menu-open .mobile-menu-backdrop {
@@ -345,8 +348,9 @@ nav {
 }
 
 .mobile-menu-header {
-    padding: 2rem 1.5rem 1.5rem;
+    padding: 1.75rem 1.5rem 1.25rem;
     border-bottom: 1px solid var(--border);
+    border-top-left-radius: var(--radius-xl);
 }
 
 .mobile-menu-logo {
@@ -361,19 +365,23 @@ nav {
 
 .mobile-nav-links {
     flex: 1;
-    padding: 1.5rem 0;
+    padding: 1.25rem 0;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    padding-bottom: 1rem;
 }
 
 .mobile-nav-links > a {
-    padding: 1rem 1.5rem;
+    padding: 0.875rem 1.5rem;
     color: var(--text-primary);
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
     font-weight: 500;
     text-decoration: none;
     transition: all 0.3s ease;
     border-left: 3px solid transparent;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin: 0.125rem 0;
 }
 
 .mobile-nav-links > a:hover,
@@ -385,17 +393,17 @@ nav {
 
 /* Mobile Resume Dropdown */
 .mobile-resume-dropdown {
-    margin: 0.5rem 0;
+    margin: 0.25rem 0;
 }
 
 .mobile-resume-toggle {
     width: 100%;
-    padding: 1rem 1.5rem;
+    padding: 0.875rem 1.5rem;
     background: none;
     border: none;
     border-left: 3px solid transparent;
     color: var(--text-primary);
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
     font-weight: 500;
     text-align: left;
     cursor: pointer;
@@ -404,6 +412,7 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 .mobile-resume-toggle::after {
@@ -428,6 +437,8 @@ nav {
     overflow: hidden;
     transition: max-height 0.3s ease;
     background: var(--bg-secondary);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin-left: 0.5rem;
 }
 
 .mobile-resume-dropdown.open .mobile-resume-menu {
@@ -436,27 +447,31 @@ nav {
 
 .mobile-resume-menu a {
     display: block;
-    padding: 0.875rem 1.5rem 0.875rem 3rem;
+    padding: 0.75rem 1.5rem 0.75rem 2.75rem;
     color: var(--text-secondary);
-    font-size: 1rem;
+    font-size: 0.9375rem;
     text-decoration: none;
     transition: all 0.3s ease;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 .mobile-resume-menu a:hover,
 .mobile-resume-menu a:active {
     background: var(--bg-tertiary);
     color: var(--accent);
-    padding-left: 3.5rem;
+    padding-left: 3rem;
 }
 
 /* Mobile Controls */
 .mobile-controls {
-    padding: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
     border-top: 1px solid var(--border);
     display: flex;
     gap: 1rem;
     justify-content: center;
+    flex-shrink: 0;
+    margin-top: auto;
 }
 
 .mobile-theme-toggle,
