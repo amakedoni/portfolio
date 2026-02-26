@@ -13,7 +13,6 @@
     
     <!-- Language System -->
     <script src="translations.js"></script>
-    <script src="lang.js"></script>
     
     <style>
         :root {
@@ -181,8 +180,8 @@
             z-index: 10;
         }
         
-        .theme-toggle-404,
-        .lang-toggle-404 {
+        .theme-toggle,
+        .lang-toggle {
             background: transparent;
             border: 2px solid var(--accent);
             width: 50px;
@@ -194,26 +193,26 @@
             align-items: center;
             justify-content: center;
             color: var(--accent);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Space Mono', monospace;
             font-size: 0.875rem;
             font-weight: 600;
         }
         
-        .theme-toggle-404:hover,
-        .lang-toggle-404:hover {
+        .theme-toggle:hover,
+        .lang-toggle:hover {
             transform: scale(1.1);
             background: var(--accent);
             color: white;
         }
         
-        .theme-toggle-404 svg {
+        .theme-toggle svg {
             width: 22px;
             height: 22px;
             stroke: var(--accent);
             transition: all 0.3s ease;
         }
         
-        .theme-toggle-404:hover svg {
+        .theme-toggle:hover svg {
             stroke: white;
         }
         
@@ -243,8 +242,8 @@
                 right: 1rem;
             }
             
-            .theme-toggle-404,
-            .lang-toggle-404 {
+            .theme-toggle,
+            .lang-toggle {
                 width: 44px;
                 height: 44px;
             }
@@ -260,10 +259,10 @@
     </div>
     
     <div class="controls-404">
-        <button class="lang-toggle-404" data-i18n="aria_lang" aria-label="Переключить язык">
+        <button class="lang-toggle" data-i18n="aria_lang" aria-label="Переключить язык">
             <span class="lang-text">RU</span>
         </button>
-        <button class="theme-toggle-404" data-i18n="aria_theme" aria-label="Переключить тему">
+        <button class="theme-toggle" data-i18n="aria_theme" aria-label="Переключить тему">
             <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
@@ -306,7 +305,65 @@
     </div>
     
     <script>
-        const themeToggle = document.querySelector('.theme-toggle-404');
+        // Language Management for 404 page
+        (function() {
+            'use strict';
+            
+            let currentLang = localStorage.getItem('language') || 'ru';
+            document.documentElement.lang = currentLang;
+            
+            function setLanguage(lang) {
+                currentLang = lang;
+                document.documentElement.lang = lang;
+                localStorage.setItem('language', lang);
+                
+                // Update all elements with data-i18n
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[lang] && translations[lang][key]) {
+                        if (element.tagName === 'BUTTON' && element.getAttribute('aria-label')) {
+                            element.setAttribute('aria-label', translations[lang][key]);
+                        } else {
+                            element.textContent = translations[lang][key];
+                        }
+                    }
+                });
+                
+                // Update title
+                if (translations[lang]['404_title']) {
+                    document.title = translations[lang]['404_title'];
+                }
+                
+                // Update language toggle button
+                const langText = document.querySelector('.lang-text');
+                if (langText) {
+                    langText.textContent = lang.toUpperCase();
+                }
+            }
+            
+            // Initialize on load
+            window.addEventListener('DOMContentLoaded', () => {
+                setLanguage(currentLang);
+                
+                // Setup language toggle
+                const langToggle = document.querySelector('.lang-toggle');
+                if (langToggle) {
+                    langToggle.addEventListener('click', () => {
+                        const newLang = currentLang === 'ru' ? 'en' : 'ru';
+                        setLanguage(newLang);
+                        
+                        // Visual feedback
+                        langToggle.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            langToggle.style.transform = '';
+                        }, 150);
+                    });
+                }
+            });
+        })();
+        
+        // Theme toggle
+        const themeToggle = document.querySelector('.theme-toggle');
         const body = document.body;
         
         const savedTheme = localStorage.getItem('theme');
