@@ -17,7 +17,11 @@ const translations = {
         hero_subtitle: "Full-Stack Developer & Machine Learning Enthusiast",
         hero_description: "Разрабатываю полнофункциональные приложения с использованием современных технологий. Углубленно изучаю машинное обучение и создаю решения, решающие реальные задачи. Сочетаю техническую экспертизу с креативным подходом к проблемам.",
         hero_cta: "Связаться со мной",
-        
+        hero_badge: "Открыт к предложениям",
+				hero_greeting: "Привет, я Александр",
+				hero_iam: "Я — ",
+				hero_typing_phrases: ["Full-Stack Dev", "ML энтузиаст", "Backend Dev", "Студент МАИ", "Python Dev"],
+
         // About Section  
         about_title: "Обо мне",
         about_p1: "Я — студент НИУ МАИ по направлению «Прикладная математика и информатика» с глубокими знаниями в программировании и анализе данных. Специализируюсь на разработке клиент-серверных приложений и изучении методов машинного обучения.",
@@ -128,7 +132,11 @@ const translations = {
         hero_subtitle: "Full-Stack Developer & Machine Learning Enthusiast",
         hero_description: "I develop full-featured applications using modern technologies. Deeply studying machine learning and creating solutions that solve real problems. Combining technical expertise with a creative approach to challenges.",
         hero_cta: "Contact me",
-        
+        hero_badge: "Open to opportunities",
+			hero_greeting: "Hi, I'm Alexander",
+			hero_iam: "I'm a ",
+			hero_typing_phrases: ["Full-Stack Developer", "ML Enthusiast", "Backend Dev", "MAI Student", "Python Dev"],
+
         // About Section
         about_title: "About Me",
         about_p1: "I'm a student at MAI University majoring in Applied Mathematics and Computer Science with deep knowledge in programming and data analysis. I specialize in developing client-server applications and studying machine learning methods.",

@@ -490,3 +490,85 @@ if (scrollProgressBar) {
     }, { passive: true });
 }
 */
+// ============================================
+// TYPING EFFECT (с поддержкой переводов)
+// ============================================
+
+const typingElement = document.getElementById('typing-text');
+
+let typeTimeout = null;
+let typingState = {
+    phraseIndex: 0,
+    charIndex: 0,
+    isDeleting: false
+};
+
+const typeSpeed = 120;
+const deleteSpeed = 60;
+const pauseAfterType = 1500;
+const pauseAfterDelete = 5000; // было 500 — дольше пауза перед новым словом
+
+
+function getPhrases() {
+    const lang = localStorage.getItem('language') || 'ru';
+    return (translations[lang] && translations[lang].hero_typing_phrases)
+        ? translations[lang].hero_typing_phrases
+        : ['Full-Stack Developer', 'ML Enthusiast', 'Developer'];
+}
+
+function typeEffect() {
+    if (!typingElement) return;
+
+    const phrases = getPhrases();
+    if (typingState.phraseIndex >= phrases.length) typingState.phraseIndex = 0;
+
+    const currentPhrase = phrases[typingState.phraseIndex];
+
+    if (!typingState.isDeleting) {
+        // Печатаем следующий символ
+        typingState.charIndex++;
+        typingElement.textContent = currentPhrase.substring(0, typingState.charIndex);
+
+        if (typingState.charIndex >= currentPhrase.length) {
+            // Фраза написана полностью — ждём и начинаем удалять
+            typingState.isDeleting = true;
+            typeTimeout = setTimeout(typeEffect, pauseAfterType);
+            return;
+        }
+
+        typeTimeout = setTimeout(typeEffect, typeSpeed);
+
+    } else {
+        // Удаляем последний символ
+        typingState.charIndex--;
+        typingElement.textContent = currentPhrase.substring(0, typingState.charIndex);
+
+        if (typingState.charIndex <= 0) {
+            // Всё удалено — переходим к следующей фразе
+            typingState.charIndex = 0;
+            typingState.isDeleting = false;
+            typingState.phraseIndex = (typingState.phraseIndex + 1) % phrases.length;
+            typeTimeout = setTimeout(typeEffect, pauseAfterDelete);
+            return;
+        }
+
+        typeTimeout = setTimeout(typeEffect, deleteSpeed);
+    }
+}
+
+
+if (typingElement) {
+    setTimeout(typeEffect, 1200);
+}
+
+// ✅ Слушаем document (так диспатчит lang.js)
+document.addEventListener('languageChanged', () => {
+    if (typeTimeout) clearTimeout(typeTimeout);
+    if (typingElement) {
+        typingElement.textContent = '';
+        typingState.charIndex = 0;
+        typingState.isDeleting = false;
+        typingState.phraseIndex = 0;
+    }
+    setTimeout(typeEffect, 300);
+});

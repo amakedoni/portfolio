@@ -3149,3 +3149,309 @@ header.scrolled {
         height: 6px;
     }
 }
+/* ============================================
+   HERO SECTION
+   ============================================ */
+
+#hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 0 4rem;
+}
+
+/* Animated background */
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.hero-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(126, 58, 242, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(126, 58, 242, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 50% at 10% 60%, rgba(109, 40, 217, 0.06) 0%, transparent 50%);
+    animation: heroGradientShift 8s ease-in-out infinite alternate;
+}
+
+.dark-theme .hero-gradient {
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(167, 139, 250, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 50% at 10% 60%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+}
+
+@keyframes heroGradientShift {
+    0% {
+        transform: scale(1) translate(0, 0);
+    }
+    100% {
+        transform: scale(1.05) translate(-1%, 2%);
+    }
+}
+
+/* Subtle grid pattern */
+.hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(126, 58, 242, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(126, 58, 242, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 70%);
+}
+
+.dark-theme .hero-grid {
+    background-image:
+        linear-gradient(rgba(167, 139, 250, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(167, 139, 250, 0.06) 1px, transparent 1px);
+}
+
+/* Floating glow orbs */
+.hero-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    animation: heroGlowFloat 6s ease-in-out infinite alternate;
+}
+
+.hero-glow-1 {
+    width: 400px;
+    height: 400px;
+    background: rgba(126, 58, 242, 0.15);
+    top: -10%;
+    right: -5%;
+    animation-duration: 7s;
+}
+
+.hero-glow-2 {
+    width: 300px;
+    height: 300px;
+    background: rgba(109, 40, 217, 0.1);
+    bottom: 10%;
+    left: -5%;
+    animation-duration: 9s;
+    animation-delay: -3s;
+}
+
+.dark-theme .hero-glow-1 {
+    background: rgba(167, 139, 250, 0.2);
+}
+
+.dark-theme .hero-glow-2 {
+    background: rgba(139, 92, 246, 0.15);
+}
+
+@keyframes heroGlowFloat {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    100% {
+        transform: translate(30px, -20px) scale(1.1);
+    }
+}
+
+/* Hero content */
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+}
+
+/* Availability badge */
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(126, 58, 242, 0.08);
+    border: 1px solid rgba(126, 58, 242, 0.2);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.dark-theme .hero-badge {
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.25);
+}
+
+.hero-badge-dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: badgePulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+@keyframes badgePulse {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+    }
+    50% {
+        opacity: 0.7;
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+}
+
+/* Hero heading */
+#hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.hero-greeting {
+    display: block;
+    color: var(--text-primary);
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.hero-typing-line {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.hero-iam {
+    color: var(--text-secondary);
+    white-space: pre;
+}
+
+.typing-text {
+    background: var(--accent-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    min-width: 4px;
+    min-height: 1em;
+}
+
+.typing-cursor {
+    color: var(--accent);
+    font-weight: 300;
+    animation: cursorBlink 1s steps(1) infinite;
+    margin-left: 2px;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Hero description */
+.hero-description {
+    font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+    color: var(--text-secondary);
+    max-width: 600px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+/* CTA Button */
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 36px;
+    background: var(--accent-gradient);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.05rem;
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    box-shadow: var(--shadow-accent);
+    transition: var(--transition);
+    animation: fadeInUp 0.8s ease-out 1s both;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 12px 35px rgba(126, 58, 242, 0.4),
+        0 4px 15px rgba(126, 58, 242, 0.3);
+    color: #fff;
+}
+
+.cta-button:hover::before {
+    opacity: 1;
+}
+
+.cta-button:active {
+    transform: translateY(-1px);
+}
+
+/* Stagger animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    #hero {
+        min-height: 85vh;
+        padding: 5rem 0 3rem;
+    }
+
+    #hero h1 {
+        font-size: clamp(2rem, 7vw, 2.75rem);
+    }
+
+    .hero-glow-1 {
+        width: 250px;
+        height: 250px;
+    }
+
+    .hero-glow-2 {
+        width: 200px;
+        height: 200px;
+    }
+
+    .hero-badge {
+        font-size: 0.8rem;
+        padding: 6px 14px;
+    }
+    
+    .cta-button {
+        padding: 14px 28px;
+        font-size: 1rem;
+    }
+}
