@@ -381,3 +381,112 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('mousedown', () => {
     document.body.classList.remove('keyboard-nav');
 });
+
+// ============================================
+// SCROLL PROGRESS INDICATOR
+// ============================================
+
+const scrollProgressContainer = document.querySelector('.scroll-progress-container');
+const scrollProgressBar = document.querySelector('.scroll-progress-bar');
+
+if (scrollProgressContainer && scrollProgressBar) {
+    let lastScrollTop = 0;
+    let ticking = false;
+    let lastMilestone = 0;
+
+    function updateScrollProgress() {
+        // Calculate scroll percentage
+        const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+
+        // Update progress bar width
+        scrollProgressBar.style.width = scrolled + '%';
+
+        // Add active class when scrolling (shows glow dot)
+        if (scrolled > 0) {
+            scrollProgressBar.classList.add('active');
+            scrollProgressContainer.classList.remove('at-top');
+        } else {
+            scrollProgressBar.classList.remove('active');
+            scrollProgressContainer.classList.add('at-top');
+        }
+
+        // Milestone animation (25%, 50%, 75%, 100%)
+        const currentMilestone = Math.floor(scrolled / 25) * 25;
+        if (currentMilestone > lastMilestone && currentMilestone > 0) {
+            scrollProgressBar.classList.add('milestone');
+            setTimeout(() => {
+                scrollProgressBar.classList.remove('milestone');
+            }, 600);
+            lastMilestone = currentMilestone;
+        }
+
+        // Reset milestone when scrolling back up significantly
+        if (scrolled < lastMilestone - 10) {
+            lastMilestone = Math.floor(scrolled / 25) * 25;
+        }
+
+        ticking = false;
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            window.requestAnimationFrame(updateScrollProgress);
+            ticking = true;
+        }
+    }
+
+    // Listen to scroll events
+    window.addEventListener('scroll', requestTick, { passive: true });
+
+    // Initial update on page load
+    updateScrollProgress();
+
+    // Update on window resize
+    window.addEventListener('resize', () => {
+        requestTick();
+    });
+}
+
+// Optional: Add percentage indicator tooltip (advanced feature)
+// Uncomment to enable:
+/*
+if (scrollProgressBar) {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'scroll-progress-tooltip';
+    tooltip.style.cssText = `
+        position: fixed;
+        top: 8px;
+        right: -50px;
+        background: var(--accent);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        pointer-events: none;
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 10000;
+    `;
+    document.body.appendChild(tooltip);
+
+    let tooltipTimeout;
+    window.addEventListener('scroll', () => {
+        const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = Math.round((winScroll / height) * 100);
+
+        tooltip.textContent = scrolled + '%';
+        tooltip.style.opacity = '1';
+        tooltip.style.right = '20px';
+
+        clearTimeout(tooltipTimeout);
+        tooltipTimeout = setTimeout(() => {
+            tooltip.style.opacity = '0';
+            tooltip.style.right = '-50px';
+        }, 1500);
+    }, { passive: true });
+}
+*/
