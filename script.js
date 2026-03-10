@@ -589,3 +589,42 @@ const skillObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.skill-card').forEach(card => {
     skillObserver.observe(card);
 });
+
+// ============================================
+// PROJECT MICRO-ANIMATIONS
+// ============================================
+
+// Ripple on project-link click
+document.querySelectorAll('.project-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.cssText = `
+            width: ${size}px;
+            height: ${size}px;
+            left: ${e.clientX - rect.left - size / 2}px;
+            top: ${e.clientY - rect.top - size / 2}px;
+        `;
+
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    });
+});
+
+// Animate timeline line when projects section enters view
+const projectsBlock = document.querySelector('.projects-unified');
+if (projectsBlock) {
+    const lineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('appear-line');
+                lineObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.05 });
+
+    lineObserver.observe(projectsBlock);
+}

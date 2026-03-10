@@ -3711,3 +3711,58 @@ header.scrolled {
         height: 16px;
     }
 }
+
+.projects-unified .timeline-item .date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    background: rgba(126, 58, 242, 0.07);
+    border: 1px solid rgba(126, 58, 242, 0.15);
+    border-radius: var(--radius-full);
+    color: var(--accent);
+    letter-spacing: 0.3px;
+    margin-bottom: 0.85rem;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.projects-unified .timeline-item:hover .date {
+    background: rgba(126, 58, 242, 0.12);
+    box-shadow: 0 2px 10px rgba(126, 58, 242, 0.15);
+}
+
+.dark-theme .projects-unified .timeline-item .date {
+    background: rgba(167, 139, 250, 0.1);
+    border-color: rgba(167, 139, 250, 0.2);
+}
+
+.education-section .timeline-item .date,
+#education .timeline-item .date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    background: rgba(126, 58, 242, 0.07);
+    border: 1px solid rgba(126, 58, 242, 0.15);
+    border-radius: var(--radius-full);
+    color: var(--accent);
+    letter-spacing: 0.3px;
+    margin-bottom: 0.85rem;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.education-section .timeline-item:hover .date,
+#education .timeline-item:hover .date {
+    background: rgba(126, 58, 242, 0.12);
+    box-shadow: 0 2px 10px rgba(126, 58, 242, 0.15);
+}
+
+.dark-theme .education-section .timeline-item .date,
+.dark-theme #education .timeline-item .date {
+    background: rgba(167, 139, 250, 0.1);
+    border-color: rgba(167, 139, 250, 0.2);
+}
