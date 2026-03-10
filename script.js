@@ -572,3 +572,20 @@ document.addEventListener('languageChanged', () => {
     }
     setTimeout(typeEffect, 300);
 });
+
+
+// ============================================
+// SKILL BARS ANIMATION
+// ============================================
+const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animated');
+            skillObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.skill-card').forEach(card => {
+    skillObserver.observe(card);
+});

@@ -328,37 +328,170 @@
     </section>
 
     <section id="skills" class="fade-in">
-        <div class="container">
-            <h2 class="section-title" data-i18n="skills_title">Навыки</h2>
-            <div class="skills-unified">
-                <div class="skills-header">
-                    <div class="skills-icon" aria-hidden="true">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                        </svg>
+    <div class="container">
+        <h2 class="section-title" data-i18n="skills_title">Навыки</h2>
+        <div class="skills-categories">
+
+            <!-- Языки -->
+            <div class="skill-category fade-in">
+                <div class="skill-category-header">
+                    <div class="skill-category-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                     </div>
-                    <h3 data-i18n="skills_header">Мой технический стек</h3>
+                    <h3 class="skill-category-title" data-i18n="skills_cat_languages">Языки</h3>
                 </div>
-                <div class="skills-grid">
-                    <div class="skill-tag"><span class="tag-text">Python</span></div>
-                    <div class="skill-tag"><span class="tag-text">C++ / C</span></div>
-                    <div class="skill-tag"><span class="tag-text">TypeScript</span></div>
-                    <div class="skill-tag"><span class="tag-text">FastAPI</span></div>
-                    <div class="skill-tag"><span class="tag-text">React Native</span></div>
-                    <div class="skill-tag"><span class="tag-text">PostgreSQL</span></div>
-                    <div class="skill-tag"><span class="tag-text">Docker</span></div>
-                    <div class="skill-tag"><span class="tag-text">Git</span></div>
-                    <div class="skill-tag"><span class="tag-text">Machine Learning</span></div>
-                    <div class="skill-tag"><span class="tag-text">TensorFlow/Keras</span></div>
-                    <div class="skill-tag"><span class="tag-text">Pandas/NumPy</span></div>
-                    <div class="skill-tag"><span class="tag-text">SQLAlchemy</span></div>
-                </div>
-                <div class="skills-footer">
-                    <p data-i18n="skills_footer">Постоянно расширяю компетенции в backend-разработке и машинном обучении</p>
+                <div class="skill-cards-grid">
+                    <div class="skill-card" data-level="90">
+                        <div class="skill-card-icon skill-icon-python">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.974 0C5.918 0 6.3 2.617 6.3 2.617l.007 2.713h5.778v.814H3.933S0 5.677 0 11.795s3.436 5.9 3.436 5.9h2.05v-2.838s-.11-3.436 3.38-3.436h5.832s3.272.053 3.272-3.162V3.35S18.508 0 11.974 0zM8.726 1.935a1.061 1.061 0 1 1 0 2.122 1.061 1.061 0 0 1 0-2.122z"/><path d="M12.026 24c6.056 0 5.674-2.617 5.674-2.617l-.007-2.713h-5.778v-.814h8.152S24 18.323 24 12.205s-3.436-5.9-3.436-5.9h-2.05v2.838s.11 3.436-3.38 3.436h-5.832s-3.272-.053-3.272 3.162v5.909S5.492 24 12.026 24zm3.248-1.935a1.061 1.061 0 1 1 0-2.122 1.061 1.061 0 0 1 0 2.122z"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">Python</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 90%"></div></div>
+                        </div>
+                    </div>
+                    <div class="skill-card" data-level="70">
+                        <div class="skill-card-icon skill-icon-cpp">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.394 6c-.167-.29-.398-.543-.652-.69L12.926.22c-.509-.294-1.34-.294-1.848 0L2.26 5.31c-.508.293-.923 1.013-.923 1.6v10.18c0 .294.104.62.271.91.167.29.398.543.652.69l8.816 5.09c.508.293 1.34.293 1.848 0l8.816-5.09c.254-.147.485-.4.652-.69.167-.29.27-.616.27-.91V6.91c.003-.294-.1-.62-.268-.91zM12 19.109c-3.92 0-7.109-3.19-7.109-7.109S8.08 4.891 12 4.891a7.133 7.133 0 0 1 6.156 3.552l-3.076 1.781A3.567 3.567 0 0 0 12 8.445c-1.964 0-3.554 1.59-3.554 3.555S10.036 15.555 12 15.555a3.57 3.57 0 0 0 3.08-1.778l3.077 1.78A7.135 7.135 0 0 1 12 19.109z"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">C++ / C</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 70%"></div></div>
+                        </div>
+                    </div>
+                    <div class="skill-card" data-level="65">
+                        <div class="skill-card-icon skill-icon-ts">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0zm17.363 9.75c.612 0 1.154.037 1.627.111a6.38 6.38 0 0 1 1.306.34v2.458a3.95 3.95 0 0 0-.643-.361 5.093 5.093 0 0 0-.717-.26 5.453 5.453 0 0 0-1.426-.2c-.3 0-.573.028-.819.086a2.1 2.1 0 0 0-.623.242c-.17.104-.3.229-.393.374a.888.888 0 0 0-.14.49c0 .196.053.373.156.529.104.156.252.304.443.444s.423.276.696.41c.273.135.582.274.926.416.47.197.892.407 1.266.628.374.222.695.473.963.753.268.279.472.598.614.957.142.359.214.776.214 1.253 0 .657-.125 1.21-.373 1.656a3.033 3.033 0 0 1-1.012 1.085 4.38 4.38 0 0 1-1.487.596c-.566.12-1.163.18-1.79.18a9.916 9.916 0 0 1-1.84-.164 5.544 5.544 0 0 1-1.512-.493v-2.63a5.033 5.033 0 0 0 3.237 1.2c.333 0 .624-.03.872-.09.249-.06.456-.144.623-.25.166-.108.29-.234.373-.38a1.023 1.023 0 0 0-.074-1.089 2.12 2.12 0 0 0-.537-.5 5.597 5.597 0 0 0-.807-.444 27.72 27.72 0 0 0-1.007-.436c-.918-.383-1.602-.852-2.053-1.405-.45-.553-.676-1.222-.676-2.005 0-.614.123-1.141.369-1.582.246-.441.58-.804 1.004-1.089a4.494 4.494 0 0 1 1.47-.629 7.536 7.536 0 0 1 1.77-.201zm-15.113.188h9.563v2.166H9.506v9.646H6.789v-9.646H3.375z"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">TypeScript</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 65%"></div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Backend -->
+            <div class="skill-category fade-in">
+                <div class="skill-category-header">
+                    <div class="skill-category-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    </div>
+                    <h3 class="skill-category-title" data-i18n="skills_cat_backend">Backend</h3>
+                </div>
+                <div class="skill-cards-grid">
+                    <div class="skill-card" data-level="85">
+                        <div class="skill-card-icon skill-icon-fastapi">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.375 0 0 5.375 0 12c0 6.624 5.375 12 12 12 6.624 0 12-5.376 12-12 0-6.625-5.376-12-12-12zm-.624 21.624v-7.624H6l6.624-13.248v7.624H18L11.376 21.624z"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">FastAPI</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 85%"></div></div>
+                        </div>
+                    </div>
+                    <div class="skill-card" data-level="80">
+                        <div class="skill-card-icon skill-icon-postgres">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.128 0a10.134 10.134 0 0 0-2.755.403l-.063.02A10.922 10.922 0 0 0 12.6.258C11.422.238 10.41.524 9.594 1 8.79.721 7.122.24 5.364.121 4.395.057 3.39.13 2.495.512A3.744 3.744 0 0 0 .28 3.478C-.329 6.23 1.23 9.293 2.515 11.19c.261.39.514.761.745 1.094.231.332.432.617.559.838.23.405.437.752.645 1.087a9.2 9.2 0 0 0 .638.86l.016.04a2.8 2.8 0 0 0 .56.836c.338.315.87.43 1.284.377.244.487.52.97.868 1.444a7.843 7.843 0 0 0 2.102 2.038c.846.526 1.81.76 2.844.709a6.658 6.658 0 0 0 2.553-.687c.127-.063.247-.123.368-.18.49.103.98.162 1.455.14 1.025-.05 1.913-.405 2.576-1.127.218-.243.384-.478.526-.714a7.65 7.65 0 0 0 1.198-.637c1.56-1.03 2.926-2.774 3.27-4.98l.005-.023c.106-.516.175-1.07.207-1.653.059-1.074-.003-2.24-.241-3.358C22.642 3.967 20.672.775 17.128 0zm2.621 10.965c-.075 1.218-.365 2.15-.797 2.834.186.319.356.644.511.97.217.463.41.928.562 1.385.123.373.21.73.243 1.062.032.332.006.616-.095.865a.593.593 0 0 1-.39.36c-.187.053-.455.043-.734-.016-.084-.02-.17-.042-.258-.065a5.7 5.7 0 0 1-.27-.095 7.126 7.126 0 0 1-.595-.271 8.245 8.245 0 0 1-.72-.433c-.265-.178-.543-.387-.832-.625-.4.146-.826.25-1.272.31a7.977 7.977 0 0 1-1.516.046 5.015 5.015 0 0 1-.443-.065c-.149.364-.264.732-.31 1.097-.05.4-.02.786.12 1.134.145.356.404.675.81.942a.48.48 0 0 1 .2.466.497.497 0 0 1-.344.381c-.426.13-1.113-.037-1.545-.37a2.83 2.83 0 0 1-.584-.655 5.166 5.166 0 0 1-.39-.834 7.233 7.233 0 0 1-.223-.924 8.376 8.376 0 0 1-.117-.96 8.658 8.658 0 0 0-.275.567c-.073.175-.143.362-.2.566a5.64 5.64 0 0 0-.143.63 5.79 5.79 0 0 0-.065.703c0 .26.02.53.075.816.054.286.141.58.294.875a.46.46 0 0 1-.04.477.49.49 0 0 1-.433.2c-.44-.04-.878-.343-1.176-.71a4.758 4.758 0 0 1-.62-1.272 7.072 7.072 0 0 1-.268-1.526 9.068 9.068 0 0 1 .023-1.558 8.16 8.16 0 0 1-.802-.62c-.43-.39-.818-.87-1.057-1.454a4.84 4.84 0 0 1-.3-1.738c.016-.633.163-1.28.444-1.882-.121-.386-.221-.787-.31-1.19a7.69 7.69 0 0 1-.154-1.18c-.021-.404.004-.812.067-1.19.064-.38.164-.726.32-1.015.158-.29.37-.527.63-.686.26-.158.574-.234.945-.225.37.01.796.108 1.287.29l.01.004c-.32-.36-.73-.8-1.05-1.29C2.35 7.614 1.244 5.024 1.73 2.843c.126-.571.39-.95.72-1.186.33-.236.74-.35 1.201-.39.927-.081 2.083.153 3.057.44A9.307 9.307 0 0 0 7.85 1.97c.76-.439 1.699-.655 2.836-.636.965.016 1.96.228 2.99.58 1.089-.278 2.18-.386 3.194-.249 1.012.138 1.95.503 2.724 1.212 1.7 1.56 2.294 4.185 2.195 6.39a15.89 15.89 0 0 1-.24 2.698z"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">PostgreSQL</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 80%"></div></div>
+                        </div>
+                    </div>
+                    <div class="skill-card" data-level="75">
+                        <div class="skill-card-icon skill-icon-sqlalchemy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v4c0 1.66 3.58 3 8 3s8-1.34 8-3V6"/><path d="M4 10v4c0 1.66 3.58 3 8 3s8-1.34 8-3v-4"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">SQLAlchemy</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 75%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DevOps & Tools -->
+            <div class="skill-category fade-in">
+                <div class="skill-category-header">
+                    <div class="skill-category-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>
+                    </div>
+                    <h3 class="skill-category-title" data-i18n="skills_cat_devops">DevOps & Tools</h3>
+                </div>
+                <div class="skill-cards-grid">
+                    <div class="skill-card" data-level="80">
+                        <div class="skill-card-icon skill-icon-docker">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.983 11.078h2.119a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.119a.185.185 0 0 0-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 0 0 .186-.186V3.574a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.888c0 .103.082.185.185.185m0 2.716h2.118a.187.187 0 0 0 .186-.186V6.29a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 0 0 .184-.186V6.29a.185.185 0 0 0-.185-.185H8.1a.185.185 0 0 0-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 0 0 .185-.186V6.29a.185.185 0 0 0-.185-.185H5.136a.186.186 0 0 0-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 0 0 .185-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.186.186 0 0 0-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.186.186 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.185.185v1.888c0 .102.083.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 0 0-.75.748 11.376 11.376 0 0 0 .692 4.062c.545 1.428 1.355 2.483 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 0 0 3.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288Z"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">Docker</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 80%"></div></div>
+                        </div>
+                    </div>
+                    <div class="skill-card" data-level="88">
+                        <div class="skill-card-icon skill-icon-git">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.188 0L8.708 2.627l2.76 2.76c.645-.215 1.379-.07 1.889.441.516.515.658 1.258.438 1.9l2.658 2.66c.645-.223 1.387-.078 1.9.435.721.72.721 1.884 0 2.604-.719.719-1.881.719-2.6 0-.539-.541-.674-1.337-.404-1.996L12.86 8.955v6.525c.176.086.342.203.488.348.713.721.713 1.883 0 2.6-.719.721-1.889.721-2.609 0-.719-.719-.719-1.879 0-2.598.182-.18.387-.316.605-.406V8.835c-.217-.091-.424-.222-.604-.405-.545-.545-.676-1.342-.396-2.009L7.636 3.7.45 10.881c-.6.605-.6 1.584 0 2.189l10.48 10.477c.604.604 1.582.604 2.186 0l10.43-10.43c.605-.603.605-1.582 0-2.187"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">Git</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 88%"></div></div>
+                        </div>
+                    </div>
+                    <div class="skill-card" data-level="72">
+                        <div class="skill-card-icon skill-icon-rn">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 10.11c1.03 0 1.87.84 1.87 1.89 0 1-.84 1.85-1.87 1.85S10.13 13 10.13 12c0-1.05.84-1.89 1.87-1.89M7.37 20c.63.38 2.01-.2 3.6-1.7-.52-.59-1.03-1.23-1.51-1.9a22.7 22.7 0 0 1-2.4-.36c-.51 2.14-.32 3.61.31 3.96m.71-5.74l-.29-.51c-.11.29-.22.58-.29.86.27.06.57.11.88.16l-.3-.51m6.54-.76l.81-1.5-.81-1.5c-.3-.53-.62-1-.91-1.47C13.17 9 12.6 9 12 9c-.6 0-1.17 0-1.71.03-.29.47-.61.94-.91 1.47L8.57 12l.81 1.5c.3.53.62 1 .91 1.47.54.03 1.11.03 1.71.03.6 0 1.17 0 1.71-.03.29-.47.61-.94.91-1.47m-7.07-7.14c-.63.38-.44 1.85.31 3.96.77-.11 1.58-.19 2.4-.36.48-.67.99-1.31 1.51-1.9-1.59-1.5-2.97-2.08-3.6-1.7M19.62 4c-.62-.38-2 .2-3.59 1.7.52.59 1.03 1.23 1.51 1.9.82.17 1.63.25 2.4.36.75-2.11.56-3.58-.32-3.96m-.71 5.74l.29.51c.11-.29.22-.58.29-.86-.27-.06-.57-.11-.88-.16l.3.51m-1.45-7.05C16.17 2.33 14.38 2 12 2c-2.37 0-4.17.33-5.46.69C5.25 3.28 4.37 4.21 4 5.7c-.5 1.97-.16 4.03 1.02 5.51-.1.4-.19.83-.26 1.28-.37 2.57.04 4.7.88 5.74.32.41.75.66 1.18.69 1.52.1 3.23-.34 5.18-1.3 1.95.96 3.66 1.4 5.18 1.3.43-.03.86-.28 1.18-.69.84-1.04 1.25-3.17.88-5.74-.07-.45-.16-.88-.26-1.28C20.16 9.73 20.5 7.67 20 5.7c-.37-1.49-1.25-2.42-2.54-3.01z"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">React Native</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 72%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ML & Data -->
+            <div class="skill-category fade-in">
+                <div class="skill-category-header">
+                    <div class="skill-category-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                    </div>
+                    <h3 class="skill-category-title" data-i18n="skills_cat_ml">ML & Data</h3>
+                </div>
+                <div class="skill-cards-grid">
+                    <div class="skill-card" data-level="75">
+                        <div class="skill-card-icon skill-icon-tf">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.292 5.856L11.54 0v24l-4.095-2.378V7.603l-6.168 3.564.015-5.31zm21.43 5.311l-.014-5.31L12.46 0v24l4.094-2.378V14.87l3.092 1.788-.018-4.618-3.074-1.756V7.603l6.168 3.564z"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">TensorFlow</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 75%"></div></div>
+                        </div>
+                    </div>
+                    <div class="skill-card" data-level="82">
+                        <div class="skill-card-icon skill-icon-pandas">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 4.5h2v6h-2zm5 0h2v6h-2zM8.5 13.5h2v6h-2zm5 0h2v6h-2zM4 8h3v8H4zm13 0h3v8h-3z"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">Pandas / NumPy</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 82%"></div></div>
+                        </div>
+                    </div>
+                    <div class="skill-card" data-level="70">
+                        <div class="skill-card-icon skill-icon-ml">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M3 12h3m12 0h3M12 3v3m0 12v3M6.34 6.34l2.12 2.12m7.08 7.08 2.12 2.12M17.66 6.34l-2.12 2.12M8.46 15.54 6.34 17.66"/></svg>
+                        </div>
+                        <div class="skill-card-body">
+                            <span class="skill-card-name">Machine Learning</span>
+                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 70%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </section>
+    </div>
+</section>
+
 
     <section id="contact" class="fade-in">
         <div class="container">
