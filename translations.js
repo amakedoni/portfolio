@@ -135,7 +135,7 @@ const translations = {
         hero_badge: "Open to opportunities",
 			hero_greeting: "Hi, I'm Alexander",
 			hero_iam: "I'm a ",
-			hero_typing_phrases: ["Full-Stack Developer", "ML Enthusiast", "Backend Dev", "MAI Student", "Python Dev"],
+			hero_typing_phrases: ["Full-Stack Dev", "ML Enthusiast", "Backend Dev", "MAI Student", "Python Dev"],
 
         // About Section
         about_title: "About Me",
