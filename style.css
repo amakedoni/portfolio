@@ -3766,3 +3766,7 @@ header.scrolled {
     background: rgba(167, 139, 250, 0.1);
     border-color: rgba(167, 139, 250, 0.2);
 }
+
+.skill-category::before {
+    display: none;
+}

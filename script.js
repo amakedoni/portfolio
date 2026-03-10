@@ -590,3 +590,4 @@ document.querySelectorAll('.skill-card').forEach(card => {
     skillObserver.observe(card);
 });
 
+
