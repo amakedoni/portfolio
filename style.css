@@ -2719,3 +2719,289 @@ footer {
         width: 180px;
     }
 }
+
+/* ============================================
+   GLASSMORPHISM EFFECTS
+   ============================================ */
+
+/* Glassmorphism for unified blocks */
+.skills-unified,
+.projects-unified,
+.education-unified,
+.contact-message {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.dark-theme .skills-unified,
+.dark-theme .projects-unified,
+.dark-theme .education-unified,
+.dark-theme .contact-message {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Glassmorphism for contact items */
+.contact-item {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.dark-theme .contact-item {
+    background: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.contact-item:hover {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(126, 58, 242, 0.3);
+    box-shadow: 
+        0 8px 32px rgba(126, 58, 242, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.dark-theme .contact-item:hover {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    box-shadow: 
+        0 8px 32px rgba(167, 139, 250, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Glassmorphism for skill tags */
+.skill-tag {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 
+        0 2px 16px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.dark-theme .skill-tag {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+        0 2px 16px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.skill-tag:hover {
+    background: rgba(126, 58, 242, 0.15);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(126, 58, 242, 0.4);
+    box-shadow: 
+        0 4px 24px rgba(126, 58, 242, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.dark-theme .skill-tag:hover {
+    background: rgba(167, 139, 250, 0.2);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    box-shadow: 
+        0 4px 24px rgba(167, 139, 250, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Glassmorphism for header on scroll */
+header.scrolled {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.06),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.dark-theme header.scrolled {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.4),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Glassmorphism for contact icon */
+.contact-icon {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 
+        0 2px 12px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.dark-theme .contact-icon {
+    background: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 2px 12px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Glassmorphism for mobile menu */
+.mobile-menu {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 
+        -4px 0 32px rgba(0, 0, 0, 0.12),
+        inset 1px 0 0 rgba(255, 255, 255, 0.9);
+}
+
+.dark-theme .mobile-menu {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        -4px 0 32px rgba(0, 0, 0, 0.5),
+        inset 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Glassmorphism for resume dropdown */
+.resume-menu {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.dark-theme .resume-menu {
+    background: rgba(30, 41, 59, 0.9);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Glassmorphism for project links */
+.project-link {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 
+        0 2px 12px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.dark-theme .project-link {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+        0 2px 12px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.project-link:hover {
+    background: rgba(126, 58, 242, 0.15);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(126, 58, 242, 0.4);
+    box-shadow: 
+        0 4px 24px rgba(126, 58, 242, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.dark-theme .project-link:hover {
+    background: rgba(167, 139, 250, 0.2);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    box-shadow: 
+        0 4px 24px rgba(167, 139, 250, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Enhanced glassmorphism on hover for main blocks */
+.skills-unified:hover,
+.projects-unified:hover,
+.education-unified:hover {
+    backdrop-filter: blur(16px) saturate(200%);
+    -webkit-backdrop-filter: blur(16px) saturate(200%);
+    box-shadow: 
+        0 12px 48px rgba(126, 58, 242, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 1),
+        inset 0 -1px 0 rgba(126, 58, 242, 0.1);
+}
+
+.dark-theme .skills-unified:hover,
+.dark-theme .projects-unified:hover,
+.dark-theme .education-unified:hover {
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
+    box-shadow: 
+        0 12px 48px rgba(167, 139, 250, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(167, 139, 250, 0.2);
+}
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not (backdrop-filter: blur(10px)) {
+    .skills-unified,
+    .projects-unified,
+    .education-unified,
+    .contact-message,
+    .contact-item,
+    .skill-tag,
+    header.scrolled,
+    .mobile-menu,
+    .resume-menu,
+    .project-link {
+        background: var(--bg-secondary);
+    }
+    
+    .dark-theme .skills-unified,
+    .dark-theme .projects-unified,
+    .dark-theme .education-unified,
+    .dark-theme .contact-message,
+    .dark-theme .contact-item,
+    .dark-theme .skill-tag,
+    .dark-theme header.scrolled,
+    .dark-theme .mobile-menu,
+    .dark-theme .resume-menu,
+    .dark-theme .project-link {
+        background: var(--bg-secondary);
+    }
+}
