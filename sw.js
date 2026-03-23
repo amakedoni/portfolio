@@ -14,10 +14,7 @@ const urlsToCache = [
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
+      .then(cache => cache.addAll(urlsToCache))
   );
   self.skipWaiting();
 });
@@ -29,7 +26,6 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -84,20 +80,14 @@ self.addEventListener('fetch', event => {
         
         caches.open(CACHE_NAME)
           .then(cache => {
-            // Дополнительная проверка перед добавлением в кеш
             if (isCacheable(event.request)) {
               cache.put(event.request, responseToCache);
             }
-          })
-          .catch(error => {
-            console.error('Cache put error:', error);
           });
         
         return response;
       })
-      .catch(error => {
-        console.log('Fetch failed, trying cache:', error);
-        
+      .catch(() => {
         // Если сеть недоступна, берём из кеша
         return caches.match(event.request)
           .then(response => {

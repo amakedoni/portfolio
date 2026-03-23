@@ -1,25 +1,5 @@
 // Unified DOMContentLoaded handler
 document.addEventListener('DOMContentLoaded', () => {
-    // Theme toggle functionality
-    const themeToggle = document.querySelector('.theme-toggle');
-    const body = document.body;
-
-    // Check for saved theme preference or respect OS preference
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-    if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
-        body.classList.add('dark-theme');
-    }
-
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-theme');
-            const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
-            localStorage.setItem('theme', currentTheme);
-        });
-    }
-
     // Resume dropdown functionality (desktop)
     const dropdown = document.querySelector('.resume-dropdown');
     if (dropdown) {
@@ -188,15 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 800);
             });
         });
-        
-        // Mobile theme toggle
-        const mobileThemeToggle = mobileMenu.querySelector('.mobile-theme-toggle');
-        mobileThemeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-theme');
-            const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
-            localStorage.setItem('theme', currentTheme);
-        });
-        
+
         // Mobile language toggle
         const mobileLangToggle = mobileMenu.querySelector('.mobile-lang-toggle');
         const mobileLangText = mobileLangToggle.querySelector('.mobile-lang-text');
@@ -284,7 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(result.message || 'Ошибка отправки');
                 }
             } catch (error) {
-                console.error('Ошибка:', error);
                 alert('Не удалось отправить сообщение. Напишите напрямую на email.');
             } finally {
                 setTimeout(() => {

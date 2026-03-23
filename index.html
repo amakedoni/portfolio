@@ -94,10 +94,11 @@
     <!-- Language System -->
     <script src="translations.js"></script>
     <script src="lang.js"></script>
-    
+    <script src="theme.js" defer></script>
+
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="style.css?v=1.0.1">
-    <link rel="stylesheet" href="a11y.css?v=1.0.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="a11y.css">
 </head>
 <body>
 	
@@ -593,15 +594,13 @@
     </button>
 
     <!-- JavaScript -->
-    <script src="script.js?v=1.0.1" defer></script>
+    <script src="script.js" defer></script>
     
     <!-- Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => console.log('SW registered:', registration))
-                    .catch(error => console.log('SW registration failed:', error));
+                navigator.serviceWorker.register('/sw.js');
             });
         }
     </script>
