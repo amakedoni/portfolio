@@ -4,8 +4,8 @@
   "description": "Full-Stack Developer Portfolio - Alexander Makedonskiy",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#7e3af2",
+  "background_color": "#fafafa",
+  "theme_color": "#111111",
   "orientation": "any",
   "icons": [
     {

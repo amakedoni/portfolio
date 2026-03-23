@@ -106,10 +106,11 @@ const translations = {
         aria_theme: "Переключить тему",
         aria_scroll_top: "Вернуться наверх",
         aria_lang: "Переключить язык",
-        
+        back_to_top: "Наверх",
+
         // Resume
         resume_downloading: "Скачивание...",
-        
+
         // Loading
         loading_text: "Alexander Makedonskiy"
     },
@@ -221,10 +222,11 @@ const translations = {
         aria_theme: "Toggle theme",
         aria_scroll_top: "Scroll to top",
         aria_lang: "Switch language",
-        
+        back_to_top: "Back to top",
+
         // Resume
         resume_downloading: "Downloading...",
-        
+
         // Loading
         loading_text: "Alexander Makedonskiy"
     }
