@@ -75,7 +75,11 @@ const translations = {
         skills_title: "Навыки",
         skills_header: "Мой технический стек",
         skills_footer: "Постоянно расширяю компетенции в backend-разработке и машинном обучении",
-        
+        skills_cat_languages: "Языки",
+        skills_cat_backend: "Backend",
+        skills_cat_devops: "DevOps & Tools",
+        skills_cat_ml: "ML & Data",
+
         // Contact Section
         contact_title: "Контакты",
         contact_email_title: "Email и телефон",
@@ -191,7 +195,11 @@ const translations = {
         skills_title: "Skills",
         skills_header: "My Tech Stack",
         skills_footer: "Constantly expanding expertise in backend development and machine learning",
-        
+        skills_cat_languages: "Languages",
+        skills_cat_backend: "Backend",
+        skills_cat_devops: "DevOps & Tools",
+        skills_cat_ml: "ML & Data",
+
         // Contact Section
         contact_title: "Contact",
         contact_email_title: "Email and Phone",
