@@ -10,6 +10,9 @@
     const DARK_THEME_CLASS = 'dark-theme';
     const MEDIA_QUERY = '(prefers-color-scheme: dark)';
 
+    // Track which buttons already have listeners
+    const initializedButtons = new WeakSet();
+
     /**
      * Initialize theme based on localStorage or OS preference
      */
@@ -22,11 +25,43 @@
         }
     }
 
+    /**
+     * Setup theme toggle button event listeners
+     */
+    function setupThemeToggle() {
+        const themeButtons = document.querySelectorAll('.theme-toggle, .mobile-theme-toggle');
+        
+        themeButtons.forEach(button => {
+            if (!initializedButtons.has(button)) {
+                initializedButtons.add(button);
+                button.addEventListener('click', () => {
+                    const isDark = document.body.classList.toggle(DARK_THEME_CLASS);
+                    localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
+                });
+            }
+        });
+    }
+
+    /**
+     * Initialize theme and setup listeners with retry for dynamic elements
+     */
+    function init() {
+        initTheme();
+        setupThemeToggle();
+        
+        // Retry setup after 100ms to catch dynamically created buttons (mobile menu)
+        setTimeout(setupThemeToggle, 100);
+        setTimeout(setupThemeToggle, 500);
+    }
+
     // Initialize on DOM ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initTheme);
+        document.addEventListener('DOMContentLoaded', init);
     } else {
-        initTheme();
+        init();
     }
+
+    // Also setup on window load (catches late dynamic elements)
+    window.addEventListener('load', setupThemeToggle);
 
 })();

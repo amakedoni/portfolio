@@ -238,23 +238,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Mobile theme toggle
-        const mobileThemeToggle = mobileMenu.querySelector('.mobile-theme-toggle');
-        
-        mobileThemeToggle.addEventListener('click', () => {
-            const body = document.body;
-            const isDark = body.classList.contains('dark-theme');
-            
-            if (isDark) {
-                body.classList.remove('dark-theme');
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.classList.add('dark-theme');
-                localStorage.setItem('theme', 'dark');
-            }
-            // CSS handles icon visibility via .dark-theme class
-        });
-        
         // Close menu on ESC key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && document.body.classList.contains('mobile-menu-open')) {
