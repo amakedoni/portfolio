@@ -1,0 +1,70 @@
+/* =====================================================
+   mobile.css — Mobile overrides for 390px (iPhone 14)
+   Loaded after style.css and a11y.css.
+   All rules scoped to max-width: 480px.
+   ===================================================== */
+
+@media (max-width: 480px) {
+
+  /* --- General layout --- */
+  .container {
+    padding: 0 1rem;
+  }
+
+  /* --- Hero section --- */
+  .hero-typing-line,
+  .hero-content .typing-text,
+  .hero-content .typing-cursor {
+    font-size: 1.5rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .cta-button {
+    width: 100% !important;
+    font-size: 1.05rem;
+    padding: 1.1rem;
+    display: block;
+    text-align: center;
+  }
+
+  /* --- About section --- */
+  .about-image {
+    height: 220px !important;
+  }
+
+  .profile-photo-wrapper {
+    width: 100%;
+  }
+
+  /* --- Timeline list items --- */
+  .timeline-item li,
+  .timeline-item p {
+    font-size: 0.9rem;
+  }
+
+  /* --- Contact section --- */
+  /* Override the column layout set at 768px in style.css */
+  .contact-item {
+    flex-direction: row !important;
+    align-items: center !important;
+    text-align: left !important;
+    gap: 1rem !important;
+  }
+
+  /* Contact form */
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  .contact-form button[type="submit"] {
+    width: 100%;
+    min-height: 44px;
+  }
+
+}
