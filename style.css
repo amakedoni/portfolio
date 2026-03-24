@@ -272,64 +272,81 @@ nav {
     transform: scale(1);
 }
 
-/* Mobile Menu Toggle Button */
+/* Mobile Menu Toggle Button - Minimalist SVG Icon */
 .mobile-menu-toggle {
     display: none;
-    background: none;
-    border: none;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border);
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0;
     z-index: 1002;
     position: relative;
-    width: 40px;
-    height: 40px;
-    flex-direction: column;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+    align-items: center;
     justify-content: center;
-    gap: 6px;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
 }
 
-.burger-line {
-    display: block;
-    width: 28px;
-    height: 2px;
-    background: var(--text-primary);
-    border-radius: 2px;
-    transition: all 0.3s ease;
+.mobile-menu-toggle:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 1px var(--accent);
+    border-color: var(--accent);
 }
 
-.mobile-menu-open .burger-line:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
+.mobile-menu-toggle:active {
+    transform: scale(0.98);
 }
 
-.mobile-menu-open .burger-line:nth-child(2) {
-    opacity: 0;
+/* Hamburger icon SVG */
+.mobile-menu-toggle svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--text-primary);
+    stroke-width: 2;
+    stroke-linecap: round;
+    fill: none;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.mobile-menu-open .burger-line:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+/* Transform hamburger to X when open */
+.mobile-menu-open .mobile-menu-toggle {
+    border-color: var(--accent);
+    box-shadow: 4px 4px 0 1px var(--accent);
 }
 
-/* Mobile Menu */
+.mobile-menu-open .mobile-menu-toggle svg {
+    stroke: var(--accent);
+}
+
+/* Mobile Menu - Full-width dropdown from top */
 .mobile-menu {
     position: fixed;
     top: 0;
-    right: -100%;
-    width: 320px;
-    max-width: 85vw;
-    height: 100vh;
+    left: 0;
+    width: 100%;
+    height: auto;
+    max-height: 0;
     background: var(--bg-primary);
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     z-index: 1001;
     display: flex;
     flex-direction: column;
-    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow-y: auto;
-    border-top-left-radius: var(--radius-xl);
-    border-bottom-left-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    transform: translateY(-20px);
 }
 
 .mobile-menu-open .mobile-menu {
-    right: 0;
+    max-height: 100vh;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .mobile-menu-backdrop {
@@ -342,8 +359,7 @@ nav {
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    backdrop-filter: blur(4px);
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .mobile-menu-open .mobile-menu-backdrop {
@@ -352,138 +368,135 @@ nav {
 }
 
 .mobile-menu-header {
-    padding: 1.75rem 1.5rem 1.25rem;
-    border-bottom: 2px solid var(--border);
-    border-top-left-radius: var(--radius-xl);
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-secondary);
 }
 
 .mobile-menu-logo {
     font-family: 'Pirata One', sans-serif;
-    font-size: 1.75rem;
+    font-size: 2rem;
     background: var(--accent-gradient);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
     font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 .mobile-nav-links {
     flex: 1;
-    padding: 1.25rem 0;
+    padding: 1.5rem 0;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    padding-bottom: 1rem;
+    max-height: calc(100vh - 250px);
 }
 
 .mobile-nav-links > a {
-    padding: 0.875rem 1.5rem;
+    padding: 1rem 2rem;
     color: var(--text-primary);
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
     font-weight: 500;
     text-decoration: none;
-    transition: all 0.3s ease;
-    border-left: 3px solid transparent;
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    margin: 0.125rem 0;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border-left: 2px solid transparent;
 }
 
 .mobile-nav-links > a:hover,
 .mobile-nav-links > a:active {
-    background: var(--bg-secondary);
     border-left-color: var(--accent);
-    color: var(--accent);
+    background: var(--bg-secondary);
 }
 
 /* Mobile Resume Dropdown */
 .mobile-resume-dropdown {
-    margin: 0.25rem 0;
+    margin: 0.5rem 0;
+    border-top: 1px solid var(--border-light);
+    padding-top: 0.5rem;
 }
 
 .mobile-resume-toggle {
     width: 100%;
-    padding: 0.875rem 1.5rem;
+    padding: 1rem 2rem;
     background: none;
     border: none;
-    border-left: 3px solid transparent;
     color: var(--text-primary);
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
     font-weight: 500;
     text-align: left;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     font-family: 'Poppins', sans-serif;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 .mobile-resume-toggle::after {
-    content: '▼';
-    font-size: 0.75rem;
-    transition: transform 0.3s ease;
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--text-primary);
+    border-bottom: 2px solid var(--text-primary);
+    transform: rotate(45deg);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-left: 0.75rem;
 }
 
 .mobile-resume-dropdown.open .mobile-resume-toggle::after {
-    transform: rotate(180deg);
+    transform: rotate(-135deg);
 }
 
 .mobile-resume-toggle:hover,
 .mobile-resume-toggle:active {
     background: var(--bg-secondary);
-    border-left-color: var(--accent);
-    color: var(--accent);
 }
 
 .mobile-resume-menu {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     background: var(--bg-secondary);
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    margin-left: 0.5rem;
 }
 
 .mobile-resume-dropdown.open .mobile-resume-menu {
-    max-height: 200px;
+    max-height: 180px;
 }
 
 .mobile-resume-menu a {
     display: block;
-    padding: 0.75rem 1.5rem 0.75rem 2.75rem;
+    padding: 0.875rem 2rem 0.875rem 2.75rem;
     color: var(--text-secondary);
-    font-size: 0.9375rem;
+    font-size: 1rem;
     text-decoration: none;
-    transition: all 0.3s ease;
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .mobile-resume-menu a:hover,
 .mobile-resume-menu a:active {
-    background: var(--bg-tertiary);
     color: var(--accent);
-    padding-left: 3rem;
+    background: var(--bg-tertiary);
 }
 
 /* Mobile Controls */
 .mobile-controls {
-    padding: 1.25rem 1.5rem;
+    padding: 1.25rem 2rem;
     padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
-    border-top: 2px solid var(--border);
+    border-top: 1px solid var(--border);
+    background: var(--bg-secondary);
     display: flex;
     gap: 1rem;
     justify-content: center;
     flex-shrink: 0;
-    margin-top: auto;
 }
 
 .mobile-theme-toggle,
 .mobile-lang-toggle {
-    background: var(--bg-secondary);
+    background: var(--bg-primary);
     border: 2px solid var(--border);
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     border-radius: var(--radius-full);
     cursor: pointer;
     transition: var(--transition);
@@ -499,9 +512,14 @@ nav {
 
 .mobile-theme-toggle:hover,
 .mobile-lang-toggle:hover {
-    transform: scale(1.1);
+    transform: translate(-2px, -2px);
     border-color: var(--accent);
-    box-shadow: var(--shadow-md);
+    box-shadow: 4px 4px 0 1px var(--accent);
+}
+
+.mobile-theme-toggle:active,
+.mobile-lang-toggle:active {
+    transform: scale(0.98);
 }
 
 .mobile-theme-toggle svg {
@@ -2752,25 +2770,15 @@ header.scrolled {
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Glassmorphism for mobile menu */
+/* Glassmorphism for mobile menu - SOLID background, no transparency */
 .mobile-menu {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-left: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 
-        -4px 0 32px rgba(0, 0, 0, 0.12),
-        inset 1px 0 0 rgba(255, 255, 255, 0.9);
+    background: var(--bg-primary);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 .dark-theme .mobile-menu {
-    background: rgba(17, 17, 17, 0.85);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 
-        -4px 0 32px rgba(0, 0, 0, 0.5),
-        inset 1px 0 0 rgba(255, 255, 255, 0.1);
+    background: var(--bg-primary);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 /* Glassmorphism for resume dropdown */

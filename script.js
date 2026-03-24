@@ -93,23 +93,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mobile Menu Setup
     const menuToggle = document.querySelector('.mobile-menu-toggle');
-    
+
     if (menuToggle && !document.querySelector('.mobile-menu')) {
         // Create mobile menu structure
         const mobileMenu = document.createElement('div');
         mobileMenu.className = 'mobile-menu';
         mobileMenu.setAttribute('role', 'dialog');
         mobileMenu.setAttribute('aria-label', 'Мобильное меню');
-        
+
         // Clone navigation links
         const desktopLinks = document.querySelectorAll('.nav-links > li');
         let mobileLinksHTML = '';
-        
+
         desktopLinks.forEach(li => {
             const link = li.querySelector('a');
             if (link && !li.classList.contains('resume-dropdown')) {
                 const href = link.getAttribute('href');
-                const text = link.textContent;
+                const text = link.getAttribute('data-i18n') ? '' : link.textContent;
                 const i18nKey = link.getAttribute('data-i18n');
                 mobileLinksHTML += `<a href="${href}" ${i18nKey ? `data-i18n="${i18nKey}"` : ''}>${text}</a>`;
             }
@@ -219,17 +219,40 @@ document.addEventListener('DOMContentLoaded', () => {
         // Mobile language toggle
         const mobileLangToggle = mobileMenu.querySelector('.mobile-lang-toggle');
         const mobileLangText = mobileLangToggle.querySelector('.mobile-lang-text');
-        
+
         // Set initial language
-        const currentLang = localStorage.getItem('language') || 'ru';
+        let currentLang = localStorage.getItem('language') || 'ru';
         mobileLangText.textContent = currentLang.toUpperCase();
-        
+
         mobileLangToggle.addEventListener('click', () => {
-            const newLang = currentLang === 'ru' ? 'en' : 'ru';
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+            localStorage.setItem('language', currentLang);
+            mobileLangText.textContent = currentLang.toUpperCase();
             if (typeof window.setLanguage === 'function') {
-                window.setLanguage(newLang);
-                mobileLangText.textContent = newLang.toUpperCase();
+                window.setLanguage(currentLang);
             }
+            // Update desktop lang toggle
+            const desktopLangText = document.querySelector('.lang-text');
+            if (desktopLangText) {
+                desktopLangText.textContent = currentLang.toUpperCase();
+            }
+        });
+
+        // Mobile theme toggle
+        const mobileThemeToggle = mobileMenu.querySelector('.mobile-theme-toggle');
+        
+        mobileThemeToggle.addEventListener('click', () => {
+            const body = document.body;
+            const isDark = body.classList.contains('dark-theme');
+            
+            if (isDark) {
+                body.classList.remove('dark-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark');
+            }
+            // CSS handles icon visibility via .dark-theme class
         });
         
         // Close menu on ESC key

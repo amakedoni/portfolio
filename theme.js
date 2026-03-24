@@ -22,44 +22,11 @@
         }
     }
 
-    /**
-     * Toggle theme and save to localStorage
-     * @param {HTMLElement} toggleButton - The theme toggle button element
-     */
-    function setupThemeToggle(toggleButton) {
-        if (!toggleButton) return;
-
-        toggleButton.addEventListener('click', () => {
-            document.body.classList.toggle(DARK_THEME_CLASS);
-            const isDark = document.body.classList.contains(DARK_THEME_CLASS);
-            localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
-        });
-    }
-
-    /**
-     * Setup all theme toggle buttons on the page
-     */
-    function setupAllThemeToggles() {
-        const toggles = document.querySelectorAll('.theme-toggle, .mobile-theme-toggle');
-        toggles.forEach(setupThemeToggle);
-    }
-
     // Initialize on DOM ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            initTheme();
-            setupAllThemeToggles();
-        });
+        document.addEventListener('DOMContentLoaded', initTheme);
     } else {
         initTheme();
-        setupAllThemeToggles();
     }
-
-    // Expose for external use if needed
-    window.ThemeToggle = {
-        init: initTheme,
-        setup: setupThemeToggle,
-        setupAll: setupAllThemeToggles
-    };
 
 })();
