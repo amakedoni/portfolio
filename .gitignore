@@ -39,4 +39,4 @@ yarn-error.log*
 dist/
 build/
 *.min.js
-*.min.css
+*.min.css.superpowers/

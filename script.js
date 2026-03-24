@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Toggle menu function
         const toggleMenu = () => {
-            const isOpen = body.classList.toggle('mobile-menu-open');
+            const isOpen = document.body.classList.toggle('mobile-menu-open');
             menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
             
             if (isOpen) {
@@ -187,14 +187,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Close menu on ESC key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && body.classList.contains('mobile-menu-open')) {
+            if (e.key === 'Escape' && document.body.classList.contains('mobile-menu-open')) {
                 toggleMenu();
             }
         });
         
         // Close menu when resizing to desktop
         window.addEventListener('resize', () => {
-            if (window.innerWidth > 768 && body.classList.contains('mobile-menu-open')) {
+            if (window.innerWidth > 768 && document.body.classList.contains('mobile-menu-open')) {
                 toggleMenu();
             }
         });

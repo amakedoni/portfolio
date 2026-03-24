@@ -1,0 +1,261 @@
+<style>
+  .phone-frame {
+    width: 390px;
+    margin: 0 auto;
+    border: 3px solid #333;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    background: #111;
+    font-family: 'Poppins', sans-serif;
+  }
+  .phone-screen {
+    background: #fafafa;
+    color: #111;
+    font-size: 14px;
+  }
+  .m-section {
+    padding: 40px 20px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .m-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 12px;
+  }
+
+  /* NAV */
+  .m-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: rgba(250,250,250,0.95);
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .m-logo { font-weight: 700; font-size: 13px; letter-spacing: -0.5px; }
+  .m-burger { display: flex; flex-direction: column; gap: 4px; cursor: pointer; }
+  .m-burger span { width: 22px; height: 2px; background: #111; display: block; border-radius: 2px; }
+  .m-nav-controls { display: flex; gap: 8px; }
+  .m-nav-btn { width: 36px; height: 36px; border: 1px solid #d0d0d0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: #111; }
+
+  /* HERO */
+  .m-hero {
+    padding: 48px 20px 44px;
+    background: #fafafa;
+    position: relative;
+  }
+  .m-hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 500; color: #555;
+    border: 1px solid #d0d0d0; border-radius: 4px;
+    padding: 4px 10px; margin-bottom: 16px;
+  }
+  .m-hero-dot { width: 6px; height: 6px; border-radius: 50%; background: #4caf50; }
+  .m-hero h1 { font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -1px; margin-bottom: 6px; }
+  .m-hero-typing { font-size: 18px; color: #555; margin-bottom: 16px; }
+  .m-hero p { font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 24px; }
+  .m-cta { display: block; background: #111; color: #fafafa; text-align: center; padding: 14px; border-radius: 4px; font-size: 14px; font-weight: 600; }
+
+  /* ABOUT */
+  .m-about-photo {
+    width: 100%; height: 220px;
+    background: #e0e0e0; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #888; font-size: 12px; margin-bottom: 20px;
+  }
+  .m-about p { font-size: 13px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+
+  /* SKILLS */
+  .m-skill-cat {
+    background: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 8px; padding: 16px;
+    margin-bottom: 12px;
+  }
+  .m-skill-cat-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #e0e0e0; }
+  .m-skill-cat-icon { width: 32px; height: 32px; background: rgba(0,0,0,0.06); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .m-skill-cat-title { font-size: 13px; font-weight: 700; font-family: monospace; }
+  .m-skill-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: rgba(255,255,255,0.6); border-radius: 4px; margin-bottom: 6px; }
+  .m-skill-ico { width: 28px; height: 28px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .m-skill-name { font-size: 12px; font-weight: 600; flex: 1; }
+  .m-skill-bar { height: 3px; background: #e0e0e0; border-radius: 3px; flex: 1; overflow: hidden; }
+  .m-skill-fill { height: 100%; background: #111; border-radius: 3px; }
+
+  /* TIMELINE */
+  .m-timeline { padding-left: 28px; position: relative; }
+  .m-timeline::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: #e0e0e0; }
+  .m-tl-item { position: relative; margin-bottom: 24px; }
+  .m-tl-item::before { content: ''; position: absolute; left: -26px; top: 6px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #111; background: #fafafa; }
+  .m-tl-item h3 { font-size: 14px; font-weight: 700; line-height: 1.3; margin-bottom: 2px; }
+  .m-tl-item h4 { font-size: 12px; color: #888; margin-bottom: 4px; }
+  .m-tl-item .m-date { font-size: 11px; color: #aaa; font-family: monospace; display: block; margin-bottom: 6px; }
+  .m-tl-item p { font-size: 12px; color: #555; line-height: 1.6; }
+
+  /* CONTACT */
+  .m-contact-item { display: flex; align-items: center; gap: 14px; padding: 14px; background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.5); border-radius: 6px; margin-bottom: 10px; }
+  .m-contact-icon { width: 44px; height: 44px; border-radius: 4px; background: rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .m-contact-info h4 { font-size: 12px; font-weight: 700; }
+  .m-contact-info p { font-size: 11px; color: #555; }
+
+  /* FOOTER */
+  .m-footer { padding: 24px 20px; text-align: center; background: #111; color: #888; font-size: 11px; }
+  .m-footer-social { display: flex; justify-content: center; gap: 12px; margin-bottom: 12px; }
+  .m-footer-icon { width: 40px; height: 40px; border: 1px solid #333; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+  .section-nav {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center;
+  }
+  .section-btn {
+    padding: 6px 12px; border: 1px solid #d0d0d0; border-radius: 4px; font-size: 11px;
+    cursor: pointer; background: #fff; transition: all 0.2s;
+  }
+  .section-btn.active { background: #111; color: #fff; border-color: #111; }
+  .phone-wrapper { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+  .phone-label { text-align: center; font-size: 11px; color: #888; margin-top: 8px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+
+  .note { background: #f5f5f5; border-left: 3px solid #111; padding: 10px 14px; font-size: 12px; color: #555; border-radius: 0 4px 4px 0; margin-bottom: 12px; }
+</style>
+
+<h2>Мобильный макет — 390px (iPhone 14)</h2>
+<p class="subtitle">Предлагаемый дизайн каждой секции. Смотри слева направо.</p>
+
+<div class="note">Это wireframe — реальные шрифты и цвета сайта, но упрощённо. Цель — согласовать структуру и расположение элементов.</div>
+
+<div class="phone-wrapper">
+
+  <!-- Phone 1: Nav + Hero -->
+  <div>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="m-nav">
+          <div class="m-logo">Alexander M.</div>
+          <div class="m-nav-controls">
+            <div class="m-nav-btn">RU</div>
+            <div class="m-nav-btn">☀</div>
+            <div class="m-burger"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div class="m-hero">
+          <div class="m-hero-badge"><span class="m-hero-dot"></span>Открыт к предложениям</div>
+          <h1>Привет, я Александр</h1>
+          <div class="m-hero-typing">Я — Full-Stack Developer|</div>
+          <p>Разрабатываю полнофункциональные приложения с использованием современных технологий.</p>
+          <a class="m-cta">Связаться со мной</a>
+        </div>
+        <div class="m-section">
+          <div class="m-label">О себе</div>
+          <div class="m-about-photo">📸 Фото профиля</div>
+          <p>Студент НИУ МАИ по направлению «Прикладная математика и информатика» с глубокими знаниями в программировании...</p>
+          <p>Мой подход основан на постоянном обучении и внимании к деталям...</p>
+        </div>
+      </div>
+    </div>
+    <div class="phone-label">Hero + О себе</div>
+  </div>
+
+  <!-- Phone 2: Skills -->
+  <div>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="m-section">
+          <div class="m-label">Навыки</div>
+          <div class="m-skill-cat">
+            <div class="m-skill-cat-header">
+              <div class="m-skill-cat-icon">&lt;/&gt;</div>
+              <div class="m-skill-cat-title">Языки</div>
+            </div>
+            <div class="m-skill-row">
+              <div class="m-skill-ico" style="background:rgba(55,118,171,0.12);color:#3776AB">Py</div>
+              <div class="m-skill-name">Python</div>
+              <div class="m-skill-bar"><div class="m-skill-fill" style="width:90%"></div></div>
+            </div>
+            <div class="m-skill-row">
+              <div class="m-skill-ico" style="background:rgba(0,89,157,0.12);color:#00599D">C++</div>
+              <div class="m-skill-name">C++ / C</div>
+              <div class="m-skill-bar"><div class="m-skill-fill" style="width:70%"></div></div>
+            </div>
+            <div class="m-skill-row">
+              <div class="m-skill-ico" style="background:rgba(49,120,198,0.12);color:#3178C6">TS</div>
+              <div class="m-skill-name">TypeScript</div>
+              <div class="m-skill-bar"><div class="m-skill-fill" style="width:65%"></div></div>
+            </div>
+          </div>
+          <div class="m-skill-cat">
+            <div class="m-skill-cat-header">
+              <div class="m-skill-cat-icon">▣</div>
+              <div class="m-skill-cat-title">Backend</div>
+            </div>
+            <div class="m-skill-row">
+              <div class="m-skill-ico" style="background:rgba(0,150,136,0.12);color:#009688">⚡</div>
+              <div class="m-skill-name">FastAPI</div>
+              <div class="m-skill-bar"><div class="m-skill-fill" style="width:85%"></div></div>
+            </div>
+            <div class="m-skill-row">
+              <div class="m-skill-ico" style="background:rgba(51,103,145,0.12);color:#336791">🐘</div>
+              <div class="m-skill-name">PostgreSQL</div>
+              <div class="m-skill-bar"><div class="m-skill-fill" style="width:80%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-label">Навыки</div>
+  </div>
+
+  <!-- Phone 3: Projects + Contact -->
+  <div>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="m-section">
+          <div class="m-label">Проекты</div>
+          <div class="m-timeline">
+            <div class="m-tl-item">
+              <h3>МАИ Таблетки — контроль лечения</h3>
+              <h4>Full-Stack Разработчик</h4>
+              <span class="m-date">2025</span>
+              <p>Клиент-серверная система с оффлайн-режимом, QR-кодами и push-уведомлениями.</p>
+            </div>
+            <div class="m-tl-item">
+              <h3>Олимпиадные достижения</h3>
+              <h4>Информатика и математика</h4>
+              <span class="m-date">2022–2025</span>
+              <p>Финалист ИТМО, РОСАТОМ, МПО «Аэрокосмос».</p>
+            </div>
+          </div>
+        </div>
+        <div class="m-section">
+          <div class="m-label">Контакты</div>
+          <div class="m-contact-item">
+            <div class="m-contact-icon">✉</div>
+            <div class="m-contact-info"><h4>Email</h4><p>aleximlord@gmail.com</p></div>
+          </div>
+          <div class="m-contact-item">
+            <div class="m-contact-icon">✈</div>
+            <div class="m-contact-info"><h4>Telegram</h4><p>@makedoni0</p></div>
+          </div>
+          <div class="m-contact-item">
+            <div class="m-contact-icon">📱</div>
+            <div class="m-contact-info"><h4>Телефон</h4><p>+7 (925) 505-30-27</p></div>
+          </div>
+        </div>
+        <div class="m-footer">
+          <div class="m-footer-social">
+            <div class="m-footer-icon">GH</div>
+            <div class="m-footer-icon">TG</div>
+            <div class="m-footer-icon">VK</div>
+          </div>
+          © 2025 Alexander Makedonskiy
+        </div>
+      </div>
+    </div>
+    <div class="phone-label">Проекты + Контакты</div>
+  </div>
+
+</div>
+
+<br>
+<p class="subtitle" style="text-align:center">Как тебе структура? Что изменить до того, как начнём писать CSS?</p>

@@ -11,6 +11,17 @@
     padding: 0 1rem;
   }
 
+  /* --- Navigation: hide lang/theme toggles from header — they're in the burger menu --- */
+  .controls .lang-toggle,
+  .controls .theme-toggle {
+    display: none;
+  }
+
+  /* --- Burger button: push to far right --- */
+  .mobile-menu-toggle {
+    margin-left: auto;
+  }
+
   /* --- Navigation: prevent logo wrapping --- */
   .logo {
     font-size: 1.4rem;
@@ -24,13 +35,28 @@
     flex-wrap: nowrap;
   }
 
-  /* --- Timeline indicator alignment fix ---
-       At 480px: .timeline has padding-left: 16px, line is at left: 12px.
-       Indicator left: 12px + 16px offset - 8px (translateX -50%) = 20px → 8px off.
-       Fix: left: 4px → 16 + 4 - 8 = 12px (matches line). */
+  /* --- Timeline: push line/indicators as far left as possible ---
+       padding-left:0 on ol guarantees li starts at x=0, so the same left value
+       on ol::before (line) and li::before (indicator) produces exact alignment.
+       item padding-left creates the visual gap between indicator and text. */
+  .projects-unified .timeline,
+  .education-unified .timeline {
+    padding-left: 0 !important;
+  }
+
+  .projects-unified .timeline::before,
+  .education-unified .timeline::before {
+    left: 8px !important;
+  }
+
+  .projects-unified .timeline-item,
+  .education-unified .timeline-item {
+    padding-left: 28px !important;
+  }
+
   .projects-unified .timeline-item::before,
   .education-unified .timeline-item::before {
-    left: 4px !important;
+    left: 8px !important;
   }
 
   /* --- Hero section --- */

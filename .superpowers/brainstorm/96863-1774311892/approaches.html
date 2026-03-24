@@ -1,0 +1,40 @@
+<h2>Как адаптировать сайт под мобильные?</h2>
+<p class="subtitle">Выбери подход — от него зависит объём работы и результат</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Аудит и точечные исправления</h3>
+      <p>Пройтись по сайту на 375px, найти конкретные поломки (переполнение текста, невидимые элементы, мелкие кнопки) и починить только их в существующем <code>style.css</code>.</p>
+      <br>
+      <p><strong>Плюсы:</strong> Быстро, минимальный риск что-то сломать на десктопе</p>
+      <p><strong>Минусы:</strong> Проблемы могут вернуться при добавлении нового контента</p>
+      <p><strong>Когда выбрать:</strong> Если сайт уже почти работает, нужен быстрый результат</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Отдельный файл mobile.css</h3>
+      <p>Создать новый <code>mobile.css</code> со всеми мобильными оверрайдами. Подключить его через <code>&lt;link media="(max-width: 768px)"&gt;</code>. Основной CSS не трогаем.</p>
+      <br>
+      <p><strong>Плюсы:</strong> Изолировано, безопасно, легко откатить</p>
+      <p><strong>Минусы:</strong> Два файла — дублирование переменных, сложнее поддерживать</p>
+      <p><strong>Когда выбрать:</strong> Если боишься что-то сломать в десктопной версии</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Полный mobile-first рефакторинг</h3>
+      <p>Переписать <code>style.css</code> с нуля по принципу «сначала мобильные стили, потом desktop через <code>min-width</code>». Стандартный современный подход.</p>
+      <br>
+      <p><strong>Плюсы:</strong> Правильная архитектура, хорошо масштабируется</p>
+      <p><strong>Минусы:</strong> Большой объём работы, риск регрессий на десктопе</p>
+      <p><strong>Когда выбрать:</strong> Если готов к серьёзному рефакторингу</p>
+    </div>
+  </div>
+</div>
