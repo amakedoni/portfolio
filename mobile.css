@@ -11,6 +11,28 @@
     padding: 0 1rem;
   }
 
+  /* --- Navigation: prevent logo wrapping --- */
+  .logo {
+    font-size: 1.4rem;
+    white-space: nowrap;
+    letter-spacing: -0.5px;
+  }
+
+  /* --- Footer social links: force single row --- */
+  .social-links {
+    gap: 0.75rem;
+    flex-wrap: nowrap;
+  }
+
+  /* --- Timeline indicator alignment fix ---
+       At 480px: .timeline has padding-left: 16px, line is at left: 12px.
+       Indicator left: 12px + 16px offset - 8px (translateX -50%) = 20px → 8px off.
+       Fix: left: 4px → 16 + 4 - 8 = 12px (matches line). */
+  .projects-unified .timeline-item::before,
+  .education-unified .timeline-item::before {
+    left: 4px !important;
+  }
+
   /* --- Hero section --- */
   .hero-typing-line,
   .hero-content .typing-text,
