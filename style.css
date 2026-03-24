@@ -2376,7 +2376,7 @@ footer {
     list-style-type: none;
 }
 
-/* Loading Screen */
+/* Loading Screen - Minimalist */
 .loading-screen {
     position: fixed;
     top: 0;
@@ -2388,7 +2388,7 @@ footer {
     align-items: center;
     justify-content: center;
     z-index: 10000;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .loading-screen.hidden {
@@ -2399,90 +2399,160 @@ footer {
 
 .loader-container {
     text-align: center;
-    animation: fadeInLoader 0.8s ease-out;
+    animation: fadeInLoader 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes fadeInLoader {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.loader-logo {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 2rem;
-    animation: floatLogo 3s ease-in-out infinite;
+/* Minimalist Logo - Letter M */
+.loader-logo-minimal {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1.75rem;
+    animation: logoAppear 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.15));
 }
 
-@keyframes floatLogo {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+.dark-theme .loader-logo-minimal {
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.1));
 }
 
-.loader-logo svg {
+@keyframes logoAppear {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.loader-logo-minimal svg {
     width: 100%;
     height: 100%;
 }
 
-.logo-path {
-    stroke-dasharray: 300;
-    stroke-dashoffset: 300;
-    animation: drawPath 2s ease-in-out forwards, pulsePath 2s ease-in-out infinite 2s;
-}
-
-@keyframes drawPath {
-    to { stroke-dashoffset: 0; }
-}
-
-@keyframes pulsePath {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-}
-
-.logo-dot {
+.loader-logo-minimal text {
     opacity: 0;
-    animation: fadeInDot 0.4s ease-in forwards 1.8s;
+    animation: textReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.3s;
 }
 
-@keyframes fadeInDot {
+@keyframes textReveal {
+    from { opacity: 0; }
     to { opacity: 1; }
 }
 
-.loader-text {
+/* Text Line with Blinking Cursor */
+.loader-text-line {
     font-family: 'Space Mono', monospace;
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    opacity: 0;
+    animation: fadeInText 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s;
+}
+
+@keyframes fadeInText {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.loader-name {
     background: var(--accent-gradient);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    margin-bottom: 2rem;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.3px;
 }
 
-.loader-progress {
-    width: 280px;
-    height: 4px;
+.loader-dots {
+    display: inline-block;
+    animation: blinkDots 1.4s steps(4) infinite;
+}
+
+@keyframes blinkDots {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+/* Sharp Progress Bar */
+.loader-progress-container {
+    width: 260px;
+    height: 3px;
     background: var(--border);
-    border-radius: 4px;
-    overflow: hidden;
     margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0;
+    opacity: 0;
+    animation: fadeInProgress 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s;
 }
 
-.loader-progress-bar {
+@keyframes fadeInProgress {
+    from { opacity: 0; transform: scaleY(0); }
+    to { opacity: 1; transform: scaleY(1); }
+}
+
+.loader-progress-bar-minimal {
     height: 100%;
     background: var(--accent-gradient);
     width: 0;
-    border-radius: 4px;
-    animation: loadProgress 2s ease-in-out forwards;
+    border-radius: 0;
+    position: relative;
+    transition: width 0.1s linear;
 }
 
-@keyframes loadProgress {
-    0% { width: 0; }
-    50% { width: 70%; }
-    100% { width: 100%; }
+.loader-progress-bar-minimal::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: var(--text-primary);
+    opacity: 0.3;
 }
 
+/* Responsive - Tablet */
+@media (max-width: 768px) {
+    .loader-logo-minimal {
+        width: 80px;
+        height: 80px;
+    }
+
+    .loader-text-line {
+        font-size: 1.125rem;
+    }
+
+    .loader-progress-container {
+        width: 200px;
+        height: 3px;
+    }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 480px) {
+    .loader-logo-minimal {
+        width: 60px;
+        height: 60px;
+    }
+
+    .loader-text-line {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .loader-progress-container {
+        width: 160px;
+        height: 2px;
+    }
+}
+
+/* Language Toggle */
 .lang-toggle {
     background: var(--bg-secondary);
     border: 2px solid var(--border);
@@ -2528,34 +2598,6 @@ footer {
         font-size: 0.8125rem;
         min-width: 44px;
         padding: 0 0.5rem;
-    }
-    
-    .loader-logo {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .loader-text {
-        font-size: 1.25rem;
-    }
-    
-    .loader-progress {
-        width: 220px;
-    }
-}
-
-@media (max-width: 480px) {
-    .loader-logo {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .loader-text {
-        font-size: 1.125rem;
-    }
-    
-    .loader-progress {
-        width: 180px;
     }
 }
 

@@ -1,5 +1,52 @@
+// ============================================
+// LOADING SCREEN ANIMATION
+// ============================================
+
+function initLoadingScreen() {
+    const loadingScreen = document.querySelector('.loading-screen');
+    const progressBar = document.querySelector('.loader-progress-bar-minimal');
+    
+    if (!loadingScreen || !progressBar) return;
+    
+    let progress = 0;
+    const duration = 1800; // 1.8 seconds total
+    const startTime = performance.now();
+    
+    function animateProgress(currentTime) {
+        const elapsed = currentTime - startTime;
+        const rawProgress = Math.min(elapsed / duration, 1);
+        
+        // Easing function for smooth acceleration/deceleration
+        const easedProgress = rawProgress < 0.5
+            ? 2 * rawProgress * rawProgress
+            : 1 - Math.pow(-2 * rawProgress + 2, 2) / 2;
+        
+        progress = easedProgress * 100;
+        progressBar.style.width = `${progress}%`;
+        
+        if (rawProgress < 1) {
+            requestAnimationFrame(animateProgress);
+        } else {
+            // Hide loading screen smoothly
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                
+                // Remove from DOM after transition
+                setTimeout(() => {
+                    loadingScreen.remove();
+                }, 500);
+            }, 300);
+        }
+    }
+    
+    requestAnimationFrame(animateProgress);
+}
+
 // Unified DOMContentLoaded handler
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize loading screen animation
+    initLoadingScreen();
+    
     // Resume dropdown functionality (desktop)
     const dropdown = document.querySelector('.resume-dropdown');
     if (dropdown) {

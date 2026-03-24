@@ -106,27 +106,22 @@
     <!-- Loading Screen -->
     <div class="loading-screen">
         <div class="loader-container">
-            <div class="loader-logo">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <div class="loader-logo-minimal">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Logo">
                     <defs>
-                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#444444;stop-opacity:1" />
-                            <stop offset="50%" style="stop-color:#111111;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+                        <linearGradient id="minimalLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:var(--text-primary);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:var(--accent);stop-opacity:1" />
                         </linearGradient>
                     </defs>
-                    <path class="logo-path" d="M 25 75 L 35 25 L 50 60 L 65 25 L 75 75" 
-                          stroke="url(#logoGradient)" 
-                          stroke-width="4" 
-                          fill="none" 
-                          stroke-linecap="round" 
-                          stroke-linejoin="round"/>
-                    <circle class="logo-dot" cx="50" cy="70" r="4" fill="url(#logoGradient)"/>
+                    <text x="50" y="75" text-anchor="middle" font-family="Space Mono" font-weight="700" font-size="80" fill="url(#minimalLogoGradient)">M</text>
                 </svg>
             </div>
-            <div class="loader-text" data-i18n="loading_text">Alexander Makedonskiy</div>
-            <div class="loader-progress">
-                <div class="loader-progress-bar"></div>
+            <div class="loader-text-line">
+                <span class="loader-name">Alexander Makedonskiy</span><span class="loader-dots">...</span>
+            </div>
+            <div class="loader-progress-container">
+                <div class="loader-progress-bar-minimal"></div>
             </div>
         </div>
     </div>
