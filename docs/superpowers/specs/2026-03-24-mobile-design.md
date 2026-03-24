@@ -2,69 +2,78 @@
 
 **Date:** 2026-03-24
 **Target:** 390px (iPhone 14 / mid-range Android), functional down to 360px
-**Approach:** Separate `mobile.css` file — overrides added on top of existing `style.css`
+**Approach:** Separate `mobile.css` file — new overrides on top of `style.css` + `a11y.css`
 
 ---
 
 ## Approach
 
-Create a new `mobile.css` file containing all mobile-specific styles. Link it after `style.css` in `index.html`. The existing `@media` blocks in `style.css` stay in place; `mobile.css` overrides and extends them where needed.
+Create a new `mobile.css` file. Link it in `index.html` **after** `style.css` and `a11y.css`:
 
-**Why not inline in style.css?**
-Keeps mobile styles isolated, easy to audit and revert without touching the desktop layout.
+```html
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="a11y.css">
+<link rel="stylesheet" href="mobile.css">  <!-- new -->
+```
+
+Rules in `mobile.css` are scoped to `@media (max-width: 480px)` unless noted, preventing bleed into tablet. Where `style.css` uses `!important`, `mobile.css` overrides must also use `!important`.
+
+No changes to `style.css`, `a11y.css`, `script.js`, `lang.js`, `theme.js`, or `index.html` structure.
 
 ---
 
-## Target Layout per Section (390px)
+## What Already Works (no CSS needed)
+
+These are handled correctly by existing `style.css` rules and require no overrides:
+
+- `overflow-x: hidden` on `body` — global + `!important` at 480px
+- `font-size: 16px !important` on `input, textarea, select, button` — at 480px (iOS auto-zoom prevention)
+- `.skills-categories` 1-col layout — at 900px
+- `.skill-category` and `.skill-card` padding — identical values already at 480px
+- `.project-links` `flex-wrap: wrap` — set globally
+- Social links 44px touch targets — set at multiple breakpoints
+- Loading screen — handled at 768px and 480px
+- Scroll-to-top button — handled at 768px and 480px
+- Mobile menu slide-in panel — handled in existing JS + CSS
+- Timeline `padding-left: 28px !important` — set at 480px
+- Timeline h3 font-size `1.45rem !important` — set at 480px
+- Timeline h4 font-size `1.15rem !important` — set at 480px
+
+---
+
+## New Rules for mobile.css (`@media (max-width: 480px)`)
 
 ### Navigation
-- Logo + [RU] [theme] [burger] in one row
-- Logo text shortened: "Alexander M." → keeps full name visible if space allows
-- Burger, lang, theme buttons: minimum 44×44px touch targets
-- Mobile menu (slide-in panel) — already implemented in script.js, keep as-is
+- `.logo`: no truncation; rely on existing overflow handling
+- Burger/lang/theme buttons already have 44px touch targets
 
 ### Hero
-- Font sizes: h1 → 28px, typing line → 18px, description → 13px
-- CTA button: full width (100%), 14px text, 14px vertical padding
-- Reduce vertical padding: 48px top, 44px bottom (desktop has excessive whitespace)
-- Badge stays as-is
+- `h1` font-size: already `2.375rem !important` in `style.css` — no override needed
+- Typing line: `font-size: 1.5rem`
+- Description `<p>`: `font-size: 1rem; line-height: 1.6`
+- CTA button: `width: 100% !important; font-size: 1.05rem; padding: 1.1rem`
+- Section padding: `section { padding: 4.5rem 0 !important }` — matches existing value, no change needed
 
 ### About
-- Photo stacked above text (column layout) — already triggered at 992px in style.css
-- Photo container: width 100%, height 220px, border-radius maintained
-- Text: 13px, 1.7 line-height
+- Photo container: `height: 220px !important` (overrides `300px !important` in style.css)
+- `width: 100%` for photo wrapper
 
 ### Projects & Education (Timeline)
-- padding-left: 28px (reduced from 35-40px)
-- Item h3: 14px, h4: 12px
-- List items inside timeline: 12px
-- Project links (GitHub buttons): flex-wrap so they wrap if needed
+- h3, h4, padding-left — already handled in `style.css` with `!important`; no override needed
+- List item font-size inside timeline: `font-size: 0.9rem`
 
 ### Skills
-- `.skills-categories`: already 1-col at 900px, keep
-- `.skill-category`: padding reduced to 1.25rem
-- `.skill-card`: padding 0.625rem 0.875rem
-- Skill category already collapses correctly — no major changes needed
+- Already fully handled — no new rules
 
 ### Contact
-- Items already switch to column at 480px — keep, just verify padding
-- Each contact item: horizontal layout (icon left, text right) on 390px
-- Icon: 44×44px min touch target
+- `.contact-item`: override column layout → `flex-direction: row !important; align-items: center !important; text-align: left !important; gap: 1rem`
+- `.contact-icon`: keep existing `min-width: 48px !important; height: 48px !important` (already set — no override)
+- Contact form inputs/textarea: already has `font-size: 16px !important`; add `width: 100%; padding: 0.75rem`
+- Submit button: `width: 100%; min-height: 44px`
 
-### Footer
-- Social icons: 40×40px, flex row centered
-- Font size 11px
-
----
-
-## General Mobile Rules
-
-- `body`: `overflow-x: hidden` — prevent horizontal scroll from any overflowing element
-- `.container`: `padding: 0 1rem` at ≤480px (currently may vary)
-- `section`: `padding: 4rem 0` at ≤480px (reduce from 6rem)
-- Particles background: disable animations on mobile (`animation: none`) for performance
-- Font sizes reviewed: no element exceeds container width at 390px
-- All interactive elements: `min-height: 44px`, `min-width: 44px` (touch targets)
+### General Layout
+- `.container`: `padding: 0 1rem` (no existing rule at 480px; applies cleanly)
+- Footer social icons: already 44px+ touch targets from existing rules
 
 ---
 
@@ -72,16 +81,14 @@ Keeps mobile styles isolated, easy to audit and revert without touching the desk
 
 | File | Change |
 |------|--------|
-| `mobile.css` | **New file** — all mobile-specific CSS |
-| `index.html` | Add `<link rel="stylesheet" href="mobile.css">` after style.css |
-
-No changes to `style.css`, `script.js`, or any other file.
+| `mobile.css` | **New file** — targeted overrides for 390px |
+| `index.html` | Add `<link rel="stylesheet" href="mobile.css">` after `a11y.css` |
 
 ---
 
 ## Out of Scope
 
-- No changes to desktop layout
+- No desktop layout changes
 - No JavaScript changes
-- No new sections or content
-- Tablet (768–1024px) — only fix obvious breaks, not a primary target
+- No HTML structural changes
+- Tablet (481–1024px) — not a target
