@@ -132,12 +132,38 @@
   }
 
   /* --- Contact section --- */
-  /* Override the column layout set at 768px in style.css */
+  .contact-container {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+    margin-top: 2rem;
+  }
+  
   .contact-item {
     flex-direction: row !important;
     align-items: center !important;
     text-align: left !important;
     gap: 1rem !important;
+    padding: 1rem !important;
+  }
+  
+  .contact-icon {
+    min-width: 48px !important;
+    height: 48px !important;
+  }
+  
+  .contact-icon svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  
+  .contact-text h3 {
+    font-size: 1.125rem !important;
+  }
+  
+  .contact-text p,
+  .contact-text a {
+    font-size: 0.9375rem !important;
+    word-break: break-word;
   }
 
   /* Contact form */
