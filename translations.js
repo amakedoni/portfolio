@@ -41,7 +41,7 @@ const translations = {
         project1_feat4: "Реализация принципов сохранения медицинской тайны",
         project1_stack_label: "Стек:",
         project1_link_backend: "Backend",
-        project1_link_client: "Клиент",
+        project1_link_client: "Client",
         
         // Project 2: Olympiads
         project2_title: "Олимпиадные достижения",
@@ -49,7 +49,19 @@ const translations = {
         project2_item1: "Финалист олимпиады ИТМО (2024–2025)",
         project2_item2: "Финалист олимпиады РОСАТОМА по информатике и математике (2022–2024)",
         project2_item3: "Участник финала Московской предпрофессиональной олимпиады по программе «Аэрокосмос»: разработка прототипа кубсата для расшифровки сообщений",
-        
+
+        // Project 3: Finly
+        project3_title: "Finly — PWA для управления финансами",
+        project3_role: "Тимлид, Full-Stack Разработчик",
+        project3_desc: "PWA-приложение для управления личными финансами с офлайн-поддержкой и AI-ассистентом. Учебный проект МАИ (направление 01.03.02 — Прикладная математика и информатика).",
+        project3_feat1: "Offline-first архитектура: IndexedDB, Service Worker (Workbox), полная функциональность без интернета",
+        project3_feat2: "AI-ассистент с автокатегоризацией операций и парсингом естественного языка",
+        project3_feat3: "Бюджеты, финансовые цели, повторяющиеся операции, импорт/экспорт данных",
+        project3_feat4: "Аналитика с графиками (Recharts, Chart.js), тёмная/светлая темы",
+        project3_stack_label: "Стек:",
+        project3_link_repo: "Repository",
+        project3_link_app: "App",
+
         // Education Section
         education_title: "Образование",
         
@@ -169,7 +181,19 @@ const translations = {
         project2_item1: "Finalist of ITMO olympiad (2024–2025)",
         project2_item2: "Finalist of ROSATOM olympiad in computer science and mathematics (2022–2024)",
         project2_item3: "Participant in the final of Moscow pre-professional olympiad in the 'Aerospace' program: development of a cubesat prototype for message decryption",
-        
+
+        // Project 3: Finly
+        project3_title: "Finly — PWA for Personal Finance",
+        project3_role: "Team Lead, Full-Stack Developer",
+        project3_desc: "PWA application for personal finance management with offline support and AI assistant. MAI educational project (major 01.03.02 — Applied Mathematics and Computer Science).",
+        project3_feat1: "Offline-first architecture: IndexedDB, Service Worker (Workbox), full functionality without internet",
+        project3_feat2: "AI assistant with auto-categorization of transactions and natural language parsing",
+        project3_feat3: "Budgets, financial goals, recurring operations, data import/export",
+        project3_feat4: "Analytics with charts (Recharts, Chart.js), dark/light themes",
+        project3_stack_label: "Stack:",
+        project3_link_repo: "Repository",
+        project3_link_app: "App",
+
         // Education Section
         education_title: "Education",
         
