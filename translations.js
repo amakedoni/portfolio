@@ -185,7 +185,7 @@ const translations = {
         // Project 3: Finly
         project3_title: "Finly — PWA for Personal Finance",
         project3_role: "Team Lead, Full-Stack Developer",
-        project3_desc: "PWA application for personal finance management with offline support and AI assistant. MAI educational project (major 01.03.02 — Applied Mathematics and Computer Science).",
+        project3_desc: "PWA application for personal finance management with offline support and AI assistant. Project from T1 (Innotech) company as part of MAI educational project (major 01.03.02 — Applied Mathematics and Computer Science).",
         project3_feat1: "Offline-first architecture: IndexedDB, Service Worker (Workbox), full functionality without internet",
         project3_feat2: "AI assistant with auto-categorization of transactions and natural language parsing",
         project3_feat3: "Budgets, financial goals, recurring operations, data import/export",
