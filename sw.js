@@ -1,13 +1,20 @@
 // Service Worker для базового офлайн-режима
-const CACHE_NAME = 'portfolio-v1.0.0';
+const CACHE_NAME = 'portfolio-v1.1.0';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/style.css',
-  '/script.js',
-  '/photo.webp',
-  '/favicon.webp',
-  '/manifest.json'
+  '/css/style.css',
+  '/js/script.js',
+  '/assets/images/photo.webp',
+  '/assets/images/favicon.webp',
+  '/manifest.json',
+  '/assets/icons.svg',
+  '/assets/images/photo-alt.jpg',
+  '/js/translations.js',
+  '/js/lang.js',
+  '/js/theme.js',
+  '/css/a11y.css',
+  '/css/mobile.css'
 ];
 
 // Установка Service Worker
