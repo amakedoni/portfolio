@@ -83,7 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
         menu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 const original = link.textContent;
-                link.textContent = 'Скачивание...';
+                const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : (localStorage.getItem('language') || 'ru');
+                link.textContent = (typeof translations !== 'undefined' && translations[lang]?.resume_downloading) || 'Скачивание...';
                 setTimeout(() => {
                     link.textContent = original;
                 }, 1200);
@@ -208,7 +209,8 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileResumeMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 const original = link.textContent;
-                link.textContent = 'Скачивание...';
+                const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : (localStorage.getItem('language') || 'ru');
+                link.textContent = (typeof translations !== 'undefined' && translations[lang]?.resume_downloading) || 'Скачивание...';
                 setTimeout(() => {
                     link.textContent = original;
                     toggleMenu();
@@ -258,13 +260,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form) {
         const successContainer = document.querySelector('.form-success-container');
         const successMsg = successContainer?.querySelector('.form-success');
+        const errorContainer = document.querySelector('.form-error-container');
+        const errorMsg = errorContainer?.querySelector('.form-error');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const gotcha = form.querySelector('[name="_gotcha"]');
             if (gotcha && gotcha.value) {
-                alert('Обнаружен спам!');
                 return;
             }
 
@@ -275,10 +278,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = Object.fromEntries(formData.entries());
             const json = JSON.stringify(data);
 
+            const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : (localStorage.getItem('language') || 'ru');
+            const t = (typeof translations !== 'undefined' && translations[lang]) || {};
+
             const submitBtn = form.querySelector('button[type="submit"]');
             const originalBtnContent = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span>отправляется</span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a 9 9 0 1 1-6.219-8.56"></path></svg>';
+            submitBtn.innerHTML = `<span>${t.contact_form_sending || 'отправляется'}</span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a 9 9 0 1 1-6.219-8.56"></path></svg>`;
+
+            const showNotification = (container, timeout = 5000) => {
+                if (!container) return;
+                container.style.maxHeight = '200px';
+                container.classList.add('open');
+                setTimeout(() => {
+                    container.style.maxHeight = '0px';
+                    container.classList.remove('open');
+                }, timeout);
+            };
 
             try {
                 const response = await fetch('https://api.web3forms.com/submit', {
@@ -295,21 +311,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok && result.success === true) {
                     form.reset();
                     if (successMsg) {
-                        successMsg.querySelector('span').textContent = 'Сообщение отправлено! Отвечу в течение 24 часов.';
+                        successMsg.querySelector('span').textContent = t.contact_form_success || 'Сообщение отправлено! Отвечу в течение 24 часов.';
                     }
-                    if (successContainer) {
-                        successContainer.style.maxHeight = '200px';
-                        successContainer.classList.add('open');
-                        setTimeout(() => {
-                            successContainer.style.maxHeight = '0px';
-                            successContainer.classList.remove('open');
-                        }, 5000);
-                    }
+                    showNotification(successContainer);
                 } else {
                     throw new Error(result.message || 'Ошибка отправки');
                 }
             } catch (error) {
-                alert('Не удалось отправить сообщение. Напишите напрямую на email.');
+                if (errorMsg) {
+                    errorMsg.querySelector('span').textContent = t.contact_form_error || 'Не удалось отправить сообщение. Напишите напрямую на email.';
+                }
+                showNotification(errorContainer);
             } finally {
                 setTimeout(() => {
                     submitBtn.disabled = false;

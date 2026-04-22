@@ -130,18 +130,3 @@
     window.getCurrentLanguage = () => currentLang;
     
 })();
-
-// Loading Screen Handler
-window.addEventListener('load', () => {
-    const loadingScreen = document.querySelector('.loading-screen');
-    if (loadingScreen) {
-        // Wait for minimum 2 seconds for better UX
-        setTimeout(() => {
-            loadingScreen.classList.add('hidden');
-            // Remove from DOM after transition
-            setTimeout(() => {
-                loadingScreen.remove();
-            }, 600);
-        }, 2000);
-    }
-});
