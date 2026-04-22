@@ -179,6 +179,13 @@
             transform: translate(-4px, -4px);
             box-shadow: 6px 6px 0 2px var(--accent-hover);
         }
+
+        button.btn-secondary {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.0625rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
         
         .controls-404 {
             position: fixed;
@@ -304,13 +311,13 @@
                 </svg>
                 <span data-i18n="404_home">На главную</span>
             </a>
-            <a href="javascript:history.back()" class="btn btn-secondary">
+            <button type="button" class="btn btn-secondary" onclick="history.back()">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
                     <polyline points="12 19 5 12 12 5"></polyline>
                 </svg>
                 <span data-i18n="404_back">Назад</span>
-            </a>
+            </button>
         </div>
     </div>
 </body>

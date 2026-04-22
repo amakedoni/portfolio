@@ -20,7 +20,7 @@
     <meta property="og:url" content="https://amakedoni.com/">
     <meta property="og:title" content="Alexander Makedonskiy | Full-Stack Developer">
     <meta property="og:description" content="Студент МАИ, Full-Stack разработчик. Создаю современные веб-приложения и изучаю машинное обучение.">
-    <meta property="og:image" content="https://amakedoni.com/og-image.jpg">
+    <meta property="og:image" content="https://amakedoni.com/assets/images/photo.webp">
     <meta property="og:locale" content="ru_RU">
     <meta property="og:site_name" content="Alexander Makedonskiy Portfolio">
     
@@ -29,7 +29,7 @@
     <meta name="twitter:url" content="https://amakedoni.com/">
     <meta name="twitter:title" content="Alexander Makedonskiy | Developer">
     <meta name="twitter:description" content="Full-Stack разработчик, студент МАИ">
-    <meta name="twitter:image" content="https://amakedoni.com/og-image.jpg">
+    <meta name="twitter:image" content="https://amakedoni.com/assets/images/photo.webp">
     
     <!-- Theme Color -->
     <meta name="theme-color" content="#111111">
@@ -39,8 +39,8 @@
     
     <!-- Favicon - WebP with PNG fallback -->
     <link rel="icon" type="image/webp" sizes="512x512" href="/assets/images/favicon.webp">
-    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-    <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/assets/images/favicon.webp">
+    <link rel="apple-touch-icon" sizes="512x512" href="/assets/images/favicon.webp">
     
     <!-- Manifest -->
     <link rel="manifest" href="/manifest.json">
@@ -103,6 +103,9 @@
 </head>
 <body>
 	
+    <!-- Skip to main content (keyboard accessibility) -->
+    <a href="#hero" class="skip-link">Перейти к основному содержимому</a>
+
     <!-- Loading Screen -->
     <div class="loading-screen">
         <div class="loader-container">
@@ -289,7 +292,7 @@
                     <li class="timeline-item">
                         <h3 data-i18n="project2_title">Олимпиадные достижения</h3>
                         <h4 data-i18n="project2_subtitle">Информатика и математика</h4>
-                        <time class="date" datetime="2022/2025">2022–2025</time>
+                        <time class="date" datetime="2022">2022–2025</time>
                         <ul>
                             <li data-i18n="project2_item1">Финалист олимпиады ИТМО (2024–2025)</li>
                             <li data-i18n="project2_item2">Финалист олимпиады РОСАТОМА по информатике и математике (2022–2024)</li>
@@ -315,13 +318,13 @@
                     <li class="timeline-item">
                         <h3 data-i18n="edu2_title">Дополнительное образование</h3>
                         <h4 data-i18n="edu2_course">Очный курс по машинному обучению и анализу данных</h4>
-                        <time class="date" datetime="2022/2025" data-i18n="edu2_period">2022 – 2025</time>
+                        <time class="date" datetime="2022" data-i18n="edu2_period">2022 – 2025</time>
                         <p data-i18n="edu2_desc">НИЯУ МИФИ, институт ИНТЭЛ. Практическое применение алгоритмов ML: регрессия (Random Forest), классификация (KNN, Random Forest), кластеризация (K-Means), визуализация данных (Matplotlib, Seaborn).</p>
                     </li>
                     <li class="timeline-item">
                         <h3 data-i18n="edu3_title">Предуниверситарий</h3>
                         <h4 data-i18n="edu3_institution">НИЯУ МИФИ</h4>
-                        <time class="date" datetime="2021/2025" data-i18n="edu3_period">2021 – 2025</time>
+                        <time class="date" datetime="2021" data-i18n="edu3_period">2021 – 2025</time>
                         <p data-i18n="edu3_desc">Углублённая подготовка по математике, информатике и физике перед поступлением в вуз.</p>
                     </li>
                 </ol>
@@ -556,6 +559,11 @@
                         <div class="form-success">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="/assets/icons.svg#icon-26"></use></svg>
                             <span data-i18n="contact_form_success">Сообщение отправлено! Отвечу в течение 24 часов.</span>
+                        </div>
+                    </div>
+                    <div class="form-error-container" role="alert" aria-live="assertive">
+                        <div class="form-error">
+                            <span data-i18n="contact_form_error">Не удалось отправить сообщение. Напишите напрямую на email.</span>
                         </div>
                     </div>
                 </div>

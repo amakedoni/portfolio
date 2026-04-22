@@ -106,6 +106,7 @@ const translations = {
         contact_form_submit: "отправить",
         contact_form_sending: "отправляется",
         contact_form_success: "Сообщение отправлено! Отвечу в течение 24 часов.",
+        contact_form_error: "Не удалось отправить сообщение. Напишите напрямую на email.",
         
         // Footer
         footer_copyright: "© 2026 Македонский Александр. Все права защищены.",
@@ -238,6 +239,7 @@ const translations = {
         contact_form_submit: "send",
         contact_form_sending: "sending",
         contact_form_success: "Message sent! I'll reply within 24 hours.",
+        contact_form_error: "Failed to send message. Please write directly to email.",
         
         // Footer
         footer_copyright: "© 2026 Alexander Makedonskiy. All rights reserved.",

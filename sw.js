@@ -58,24 +58,26 @@ function isCacheable(request) {
     return false;
   }
   
-  // Не кешируем запросы к внешним API (опционально)
-  // if (url.hostname !== self.location.hostname) {
-  //   return false;
-  // }
-  
   return true;
 }
 
 // Стратегия Network First, падаем на Cache
 self.addEventListener('fetch', event => {
-  // Игнорируем некешируемые запросы
-  if (!isCacheable(event.request)) {
-    event.respondWith(fetch(event.request));
+  const req = event.request;
+  const url = new URL(req.url);
+
+  // Кешируем только безопасные GET-запросы к тому же origin
+  if (req.method !== 'GET' || url.origin !== self.location.origin) {
+    return;
+  }
+
+  // Дополнительная проверка протокола (chrome-extension и т.д.)
+  if (!isCacheable(req)) {
     return;
   }
 
   event.respondWith(
-    fetch(event.request)
+    fetch(req)
       .then(response => {
         // Не кешируем неуспешные ответы или непрозрачные ответы
         if (!response || response.status !== 200 || response.type === 'opaque') {
@@ -87,23 +89,21 @@ self.addEventListener('fetch', event => {
         
         caches.open(CACHE_NAME)
           .then(cache => {
-            if (isCacheable(event.request)) {
-              cache.put(event.request, responseToCache);
-            }
+            cache.put(req, responseToCache);
           });
         
         return response;
       })
       .catch(() => {
         // Если сеть недоступна, берём из кеша
-        return caches.match(event.request)
-          .then(response => {
-            if (response) {
-              return response;
+        return caches.match(req)
+          .then(cached => {
+            if (cached) {
+              return cached;
             }
             
             // Для HTML возвращаем главную страницу
-            const acceptHeader = event.request.headers.get('accept');
+            const acceptHeader = req.headers.get('accept');
             if (acceptHeader && acceptHeader.includes('text/html')) {
               return caches.match('/index.html');
             }
