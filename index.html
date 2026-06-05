@@ -681,28 +681,14 @@ body.dark-theme .sword-svg-el stop:nth-child(3){stop-color:var(--ink)}
 .sword-arc-s2 .arc-main{animation:arcS2 8s 1.6s linear infinite}
 .sword-arc-s2 .arc-soft{animation:arcS2soft 8s 1.6s linear infinite}
 
-/* sword sparks */
-.sword-spark{position:absolute;background:var(--ink);pointer-events:none;z-index:5;opacity:0}
-.sword-spark.sq{width:5px;height:5px;border-radius:1px}
-.sword-spark.rnd{width:3px;height:3px;border-radius:50%}
-.ss1a{top:10px;left:62px;animation:ssS1 8s 1.86s linear infinite;--dx:18px;--dy:14px}
-.ss1b{top:25px;left:76px;animation:ssS1 8s 1.88s linear infinite;--dx:22px;--dy:10px}
-.ss1c{top:50px;left:84px;animation:ssS1 8s 1.9s linear infinite;--dx:26px;--dy:2px}
-.ss1d{top:72px;left:82px;animation:ssS1 8s 1.92s linear infinite;--dx:24px;--dy:-6px}
-.ss1e{top:90px;left:72px;animation:ssS1 8s 1.94s linear infinite;--dx:16px;--dy:-12px}
-.ss1f{top:8px;left:44px;animation:ssS1 8s 1.87s linear infinite;--dx:-16px;--dy:12px}
-.ss1g{top:30px;left:30px;animation:ssS1 8s 1.89s linear infinite;--dx:-22px;--dy:4px}
-.ss1h{top:55px;left:24px;animation:ssS1 8s 1.91s linear infinite;--dx:-26px;--dy:-4px}
-.ss2a{top:80px;left:52px;animation:ssS2 8s 2.05s linear infinite;--ux:12px;--uy:-22px}
-.ss2b{top:68px;left:68px;animation:ssS2 8s 2.07s linear infinite;--ux:18px;--uy:-18px}
-.ss2c{top:52px;left:78px;animation:ssS2 8s 2.09s linear infinite;--ux:22px;--uy:-12px}
-.ss2d{top:36px;left:80px;animation:ssS2 8s 2.11s linear infinite;--ux:18px;--uy:-8px}
-.ss2e{top:20px;left:74px;animation:ssS2 8s 2.13s linear infinite;--ux:10px;--uy:-4px}
-.ss2f{top:84px;left:38px;animation:ssS2 8s 2.06s linear infinite;--ux:-10px;--uy:-20px}
-.ss2g{top:64px;left:30px;animation:ssS2 8s 2.08s linear infinite;--ux:-16px;--uy:-14px}
-.ss2h{top:42px;left:26px;animation:ssS2 8s 2.1s linear infinite;--ux:-18px;--uy:-10px}
-@keyframes ssS1{0%,8%{opacity:0;transform:translate(0,0) scale(0)}18%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)}28%{opacity:0;transform:translate(calc(var(--dx)*2.5),calc(var(--dy)*2.5)) scale(0)}50%,100%{opacity:0}}
-@keyframes ssS2{0%,58%{opacity:0;transform:translate(0,0) scale(0)}68%{opacity:1;transform:translate(var(--ux),var(--uy)) scale(1)}80%{opacity:0;transform:translate(calc(var(--ux)*2.5),calc(var(--uy)*2.5)) scale(0)}100%{opacity:0}}
+/* canvas overlay */
+.sword-canvas{position:absolute;top:-30px;left:-30px;width:calc(100% + 60px);height:calc(100% + 60px);pointer-events:none;z-index:5}
+/* impact flash */
+.sword-flash{position:absolute;inset:0;background:var(--bg);opacity:0;pointer-events:none;z-index:20;transition:opacity 180ms ease-out}
+.sword-flash.active{opacity:0.45}
+/* screen shake */
+@keyframes sword-stage-shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-2px,0)}40%{transform:translate(2px,0)}60%{transform:translate(-1px,0)}80%{transform:translate(1px,0)}}
+.sword-stage--shake{animation:sword-stage-shake 280ms ease-out forwards}
 
 /* forge sparks (entrance only) */
 .fspark{position:absolute;width:4px;height:4px;background:var(--ink);opacity:0;pointer-events:none;z-index:5}
@@ -901,14 +887,8 @@ body.dark-theme .sword-svg-el stop:nth-child(3){stop-color:var(--ink)}
         <div class="fspark fs2" style="--fx:-10px;--fy:-16px"></div>
         <div class="fspark fs3" style="--fx:16px;--fy:-10px"></div>
         <div class="fspark fs4" style="--fx:-12px;--fy:-18px"></div>
-        <div class="sword-spark sq ss1a"></div><div class="sword-spark rnd ss1b"></div>
-        <div class="sword-spark sq ss1c"></div><div class="sword-spark rnd ss1d"></div>
-        <div class="sword-spark sq ss1e"></div><div class="sword-spark sq ss1f"></div>
-        <div class="sword-spark rnd ss1g"></div><div class="sword-spark sq ss1h"></div>
-        <div class="sword-spark sq ss2a"></div><div class="sword-spark rnd ss2b"></div>
-        <div class="sword-spark sq ss2c"></div><div class="sword-spark rnd ss2d"></div>
-        <div class="sword-spark sq ss2e"></div><div class="sword-spark sq ss2f"></div>
-        <div class="sword-spark rnd ss2g"></div><div class="sword-spark sq ss2h"></div>
+        <canvas class="sword-canvas" aria-hidden="true"></canvas>
+        <div class="sword-flash" aria-hidden="true"></div>
       </div>
     </div>
 
