@@ -1,604 +1,1690 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    
-    <!-- Primary Meta Tags -->
-    <title>Alexander Makedonskiy | Full-Stack Developer & ML Enthusiast</title>
-    <meta name="title" content="Alexander Makedonskiy | Full-Stack Developer">
-    <meta name="description" content="Студент МАИ, Full-Stack разработчик. Специализируюсь на Python, FastAPI, React Native и машинном обучении. Создаю современные веб-приложения и мобильные решения.">
-    <meta name="keywords" content="александр македонский, разработчик, программист, python, fastapi, react native, машинное обучение, МАИ, портфолио, full-stack developer, portfolio">
-    <meta name="author" content="Alexander Makedonskiy">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://amakedoni.com/">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://amakedoni.com/">
-    <meta property="og:title" content="Alexander Makedonskiy | Full-Stack Developer">
-    <meta property="og:description" content="Студент МАИ, Full-Stack разработчик. Создаю современные веб-приложения и изучаю машинное обучение.">
-    <meta property="og:image" content="https://amakedoni.com/assets/images/photo.webp">
-    <meta property="og:locale" content="ru_RU">
-    <meta property="og:site_name" content="Alexander Makedonskiy Portfolio">
-    
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://amakedoni.com/">
-    <meta name="twitter:title" content="Alexander Makedonskiy | Developer">
-    <meta name="twitter:description" content="Full-Stack разработчик, студент МАИ">
-    <meta name="twitter:image" content="https://amakedoni.com/assets/images/photo.webp">
-    
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#111111">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="AM Portfolio">
-    
-    <!-- Favicon - WebP with PNG fallback -->
-    <link rel="icon" type="image/webp" sizes="512x512" href="/assets/images/favicon.webp">
-    <link rel="apple-touch-icon" sizes="192x192" href="/assets/images/favicon.webp">
-    <link rel="apple-touch-icon" sizes="512x512" href="/assets/images/favicon.webp">
-    
-    <!-- Manifest -->
-    <link rel="manifest" href="/manifest.json">
-    
-    <!-- Preconnect for fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Preload critical images -->
-    <link rel="preload" as="image" type="image/webp" href="/assets/images/photo.webp" imagesrcset="/assets/images/photo.webp" imagesizes="(max-width: 600px) 400px, 600px">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Pirata+One&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- Structured Data - JSON-LD -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Alexander Makedonskiy",
-      "alternateName": "Александр Македонский",
-      "url": "https://amakedoni.com",
-      "image": "https://amakedoni.com/assets/images/photo.webp",
-      "sameAs": [
-        "https://github.com/amakedoni",
-        "https://t.me/makedoni0",
-        "https://m.vk.com/amakedoni"
-      ],
-      "jobTitle": "Full-Stack Developer",
-      "worksFor": {
-        "@type": "EducationalOrganization",
-        "name": "НИУ МАИ"
-      },
-      "alumniOf": {
-        "@type": "EducationalOrganization",
-        "name": "НИЯУ МИФИ"
-      },
-      "email": "aleximlord@gmail.com",
-      "telephone": "+79255053027",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Москва",
-        "addressCountry": "RU"
-      },
-      "knowsAbout": ["Python", "FastAPI", "React Native", "Machine Learning", "PostgreSQL", "Docker"],
-      "description": "Студент МАИ, Full-Stack разработчик. Специализируюсь на Python, FastAPI, React Native и машинном обучении."
-    }
-    </script>
-    
-    <!-- Language System -->
-    <script src="js/translations.js"></script>
-    <script src="js/lang.js"></script>
-    <script src="js/theme.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alexander Makedonskiy — Full-Stack & ML Engineer</title>
+<meta name="title" content="Alexander Makedonskiy | Full-Stack Developer" />
+<meta name="description" content="Студент МАИ, Full-Stack разработчик. Специализируюсь на Python, FastAPI, React Native и машинном обучении." />
+<meta name="keywords" content="александр македонский, разработчик, программист, python, fastapi, react native, машинное обучение, МАИ, портфолио, full-stack developer, portfolio" />
+<meta name="author" content="Alexander Makedonskiy" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://amakedoni.com/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://amakedoni.com/" />
+<meta property="og:title" content="Alexander Makedonskiy | Full-Stack Developer" />
+<meta property="og:description" content="Студент МАИ, Full-Stack разработчик. Создаю современные веб-приложения и изучаю машинное обучение." />
+<meta property="og:image" content="https://amakedoni.com/assets/images/photo.webp" />
+<meta property="og:locale" content="ru_RU" />
+<meta property="og:site_name" content="Alexander Makedonskiy Portfolio" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://amakedoni.com/" />
+<meta name="twitter:title" content="Alexander Makedonskiy | Developer" />
+<meta name="twitter:description" content="Full-Stack разработчик, студент МАИ" />
+<meta name="twitter:image" content="https://amakedoni.com/assets/images/photo.webp" />
+<meta name="theme-color" content="#111111" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="AM Portfolio" />
+<link rel="icon" type="image/webp" sizes="512x512" href="/assets/images/favicon.webp" />
+<link rel="apple-touch-icon" sizes="192x192" href="/assets/images/favicon.webp" />
+<link rel="apple-touch-icon" sizes="512x512" href="/assets/images/favicon.webp" />
+<link rel="manifest" href="/manifest.json" />
+<link rel="preload" as="image" type="image/webp" href="/assets/images/photo.webp" imagesrcset="/assets/images/photo.webp" imagesizes="(max-width: 600px) 400px, 600px" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Pirata+One&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Person",
+  "name":"Alexander Makedonskiy",
+  "alternateName":"Александр Македонский",
+  "url":"https://amakedoni.com",
+  "image":"https://amakedoni.com/assets/images/photo.webp",
+  "sameAs":[
+    "https://github.com/amakedoni",
+    "https://t.me/makedoni0",
+    "https://m.vk.com/amakedoni"
+  ],
+  "jobTitle":"Full-Stack Developer",
+  "worksFor":{"@type":"EducationalOrganization","name":"НИУ МАИ"},
+  "alumniOf":{"@type":"EducationalOrganization","name":"НИЯУ МИФИ"},
+  "email":"aleximlord@gmail.com",
+  "telephone":"+79255053027",
+  "address":{"@type":"PostalAddress","addressLocality":"Москва","addressCountry":"RU"},
+  "knowsAbout":["Python","FastAPI","React Native","Machine Learning","PostgreSQL","Docker"],
+  "description":"Студент МАИ, Full-Stack разработчик. Специализируюсь на Python, FastAPI, React Native и машинном обучении."
+}
+</script>
+<style>
+:root{
+  --bg:#fafafa;
+  --bg-2:#ffffff;
+  --bg-3:#f0f0f0;
+  --ink:#111111;
+  --ink-2:#555555;
+  --ink-3:#888888;
+  --line:#d0d0d0;
+  --line-soft:#e6e6e6;
+  --shadow-sm:3px 3px 0 1px rgba(0,0,0,.12);
+  --shadow-md:4px 4px 0 2px rgba(0,0,0,.18);
+  --shadow-lg:6px 6px 0 2px #111;
+  --display:'Pirata One', serif;
+  --mono:'Space Mono', ui-monospace, monospace;
+  --sans:'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  --r-sm:2px; --r-md:4px; --r-lg:6px; --r-xl:8px;
+  --t:.3s cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background-color .5s ease,color .5s ease;opacity:0;animation:fadeInBody .9s ease-out forwards}
+@keyframes fadeInBody{to{opacity:1}}
+::selection{background:var(--ink);color:var(--bg)}
+body.dark-theme{
+  --bg:#0f0f0f;
+  --bg-2:#161616;
+  --bg-3:#1d1d1d;
+  --ink:#f5f5f5;
+  --ink-2:#cfcfcf;
+  --ink-3:#9c9c9c;
+  --line:#3a3a3a;
+  --line-soft:#2a2a2a;
+}
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/a11y.css">
-    <link rel="stylesheet" href="css/mobile.css">
+/* subtle plus-pattern background like original */
+.bg-pattern{
+  position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='30' y1='25' x2='30' y2='35' stroke='%23111111' stroke-width='1'/%3E%3Cline x1='25' y1='30' x2='35' y2='30' stroke='%23111111' stroke-width='1'/%3E%3C/svg%3E");
+  background-size:60px 60px;opacity:.10;
+}
+body.dark-theme .bg-pattern{
+  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='30' y1='25' x2='30' y2='35' stroke='%23f5f5f5' stroke-width='1'/%3E%3Cline x1='25' y1='30' x2='35' y2='30' stroke='%23f5f5f5' stroke-width='1'/%3E%3C/svg%3E");
+  opacity:.14;
+}
+
+.wrap{width:90%;max-width:1280px;margin:0 auto;padding:0 20px}
+.skip-link{
+  position:absolute;top:-44px;left:0;background:var(--ink);color:var(--bg);
+  padding:8px 14px;z-index:200;text-decoration:none;border-radius:0 0 var(--r-md) 0;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.1em
+}
+.skip-link:focus{top:0}
+
+.loading-screen{
+  position:fixed;inset:0;background:var(--bg);z-index:9999;
+  display:flex;align-items:center;justify-content:center;transition:opacity .55s ease,visibility .55s ease
+}
+.loading-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-container{display:flex;flex-direction:column;gap:1.2rem;align-items:center}
+.loader-logo-minimal{
+  width:70px;height:70px;border:2px solid var(--ink);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:2.1rem;
+  box-shadow:var(--shadow-sm);animation:loaderSpin 2.2s linear infinite
+}
+.loader-text-line{font-family:var(--display);font-size:1.35rem;line-height:1;color:var(--ink);letter-spacing:.2px}
+.loader-progress-container{width:190px;height:2px;background:var(--line-soft);overflow:hidden}
+.loader-progress-bar-minimal{height:100%;background:linear-gradient(90deg,var(--ink),var(--ink-2),var(--ink));animation:loaderBar 2.3s ease-out forwards}
+@keyframes loaderSpin{to{transform:rotate(360deg)}}
+@keyframes loaderBar{from{width:0}to{width:100%}}
+
+/* ====== HEADER ====== */
+header{
+  position:sticky;top:0;z-index:50;
+  padding:1.5rem 0;background:var(--bg);
+  border-bottom:1px solid var(--line-soft);
+  box-shadow:var(--shadow-sm);
+  transition:all .4s ease;
+}
+header.scrolled{padding:.8rem 0;box-shadow:var(--shadow-md);background:var(--bg)}
+nav{display:flex;justify-content:space-between;align-items:center}
+.logo{
+  font-family:'Pirata One', sans-serif;font-size:2.5rem;font-weight:700;
+  background:linear-gradient(135deg,var(--ink) 0%,var(--ink-2) 50%,var(--ink) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  text-decoration:none;letter-spacing:-1px;white-space:nowrap;
+  position:relative;display:inline-block;transition:filter .25s ease;
+}
+.logo::after{
+  content:'';position:absolute;left:0;right:0;bottom:4px;height:2px;
+  background:linear-gradient(135deg,var(--ink) 0%,var(--ink-2) 50%,var(--ink) 100%);
+  opacity:.7;border-radius:2px;transition:opacity .25s ease;
+}
+.logo:hover{filter:brightness(1.2)}
+.logo:hover::after{opacity:1}
+.nav-links{display:flex;list-style:none;gap:2rem}
+.nav-links a{
+  color:var(--ink);text-decoration:none;font-weight:500;font-size:1rem;
+  position:relative;padding:.5rem 0;display:inline-block;line-height:1;
+  transition:color .2s cubic-bezier(.4,0,.2,1);
+}
+.nav-links a:hover{color:var(--ink-2)}
+.nav-links a::after{
+  content:'';position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--ink);
+  transition:width .4s cubic-bezier(.23,1,.32,1);
+}
+.nav-links a:hover::after{width:100%}
+.nav-item.resume-dropdown{position:relative}
+.nav-item.resume-dropdown::before{
+  content:"";position:absolute;left:0;right:0;top:100%;height:12px;
+}
+.resume-toggle{
+  background:none;border:none;color:var(--ink);cursor:pointer;position:relative;
+  padding:.5rem 0;font-family:var(--sans);font-weight:500;font-size:1rem;line-height:1;display:inline-block
+}
+.resume-toggle::after{
+  content:'';position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--ink);
+  transition:width .4s cubic-bezier(.23,1,.32,1)
+}
+.resume-toggle:hover::after{width:100%}
+html[lang="ru"] .nav-links a,
+html[lang="ru"] .resume-toggle{font-weight:600}
+.resume-menu{
+  display:none;position:absolute;top:calc(100% + 2px);left:0;list-style:none;min-width:126px;
+  background:var(--bg-2);border:2px solid var(--line);border-radius:var(--r-md);overflow:hidden;
+  box-shadow:var(--shadow-md);z-index:30
+}
+.resume-dropdown:hover .resume-menu,.resume-dropdown.open .resume-menu{display:block}
+.resume-menu a{display:block;padding:.7rem .9rem;border-bottom:1px solid var(--line-soft);font-family:var(--mono)}
+.resume-menu li:last-child a{border-bottom:none}
+.resume-menu a:hover{background:var(--bg-3)}
+
+.mobile-menu-toggle{
+  display:none;width:40px;height:40px;border:2px solid var(--line);border-radius:var(--r-md);background:var(--bg-2);
+  color:var(--ink);align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-sm);transition:var(--t)
+}
+.mobile-menu-toggle:hover{transform:translate(-2px,2px);box-shadow:4px 4px 0 1px var(--ink);border-color:var(--ink)}
+.controls{display:flex;gap:12px}
+.mobile-controls{display:none}
+.icon-btn{
+  width:44px;height:44px;border:2px solid var(--line);border-radius:var(--r-md);
+  background:var(--bg-2);color:var(--ink);font-family:var(--mono);font-weight:700;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  box-shadow:var(--shadow-sm);transition:var(--t);
+}
+.icon-btn:hover{transform:translate(-2px,2px);box-shadow:4px 4px 0 1px var(--ink);border-color:var(--ink)}
+.icon-btn:active{transform:scale(.98)}
+.theme-toggle{position:relative}
+.theme-toggle svg{
+  position:absolute;
+  transition:opacity .3s ease,transform .3s ease;
+}
+.theme-toggle .moon-icon{opacity:1;transform:scale(1) rotate(0deg)}
+.theme-toggle .sun-icon{opacity:0;transform:scale(.7) rotate(-25deg)}
+body.dark-theme .theme-toggle .moon-icon{opacity:0;transform:scale(.7) rotate(25deg)}
+body.dark-theme .theme-toggle .sun-icon{opacity:1;transform:scale(1) rotate(0deg)}
+
+/* ====== HERO ====== */
+#hero{
+  min-height:88vh;display:flex;flex-direction:column;justify-content:center;
+  padding:5rem 0 4rem;position:relative;
+}
+.hero-meta{
+  display:flex;align-items:center;gap:14px;
+  font-family:var(--mono);font-size:.78rem;color:var(--ink-2);
+  letter-spacing:.18em;text-transform:uppercase;margin-bottom:2rem;
+}
+.hero-meta .dot{width:8px;height:8px;background:var(--ink);border-radius:50%;animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+.hero-meta .sep{width:24px;height:1px;background:var(--ink-3)}
+
+#hero h1{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(3.5rem, 9vw, 8.5rem);
+  line-height:.95;letter-spacing:-2px;
+  color:var(--ink);
+}
+#hero h1 .row{display:block}
+#hero h1 .accent{
+  display:inline-block;
+  background:linear-gradient(45deg,#111,#555,#111);
+  background-size:200% 200%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shift 12s ease infinite;
+}
+@keyframes shift{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+
+.hero-body{
+  display:grid;grid-template-columns:1.4fr 1fr;gap:60px;align-items:end;
+  margin-top:3rem;padding-top:2.5rem;border-top:1px solid var(--line-soft);
+}
+.hero-lede{font-size:1.125rem;line-height:1.75;color:var(--ink-2);max-width:520px}
+.hero-lede strong{color:var(--ink);font-weight:600}
+
+.hero-aside{display:flex;flex-direction:column;gap:18px;align-items:flex-end}
+.role-rotator{
+  display:flex;align-items:center;gap:14px;
+  font-family:var(--mono);font-size:.95rem;color:var(--ink-2);
+}
+.role-rotator .lbl{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.rstage{position:relative;height:1.2em;overflow:hidden;min-width:240px;transform:translateY(-2px)}
+.rstage span{
+  position:absolute;left:0;top:0;width:100%;color:var(--ink);font-weight:600;
+  transition:transform .6s cubic-bezier(.6,.05,.3,.95), opacity .4s ease;
+  transform:translateY(100%);opacity:0;white-space:nowrap;
+}
+.rstage span.in{transform:translateY(0);opacity:1}
+.rstage span.out{transform:translateY(-100%);opacity:0}
+
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:1rem 2rem;font-family:var(--sans);font-weight:600;font-size:1rem;
+  text-decoration:none;color:var(--ink);background:var(--bg-2);
+  border:2px solid var(--ink);border-radius:var(--r-md);
+  box-shadow:var(--shadow-md);transition:var(--t);cursor:pointer;
+}
+.btn:hover{transform:translate(-4px,4px);box-shadow:6px 6px 0 2px var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:-4px -4px 0 2px var(--ink)}
+.btn.primary{background:var(--ink);color:var(--bg)}
+.btn.primary:hover{box-shadow:6px 6px 0 2px var(--ink-2)}
+.btn .arr{width:14px;height:14px;transition:transform .3s ease}
+.btn:hover .arr{transform:translate(2px,-2px)}
+
+/* ====== SECTION HEADER ====== */
+section{padding:7rem 0;position:relative}
+.s-head{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;
+  padding-bottom:1.5rem;border-bottom:1px solid var(--line);
+  margin-bottom:4rem;flex-wrap:wrap;
+}
+.s-num{font-family:var(--mono);font-size:.78rem;color:var(--ink-3);letter-spacing:.2em;text-transform:uppercase}
+.s-title{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(2.5rem,5.5vw,5rem);line-height:1;letter-spacing:-1.5px;
+  color:var(--ink);
+}
+.s-meta{font-family:var(--mono);font-size:.78rem;color:var(--ink-3);letter-spacing:.2em;text-transform:uppercase}
+
+/* ====== ABOUT ====== */
+.about-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:5rem;align-items:start}
+.about-prose p{font-size:1.0625rem;color:var(--ink-2);line-height:1.85;margin-bottom:1.25rem;text-wrap:pretty}
+.about-prose p strong{color:var(--ink);font-weight:600}
+.pull-quote{
+  margin:2rem 0;padding:1.5rem 1.75rem;
+  border-left:3px solid var(--ink);
+  font-family:var(--display);font-size:1.625rem;line-height:1.3;color:var(--ink);
+  background:var(--bg-2);
+  box-shadow:var(--shadow-sm);
+}
+
+.about-aside{display:flex;flex-direction:column;gap:1.25rem}
+.profile{
+  position:relative;aspect-ratio:4/5;
+  background:var(--bg-2);border:2px solid var(--line);border-radius:var(--r-xl);
+  overflow:hidden;box-shadow:var(--shadow-md);transition:var(--t);
+  display:flex;align-items:center;justify-content:center;
+}
+.profile:hover{transform:translate(-4px,4px);border-color:var(--ink);box-shadow:6px 6px 0 2px var(--ink)}
+.profile picture{
+  position:absolute;inset:14px;display:block;overflow:hidden;border-radius:var(--r-lg);
+}
+.profile .photo{
+  width:100%;height:100%;object-fit:cover;display:block;
+  object-position:center top;
+  filter:grayscale(1) contrast(1.05);
+}
+.profile .frame{position:absolute;inset:14px;border:1px solid var(--line);border-radius:var(--r-lg);pointer-events:none}
+.profile .tag{
+  position:absolute;left:18px;bottom:18px;
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);
+  background:var(--bg);padding:6px 10px;border:1px solid var(--ink);border-radius:var(--r-sm);
+}
+.profile .corner{
+  position:absolute;top:14px;right:14px;
+  font-family:var(--mono);font-size:.65rem;letter-spacing:.2em;color:var(--ink-3);
+}
+
+.stats{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  border:2px solid var(--ink);background:var(--ink);
+  box-shadow:var(--shadow-md);
+}
+.stat{
+  background:var(--bg-2);padding:1.25rem 1.5rem;
+  display:flex;flex-direction:column;gap:.25rem;
+  position:relative;
+}
+.stat .v{font-family:var(--display);font-size:2.75rem;line-height:1;color:var(--ink);letter-spacing:-1px}
+.stat .v .u{font-size:1.4rem;color:var(--ink-2);margin-left:2px}
+.stat .l{font-family:var(--mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.18em;text-transform:uppercase;margin-top:.4rem}
+.stats .stat:nth-child(1),.stats .stat:nth-child(2){border-bottom:1px solid var(--ink)}
+.stats .stat:nth-child(odd){border-right:1px solid var(--ink)}
+
+/* ====== MARQUEE ====== */
+.marquee{
+  overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:1rem 0;background:var(--bg-2);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+}
+.mtrack{display:flex;gap:48px;animation:mscroll 80s linear infinite;width:max-content}
+.mtrack span{font-family:var(--display);font-size:1.85rem;color:var(--ink);white-space:nowrap;display:inline-flex;align-items:center;gap:48px;line-height:1}
+.mtrack .star{font-family:var(--mono);font-size:.9rem;color:var(--ink-3)}
+@keyframes mscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ====== PROJECTS ====== */
+.proj-feat{
+  background:var(--bg-2);border:2px solid var(--line);border-radius:var(--r-xl);
+  box-shadow:var(--shadow-md);overflow:hidden;transition:var(--t);margin-bottom:2rem;
+}
+.proj-feat:hover{transform:translate(-4px,4px);box-shadow:6px 6px 0 2px var(--ink);border-color:var(--ink)}
+.pf-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:0}
+.pf-info{padding:3rem 2.5rem;display:flex;flex-direction:column;gap:1.25rem;border-right:1px solid var(--line)}
+.pf-tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);display:flex;align-items:center;gap:10px}
+.pf-tag .d{width:8px;height:8px;background:var(--ink);border-radius:50%}
+.pf-info h3{font-family:var(--display);font-weight:400;font-size:2.5rem;line-height:1.05;letter-spacing:-1px;color:var(--ink)}
+.pf-role{font-family:var(--mono);font-size:.8rem;color:var(--ink-2);letter-spacing:.05em}
+.pf-desc{font-size:1rem;color:var(--ink-2);line-height:1.7}
+.pf-ci{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);letter-spacing:.06em;padding-top:.25rem}
+.pf-stack{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  font-family:var(--mono);font-size:.72rem;color:var(--ink);
+  padding:6px 12px;border:1.5px solid var(--ink);border-radius:var(--r-sm);
+  background:var(--bg);transition:var(--t);
+}
+.chip:hover{background:var(--ink);color:var(--bg)}
+.pf-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:.5rem}
+
+.pf-mock{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  padding:2.5rem;background:var(--bg-3);
+  border-left:0;
+  background-image:
+    linear-gradient(45deg, transparent 49%, var(--line) 49%, var(--line) 51%, transparent 51%),
+    linear-gradient(-45deg, transparent 49%, var(--line) 49%, var(--line) 51%, transparent 51%);
+  background-size:18px 18px;
+}
+.device{
+  position:relative;width:100%;max-width:340px;aspect-ratio:9/16;
+  background:var(--ink);border-radius:36px;padding:10px;
+  box-shadow:6px 6px 0 2px var(--ink);
+  transform:rotate(-3deg);transition:transform .8s cubic-bezier(.2,.7,.3,1);
+}
+.proj-feat:hover .device{transform:rotate(0deg)}
+.dscreen{
+  width:100%;height:100%;border-radius:26px;background:var(--bg-2);overflow:hidden;
+  position:relative;border:1px solid var(--ink);
+}
+.dnotch{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:80px;height:20px;background:var(--ink);border-radius:12px;z-index:3}
+.app{padding:32px 14px 14px;display:flex;flex-direction:column;gap:10px;height:100%;font-family:var(--sans)}
+.app-h{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.6rem;color:var(--ink-2);letter-spacing:.1em}
+.app-bal{font-family:var(--display);font-size:2.25rem;color:var(--ink);line-height:1;letter-spacing:-1px}
+.app-bal .cur{font-family:var(--mono);font-size:1rem;color:var(--ink-2);margin-right:2px}
+.app-sub{font-family:var(--mono);font-size:.55rem;color:var(--ink-3);letter-spacing:.15em;text-transform:uppercase}
+.app-graph{height:60px;background:var(--bg-3);border:1px solid var(--line);border-radius:6px;position:relative;overflow:hidden}
+.app-graph svg{position:absolute;inset:0;width:100%;height:100%}
+.app-tx{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.tx{display:flex;align-items:center;gap:8px;padding:7px 9px;background:var(--bg);border:1px solid var(--line);border-radius:6px;font-size:.65rem}
+.tx-i{width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);font-family:var(--mono);font-weight:700;font-size:.6rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tx-m{flex:1;display:flex;flex-direction:column;gap:1px;min-width:0}
+.tx-m .t{color:var(--ink);font-size:.7rem;font-weight:500}
+.tx-m .c{color:var(--ink-3);font-family:var(--mono);font-size:.55rem;letter-spacing:.06em}
+.tx-a{font-family:var(--mono);font-size:.7rem;color:var(--ink);font-weight:700}
+
+/* secondary projects */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.pcard{
+  background:var(--bg-2);border:2px solid var(--line);border-radius:var(--r-xl);
+  padding:2rem;display:flex;flex-direction:column;gap:1rem;min-height:340px;
+  box-shadow:var(--shadow-sm);transition:var(--t);position:relative;
+}
+.pcard:hover{transform:translate(-4px,4px);box-shadow:6px 6px 0 2px var(--ink);border-color:var(--ink)}
+.pc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+.pc-num{font-family:var(--display);font-size:2.5rem;line-height:1;color:var(--ink-3)}
+.pc-year{font-family:var(--mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.18em;text-transform:uppercase;margin-top:.5rem}
+.pc-arrow{
+  width:36px;height:36px;border:1.5px solid var(--ink);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:var(--mono);transition:var(--t);
+}
+.pcard:hover .pc-arrow{background:var(--ink);color:var(--bg);transform:rotate(-45deg)}
+.pc-title{font-family:var(--display);font-weight:400;font-size:1.75rem;line-height:1.1;color:var(--ink);letter-spacing:-.5px}
+.pc-role{font-family:var(--mono);font-size:.72rem;color:var(--ink-2);letter-spacing:.06em}
+.pc-desc{font-size:.95rem;color:var(--ink-2);line-height:1.65;flex:1}
+.pc-stack{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);padding-top:.75rem;border-top:1px dashed var(--line)}
+
+/* achievements */
+.ach{
+  margin-top:1.5rem;padding:2rem 2.25rem;
+  background:var(--bg-2);border:2px solid var(--line);border-radius:var(--r-xl);
+  box-shadow:var(--shadow-sm);transition:var(--t);
+  display:grid;grid-template-columns:1fr 2fr;gap:2.5rem;align-items:start;
+}
+.ach:hover{transform:translate(-4px,4px);border-color:var(--ink);box-shadow:6px 6px 0 2px var(--ink)}
+.ach-t{font-family:var(--display);font-size:2rem;line-height:1.05;color:var(--ink);letter-spacing:-.5px}
+.ach-y{display:block;font-family:var(--mono);font-size:.72rem;color:var(--ink-3);letter-spacing:.18em;text-transform:uppercase;margin-top:.5rem}
+.ach-list{display:flex;flex-direction:column}
+.ach-item{display:grid;grid-template-columns:auto 1fr;gap:1.25rem;align-items:center;padding:.85rem 0;border-bottom:1px solid var(--line-soft);font-size:.95rem;color:var(--ink-2)}
+.ach-item:last-child{border:none}
+.ach-tag{font-family:var(--mono);font-size:.68rem;color:var(--ink);letter-spacing:.15em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--ink);border-radius:var(--r-sm);min-width:120px;text-align:center}
+
+/* ====== SKILLS ====== */
+.skills-wrap{
+  background:var(--bg-2);border:2px solid var(--line);border-radius:var(--r-xl);
+  padding:2.75rem;box-shadow:var(--shadow-md);transition:var(--t);
+}
+.skills-wrap:hover{transform:translate(-4px,4px);border-color:var(--ink);box-shadow:6px 6px 0 2px var(--ink)}
+.skills-tabs{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:2rem;
+  padding-bottom:1.5rem;border-bottom:1px dashed var(--line);
+}
+.tab{
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;
+  padding:.55rem 1rem;background:var(--bg);
+  border:1.5px solid var(--line);border-radius:var(--r-md);
+  color:var(--ink-2);cursor:pointer;transition:var(--t);
+}
+.tab:hover{border-color:var(--ink);color:var(--ink)}
+.tab.active{background:var(--ink);color:var(--bg);border-color:var(--ink);box-shadow:var(--shadow-sm)}
+
+.skills-categories{display:flex;flex-direction:column;gap:2rem}
+.skcat{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start;padding-bottom:1.75rem;border-bottom:1px dashed var(--line)}
+.skcat:last-child{border:none;padding-bottom:0}
+.skcat-l{
+  font-family:var(--display);font-size:1.5rem;color:var(--ink);
+  min-width:140px;line-height:1;letter-spacing:-.5px;
+}
+.skcat-l .num{display:block;font-family:var(--mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.2em;margin-top:.4rem}
+.sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem}
+.sk{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:.75rem 1rem;background:var(--bg);
+  border:1.5px solid var(--line);border-radius:var(--r-md);
+  font-family:var(--mono);font-size:.85rem;color:var(--ink);
+  box-shadow:2px 2px 0 1px rgba(0,0,0,.1);
+  transition:var(--t);position:relative;
+}
+.sk:hover{transform:translate(-2px,2px);background:var(--ink);color:var(--bg);border-color:var(--ink);box-shadow:4px 4px 0 1px var(--ink-2)}
+.sk .lv{font-size:.65rem;opacity:.6;letter-spacing:.05em}
+.sk.dim{opacity:.25;filter:grayscale(1)}
+
+/* ====== EDUCATION ====== */
+.edu-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem}
+.ecard{
+  background:var(--bg-2);border:2px solid var(--line);border-radius:var(--r-xl);
+  padding:2rem;display:flex;flex-direction:column;gap:1rem;
+  box-shadow:var(--shadow-sm);transition:var(--t);min-height:280px;
+  position:relative;overflow:hidden;
+}
+.ecard:hover{transform:translate(-4px,4px);box-shadow:6px 6px 0 2px var(--ink);border-color:var(--ink)}
+.eperiod{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);letter-spacing:.18em;text-transform:uppercase}
+.edegree{font-family:var(--display);font-weight:400;font-size:1.625rem;line-height:1.15;color:var(--ink);letter-spacing:-.5px}
+.einst{font-family:var(--mono);font-size:.78rem;color:var(--ink);font-weight:700;letter-spacing:.04em}
+.edesc{font-size:.92rem;color:var(--ink-2);line-height:1.65;margin-top:auto}
+
+/* ====== CONTACT ====== */
+.contact-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:3rem;align-items:start}
+.cleft h3{font-family:var(--display);font-weight:400;font-size:clamp(2rem,4vw,3.25rem);line-height:1;color:var(--ink);letter-spacing:-1px;margin-bottom:1.5rem}
+.cleft p{font-size:1.0625rem;color:var(--ink-2);line-height:1.75;max-width:480px;margin-bottom:2rem}
+.channels{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.ch{
+  display:grid;grid-template-columns:auto 1fr auto;gap:1.5rem;align-items:center;
+  padding:1.1rem .25rem;border-bottom:1px solid var(--line);
+  text-decoration:none;color:var(--ink);transition:var(--t);
+}
+.ch .ch-l{font-family:var(--mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.2em;text-transform:uppercase;min-width:84px}
+.ch .ch-v{font-family:var(--display);font-size:1.5rem;color:var(--ink);letter-spacing:-.5px;line-height:1;transition:transform .3s ease}
+.ch .ch-a{
+  width:32px;height:32px;border:1.5px solid var(--ink);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);transition:var(--t);
+}
+.ch:hover{padding-left:.75rem}
+.ch:hover .ch-a{background:var(--ink);color:var(--bg);transform:rotate(-45deg)}
+
+.cform{
+  background:var(--bg-2);border:2px solid var(--ink);border-radius:var(--r-xl);
+  padding:3rem;box-shadow:var(--shadow-md);transition:var(--t);
+  display:flex;flex-direction:column;gap:1rem;
+}
+.cform:hover{transform:translate(-4px,4px);box-shadow:6px 6px 0 2px var(--ink)}
+.cform-lbl{font-family:var(--mono);font-size:.72rem;color:var(--ink-2);letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.cform-lbl::before{content:"";width:8px;height:8px;background:var(--ink);border-radius:50%;animation:blink 2s infinite}
+.cform input,.cform textarea{
+  width:100%;background:var(--bg);
+  border:1.5px solid var(--line);border-radius:var(--r-md);
+  padding:.85rem 1rem;color:var(--ink);font-family:var(--sans);font-size:.95rem;
+  transition:var(--t);
+}
+.cform input:focus,.cform textarea:focus{outline:none;border-color:var(--ink);box-shadow:3px 3px 0 1px var(--ink)}
+.cform textarea{resize:vertical;min-height:120px}
+.cform button{
+  margin-top:.5rem;padding:1rem 1.5rem;border:2px solid var(--ink);border-radius:var(--r-md);
+  background:var(--ink);color:var(--bg);font-family:var(--sans);font-weight:600;font-size:1rem;
+  cursor:pointer;display:inline-flex;justify-content:center;align-items:center;gap:8px;
+  box-shadow:var(--shadow-md);transition:var(--t);
+}
+.cform button:hover{transform:translate(-4px,4px);box-shadow:6px 6px 0 2px var(--ink-2)}
+
+/* ====== FOOTER ====== */
+footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-2);margin-top:4rem}
+.foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
+.foot-brand{font-family:var(--display);font-size:1.5rem;color:var(--ink);letter-spacing:-.5px}
+.foot-meta{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);letter-spacing:.18em;text-transform:uppercase}
+.foot-links{display:flex;gap:1rem}
+.foot-links a{
+  width:42px;height:42px;border:2px solid var(--line);border-radius:var(--r-md);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:700;font-size:.78rem;color:var(--ink);text-decoration:none;
+  background:var(--bg);box-shadow:var(--shadow-sm);transition:var(--t);
+}
+.foot-links a:hover{background:var(--ink);color:var(--bg);transform:translate(-4px,4px);border-color:var(--ink);box-shadow:6px 6px 0 2px var(--ink)}
+.foot-links a:active{transform:translate(2px,2px);box-shadow:-4px -4px 0 2px var(--ink)}
+
+/* scroll to top */
+.scroll-to-top{
+  position:fixed;right:28px;bottom:28px;z-index:999;
+  display:flex;align-items:center;gap:.5rem;
+  padding:.75rem 1rem;border:2px solid var(--ink);border-radius:var(--r-md);
+  background:var(--ink);color:var(--bg);font-family:var(--mono);font-size:.72rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+  box-shadow:var(--shadow-md);transition:var(--t);
+  opacity:0;pointer-events:none;transform:translateY(20px);
+}
+.scroll-to-top.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+.scroll-to-top:hover{transform:translate(-4px,4px);box-shadow:6px 6px 0 2px var(--ink)}
+.scroll-to-top:active{transform:translate(2px,2px);box-shadow:-4px -4px 0 2px var(--ink)}
+.scroll-to-top svg{width:14px;height:14px;stroke-width:2.5;transition:transform .25s ease}
+.scroll-to-top:hover svg{transform:translateY(-2px)}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(50px);transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1);will-change:opacity,transform}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* keep press/hover movement visible on revealed blocks */
+.reveal.in.btn:hover,
+.reveal.in.proj-feat:hover,
+.reveal.in.pcard:hover,
+.reveal.in.ecard:hover,
+.reveal.in.ach:hover,
+.reveal.in.skills-wrap:hover{transform:translate(-4px,4px)}
+.reveal.in.profile:hover,
+.reveal.in.cform:hover{transform:translate(-4px,4px)}
+
+.reveal.in.btn:active{transform:translate(2px,2px)}
+
+/* ====== HERO SWORD ====== */
+.hero-title-row{display:flex;align-items:center;gap:32px}
+.hero-title-row h1{flex:1;min-width:0}
+.sword-stage{width:150px;height:170px;position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:visible}
+.sword-group{transform-origin:50% 78%;animation:swordTimeline 8s 1.6s linear infinite}
+.sword-svg-el{width:44px;height:130px;display:block;animation:shadowTimeline 8s 1.6s linear infinite}
+.forge-shell{animation:forgeReveal 1.4s cubic-bezier(.65,0,.35,1) forwards}
+@keyframes forgeReveal{0%{clip-path:inset(0 0 100% 0)}100%{clip-path:inset(0 0 0 0)}}
+@keyframes swordTimeline{
+  0%,2%{transform:translate(0,0) rotate(0deg)}
+  4%{transform:translate(-1px,-2px) rotate(-3deg)}
+  7%{transform:translate(-3px,-7px) rotate(-12deg)}
+  10%{transform:translate(-6px,-11px) rotate(-28deg)}
+  13%{transform:translate(-10px,-14px) rotate(-40deg)}
+  16%{transform:translate(-6px,-8px) rotate(-22deg)}
+  19%{transform:translate(5px,4px) rotate(15deg)}
+  21%{transform:translate(10px,8px) rotate(44deg)}
+  23%{transform:translate(14px,12px) rotate(56deg)}
+  25%{transform:translate(16px,14px) rotate(62deg)}
+  27%{transform:translate(10px,8px) rotate(48deg)}
+  29%{transform:translate(12px,10px) rotate(54deg)}
+  32%{transform:translate(5px,4px) rotate(18deg)}
+  36%{transform:translate(-2px,-1px) rotate(-4deg)}
+  40%{transform:translate(1px,0) rotate(1deg)}
+  44%,48%{transform:translate(0,0) rotate(0deg)}
+  49%,50%{transform:translate(0,0) rotate(0deg)}
+  57%{transform:translate(4px,6px) rotate(20deg)}
+  65%{transform:translate(10px,14px) rotate(48deg)}
+  71%{transform:translate(12px,18px) rotate(68deg)}
+  78%{transform:translate(6px,6px) rotate(38deg)}
+  84%{transform:translate(-2px,-8px) rotate(-2deg)}
+  88%{transform:translate(-6px,-22px) rotate(-24deg)}
+  92%{transform:translate(-4px,-14px) rotate(-14deg)}
+  96%{transform:translate(-1px,-3px) rotate(-3deg)}
+  100%{transform:translate(0,0) rotate(0deg)}
+}
+@keyframes shadowTimeline{
+  0%,2%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.15)) brightness(1)}
+  13%{filter:drop-shadow(8px 8px 0 rgba(0,0,0,.28)) brightness(1)}
+  21%{filter:drop-shadow(14px 14px 0 rgba(0,0,0,.4)) brightness(1.06)}
+  29%{filter:drop-shadow(8px 8px 0 rgba(0,0,0,.2)) brightness(1)}
+  44%,49%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.15)) brightness(1)}
+  65%{filter:drop-shadow(8px 4px 0 rgba(0,0,0,.22)) brightness(1)}
+  71%{filter:drop-shadow(10px 6px 0 rgba(0,0,0,.28)) brightness(1)}
+  88%{filter:drop-shadow(-10px -14px 0 rgba(0,0,0,.4)) brightness(1.06)}
+  92%{filter:drop-shadow(-6px -8px 0 rgba(0,0,0,.22)) brightness(1)}
+  96%,100%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.15)) brightness(1)}
+}
+body.dark-theme .sword-svg-el{filter:drop-shadow(4px 4px 0 rgba(255,255,255,.15)) brightness(1)}
+body.dark-theme .sword-svg-el rect,body.dark-theme .sword-svg-el circle{fill:var(--ink)}
+body.dark-theme .sword-svg-el stop:first-child{stop-color:var(--ink)}
+body.dark-theme .sword-svg-el stop:nth-child(2){stop-color:var(--ink-2)}
+body.dark-theme .sword-svg-el stop:nth-child(3){stop-color:var(--ink)}
+
+/* sword speed lines */
+.sword-sl{position:absolute;height:3px;background:var(--ink);border-radius:2px;opacity:0;pointer-events:none;z-index:1}
+.sword-sl.sl1{width:50px;top:30px;left:20px;transform-origin:right center;animation:ssl1 8s 1.75s linear infinite}
+.sword-sl.sl2{width:42px;top:60px;left:24px;transform-origin:right center;animation:ssl2 8s 1.78s linear infinite}
+.sword-sl.sl3{width:48px;top:90px;left:22px;transform-origin:right center;animation:ssl3 8s 1.8s linear infinite}
+.sword-sl.sl4{width:38px;top:100px;left:72px;transform-origin:left center;animation:ssl4 8s 1.6s linear infinite}
+.sword-sl.sl5{width:32px;top:112px;left:76px;transform-origin:left center;animation:ssl5 8s 1.6s linear infinite}
+.sword-sl.sl6{width:36px;top:86px;left:70px;transform-origin:left center;animation:ssl6 8s 1.6s linear infinite}
+@keyframes ssl1{0%,8%{opacity:0;transform:rotate(-5deg) scaleX(0)}14%{opacity:.3;transform:rotate(-5deg) scaleX(1)}24%{opacity:0;transform:rotate(-5deg) scaleX(0)}50%,100%{opacity:0;transform:rotate(-5deg) scaleX(0)}}
+@keyframes ssl2{0%,8%{opacity:0;transform:rotate(3deg) scaleX(0)}14%{opacity:.3;transform:rotate(3deg) scaleX(1)}24%{opacity:0;transform:rotate(3deg) scaleX(0)}50%,100%{opacity:0;transform:rotate(3deg) scaleX(0)}}
+@keyframes ssl3{0%,8%{opacity:0;transform:rotate(8deg) scaleX(0)}14%{opacity:.3;transform:rotate(8deg) scaleX(1)}24%{opacity:0;transform:rotate(8deg) scaleX(0)}50%,100%{opacity:0;transform:rotate(8deg) scaleX(0)}}
+@keyframes ssl4{0%,76%{opacity:0;transform:rotate(-62deg) scaleX(0)}84%{opacity:.3;transform:rotate(-62deg) scaleX(1)}92%{opacity:0;transform:rotate(-62deg) scaleX(0)}100%{opacity:0;transform:rotate(-62deg) scaleX(0)}}
+@keyframes ssl5{0%,76%{opacity:0;transform:rotate(-68deg) scaleX(0)}84%{opacity:.3;transform:rotate(-68deg) scaleX(1)}92%{opacity:0;transform:rotate(-68deg) scaleX(0)}100%{opacity:0;transform:rotate(-68deg) scaleX(0)}}
+@keyframes ssl6{0%,76%{opacity:0;transform:rotate(-74deg) scaleX(0)}84%{opacity:.3;transform:rotate(-74deg) scaleX(1)}92%{opacity:0;transform:rotate(-74deg) scaleX(0)}100%{opacity:0;transform:rotate(-74deg) scaleX(0)}}
+
+/* sword sparks */
+.sword-spark{position:absolute;background:var(--ink);pointer-events:none;z-index:5;opacity:0}
+.sword-spark.sq{width:5px;height:5px;border-radius:1px}
+.sword-spark.rnd{width:3px;height:3px;border-radius:50%}
+.ss1a{top:10px;left:62px;animation:ssS1 8s 1.86s linear infinite;--dx:18px;--dy:14px}
+.ss1b{top:25px;left:76px;animation:ssS1 8s 1.88s linear infinite;--dx:22px;--dy:10px}
+.ss1c{top:50px;left:84px;animation:ssS1 8s 1.9s linear infinite;--dx:26px;--dy:2px}
+.ss1d{top:72px;left:82px;animation:ssS1 8s 1.92s linear infinite;--dx:24px;--dy:-6px}
+.ss1e{top:90px;left:72px;animation:ssS1 8s 1.94s linear infinite;--dx:16px;--dy:-12px}
+.ss1f{top:8px;left:44px;animation:ssS1 8s 1.87s linear infinite;--dx:-16px;--dy:12px}
+.ss1g{top:30px;left:30px;animation:ssS1 8s 1.89s linear infinite;--dx:-22px;--dy:4px}
+.ss1h{top:55px;left:24px;animation:ssS1 8s 1.91s linear infinite;--dx:-26px;--dy:-4px}
+.ss2a{top:80px;left:52px;animation:ssS2 8s 2.05s linear infinite;--ux:12px;--uy:-22px}
+.ss2b{top:68px;left:68px;animation:ssS2 8s 2.07s linear infinite;--ux:18px;--uy:-18px}
+.ss2c{top:52px;left:78px;animation:ssS2 8s 2.09s linear infinite;--ux:22px;--uy:-12px}
+.ss2d{top:36px;left:80px;animation:ssS2 8s 2.11s linear infinite;--ux:18px;--uy:-8px}
+.ss2e{top:20px;left:74px;animation:ssS2 8s 2.13s linear infinite;--ux:10px;--uy:-4px}
+.ss2f{top:84px;left:38px;animation:ssS2 8s 2.06s linear infinite;--ux:-10px;--uy:-20px}
+.ss2g{top:64px;left:30px;animation:ssS2 8s 2.08s linear infinite;--ux:-16px;--uy:-14px}
+.ss2h{top:42px;left:26px;animation:ssS2 8s 2.1s linear infinite;--ux:-18px;--uy:-10px}
+@keyframes ssS1{0%,8%{opacity:0;transform:translate(0,0) scale(0)}18%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)}28%{opacity:0;transform:translate(calc(var(--dx)*2.5),calc(var(--dy)*2.5)) scale(0)}50%,100%{opacity:0}}
+@keyframes ssS2{0%,58%{opacity:0;transform:translate(0,0) scale(0)}68%{opacity:1;transform:translate(var(--ux),var(--uy)) scale(1)}80%{opacity:0;transform:translate(calc(var(--ux)*2.5),calc(var(--uy)*2.5)) scale(0)}100%{opacity:0}}
+
+/* forge sparks (entrance only) */
+.fspark{position:absolute;width:4px;height:4px;background:var(--ink);opacity:0;pointer-events:none;z-index:5}
+.fs1{top:22px;left:62px;animation:fsparkFly .45s .5s ease-out forwards}
+.fs2{top:42px;left:56px;animation:fsparkFly .4s .7s ease-out forwards}
+.fs3{top:65px;left:64px;animation:fsparkFly .5s .9s ease-out forwards}
+.fs4{top:88px;left:58px;animation:fsparkFly .42s 1.1s ease-out forwards}
+@keyframes fsparkFly{0%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(var(--fx,10px),var(--fy,-14px))}}
+
+@media (max-width:768px){
+  .hero-title-row{flex-direction:column;gap:8px;align-items:flex-start}
+  .sword-stage{width:100px;height:120px;margin-left:-8px}
+  .sword-svg-el{width:36px;height:106px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+  .reveal{opacity:1;transform:none}
+}
+
+/* ====== CUSTOM CURSOR ====== */
+.cursor-dot{
+  position:fixed;top:0;left:0;z-index:9999;
+  width:6px;height:6px;margin-left:-3px;margin-top:-3px;
+  background:var(--ink);border-radius:50%;
+  pointer-events:none;will-change:transform;
+  transition:width .25s ease,height .25s ease,margin .25s ease,background .25s ease;
+}
+.cursor-ring{
+  position:fixed;top:0;left:0;z-index:9998;
+  width:28px;height:28px;margin-left:-14px;margin-top:-14px;
+  border:1.5px solid var(--ink);border-radius:50%;
+  pointer-events:none;will-change:transform;
+  transition:width .3s ease,height .3s ease,margin .3s ease,border-color .3s ease,opacity .25s ease;
+}
+/* hover over interactive */
+.cursor-dot.hover{
+  width:10px;height:10px;margin-left:-5px;margin-top:-5px;
+  background:var(--bg);border:2px solid var(--ink);
+}
+.cursor-ring.hover{
+  width:48px;height:48px;margin-left:-24px;margin-top:-24px;
+  border-width:2px;border-color:var(--ink-2);
+}
+/* hidden states */
+.cursor-dot.hidden,.cursor-ring.hidden{opacity:0}
+/* hide on touch */
+@media (pointer:coarse){
+  .cursor-dot,.cursor-ring{display:none}
+}
+
+/* responsive */
+@media (max-width:992px){
+  .hero-body{grid-template-columns:1fr;align-items:start;gap:2rem}
+  .hero-aside{align-items:flex-start}
+  .about-grid{grid-template-columns:1fr;gap:3rem}
+  .pf-grid{grid-template-columns:1fr}
+  .pf-info{border-right:none;border-bottom:1px solid var(--line)}
+  .proj-grid,.edu-grid{grid-template-columns:1fr}
+  .ach{grid-template-columns:1fr;gap:1.5rem}
+  .contact-grid{grid-template-columns:1fr}
+  .skcat{grid-template-columns:1fr;gap:1rem}
+}
+@media (max-width:768px){
+  nav{position:relative}
+  .logo{font-size:2.05rem}
+  .mobile-menu-toggle{display:flex}
+  .controls{display:none}
+  .nav-links{
+    display:none;position:absolute;left:0;right:0;top:calc(100% + 8px);
+    background:var(--bg);border:2px solid var(--line);border-radius:var(--r-md);
+    box-shadow:var(--shadow-md);padding:.5rem 0;flex-direction:column;gap:0;z-index:80
+  }
+  nav.mobile-open .nav-links{display:flex}
+  .nav-links li{width:100%}
+  .nav-links li>a,.resume-toggle{display:block;width:100%;padding:.8rem 1rem}
+  .nav-links li:not(:last-child){border-bottom:1px solid var(--line-soft)}
+  .resume-menu{position:static;display:none;border:none;border-top:1px solid var(--line-soft);box-shadow:none;border-radius:0;background:transparent}
+  .resume-dropdown:hover .resume-menu{display:none}
+  .resume-dropdown.open .resume-menu{display:block}
+  .resume-menu a{padding:.65rem 1rem .65rem 1.8rem}
+  .mobile-controls{
+    display:flex;gap:10px;justify-content:center;align-items:center;
+    padding:1rem;
+  }
+  section{padding:5rem 0}
+  .skills-wrap{padding:1.75rem}
+  .pf-info{padding:2rem 1.5rem}
+  .pf-mock{padding:2rem 1rem}
+  .scroll-to-top{right:16px;bottom:16px;padding:.65rem .85rem}
+}
+</style>
 </head>
 <body>
-	
-    <!-- Skip to main content (keyboard accessibility) -->
-    <a href="#hero" class="skip-link">Перейти к основному содержимому</a>
 
-    <!-- Loading Screen -->
-    <div class="loading-screen">
-        <div class="loader-container">
-            <div class="loader-logo-minimal">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Logo">
-                    <defs>
-                        <linearGradient id="minimalLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:var(--text-primary);stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:var(--accent);stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                    <text x="50" y="75" text-anchor="middle" font-family="Space Mono" font-weight="700" font-size="80" fill="url(#minimalLogoGradient)">M</text>
-                </svg>
-            </div>
-            <div class="loader-text-line">
-                <span class="loader-name">Alexander Makedonskiy</span><span class="loader-dots">...</span>
-            </div>
-            <div class="loader-progress-container">
-                <div class="loader-progress-bar-minimal"></div>
-            </div>
-        </div>
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<a href="#hero" class="skip-link">Skip to content</a>
+
+<div class="loading-screen">
+  <div class="loader-container">
+    <div class="loader-logo-minimal">M</div>
+    <div class="loader-text-line">Alexander Makedonskiy...</div>
+    <div class="loader-progress-container"><div class="loader-progress-bar-minimal"></div></div>
+  </div>
+</div>
+
+<div class="bg-pattern"></div>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <a href="#" class="logo">Alexander Makedonskiy</a>
+      <button class="mobile-menu-toggle" aria-label="Menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Work</a></li>
+        <li><a href="#education">Education</a></li>
+        <li class="nav-item resume-dropdown" role="menu">
+          <button class="resume-toggle" aria-haspopup="true" aria-expanded="false">Resume</button>
+          <ul class="resume-menu" role="menu">
+            <li role="none"><a href="resume.pdf" download="Македонский_Александр_резюме.pdf" role="menuitem">PDF</a></li>
+            <li role="none"><a href="resume.docx" download="Македонский_Александр_резюме.docx" role="menuitem">DOCX</a></li>
+          </ul>
+        </li>
+        <li><a href="#skills">Stack</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li class="mobile-controls">
+          <button class="icon-btn lang-toggle" aria-label="Language"><span class="lang-text">EN</span></button>
+          <button class="icon-btn theme-toggle" aria-label="Theme">
+            <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/assets/icons.svg#icon-02"></use></svg>
+            <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/assets/icons.svg#icon-03"></use></svg>
+          </button>
+        </li>
+      </ul>
+      <div class="controls">
+        <button class="icon-btn lang-toggle" aria-label="Language"><span class="lang-text">EN</span></button>
+        <button class="icon-btn theme-toggle" aria-label="Theme">
+          <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/assets/icons.svg#icon-02"></use></svg>
+          <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/assets/icons.svg#icon-03"></use></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="hero" data-screen-label="01 Hero">
+  <div class="wrap">
+    <div class="hero-meta">
+      <span class="dot"></span>
+      <span>Available · Moscow, RU</span>
+      <span class="sep"></span>
+      <span>2026</span>
     </div>
 
-    <div class="particles-background">
-        <div class="particle p1"></div>
-        <div class="particle p2"></div>
-        <div class="particle p3"></div>
-        <div class="particle p4"></div>
-        <div class="particle p5"></div>
-        <div class="particle p6"></div>
-        <div class="particle p7"></div>
-        <div class="particle p8"></div>
-        <div class="particle p9"></div>
-        <div class="particle p10"></div>
-    </div>
-    
-    <header>
-        <div class="container">
-            <nav>
-                <a href="#" class="logo">Alexander Makedonskiy</a>
-                <button class="mobile-menu-toggle" data-i18n="aria_menu" aria-label="Меню" aria-expanded="false">
-                    <svg viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-01"></use></svg>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="#about" data-i18n="nav_about">Обо мне</a></li>
-                    <li><a href="#projects" data-i18n="nav_projects">Проекты</a></li>
-                    <li><a href="#education" data-i18n="nav_education">Образование</a></li>
-                    <li class="nav-item resume-dropdown" role="menu">
-                        <button class="resume-toggle" data-i18n="nav_resume" aria-haspopup="true" aria-expanded="false">
-                            Резюме
-                        </button>
-                        <ul class="resume-menu" role="menu">
-                            <li role="none">
-                                <a href="resume.pdf" download="Македонский_Александр_резюме.pdf" role="menuitem">PDF</a>
-                            </li>
-                            <li role="none">
-                                <a href="resume.docx" download="Македонский_Александр_резюме.docx" role="menuitem">DOCX</a>
-                            </li>
-                        </ul>
-                    </li>                   
-                    <li><a href="#skills" data-i18n="nav_skills">Навыки</a></li>
-                    <li><a href="#contact" data-i18n="nav_contact">Контакты</a></li>
-                </ul>
-                <div class="controls">
-                    <button class="lang-toggle" data-i18n="aria_lang" aria-label="Переключить язык">
-                        <span class="lang-text">RU</span>
-                    </button>
-                    <button class="theme-toggle" data-i18n="aria_theme" aria-label="Переключить тему">
-                        <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/assets/icons.svg#icon-02"></use></svg>
-                        <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/assets/icons.svg#icon-03"></use></svg>
-                    </button>
-                </div>
-            </nav>
+    <div class="hero-title-row">
+      <h1>
+        <span class="row">Engineering</span>
+        <span class="row"><span class="accent">tomorrow's</span></span>
+        <span class="row">interfaces.</span>
+      </h1>
+      <div class="sword-stage" aria-hidden="true">
+        <div class="sword-sl sl1"></div><div class="sword-sl sl2"></div><div class="sword-sl sl3"></div>
+        <div class="sword-sl sl4"></div><div class="sword-sl sl5"></div><div class="sword-sl sl6"></div>
+        <div class="sword-group">
+          <div class="forge-shell">
+            <svg class="sword-svg-el" viewBox="0 0 44 130" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="bladeGrad2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#111"/><stop offset="45%" stop-color="#444"/>
+                  <stop offset="55%" stop-color="#111"/><stop offset="100%" stop-color="#111"/>
+                </linearGradient>
+              </defs>
+              <rect x="18" y="0" width="8" height="78" rx="3" fill="url(#bladeGrad2)"/>
+              <rect x="2" y="74" width="40" height="5" rx="2" fill="#111"/>
+              <rect x="19" y="81" width="6" height="32" rx="2" fill="#111"/>
+              <circle cx="22" cy="118" r="7" fill="#111"/>
+            </svg>
+          </div>
         </div>
-    </header>
+        <div class="fspark fs1" style="--fx:14px;--fy:-14px"></div>
+        <div class="fspark fs2" style="--fx:-10px;--fy:-16px"></div>
+        <div class="fspark fs3" style="--fx:16px;--fy:-10px"></div>
+        <div class="fspark fs4" style="--fx:-12px;--fy:-18px"></div>
+        <div class="sword-spark sq ss1a"></div><div class="sword-spark rnd ss1b"></div>
+        <div class="sword-spark sq ss1c"></div><div class="sword-spark rnd ss1d"></div>
+        <div class="sword-spark sq ss1e"></div><div class="sword-spark sq ss1f"></div>
+        <div class="sword-spark rnd ss1g"></div><div class="sword-spark sq ss1h"></div>
+        <div class="sword-spark sq ss2a"></div><div class="sword-spark rnd ss2b"></div>
+        <div class="sword-spark sq ss2c"></div><div class="sword-spark rnd ss2d"></div>
+        <div class="sword-spark sq ss2e"></div><div class="sword-spark sq ss2f"></div>
+        <div class="sword-spark rnd ss2g"></div><div class="sword-spark sq ss2h"></div>
+      </div>
+    </div>
 
-    <section id="hero" class="fade-in">
-    <div class="hero-bg">
-        <div class="hero-gradient"></div>
-        <div class="hero-grid"></div>
-        <div class="hero-glow hero-glow-1"></div>
-        <div class="hero-glow hero-glow-2"></div>
-    </div>
-    <div class="container">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span class="hero-badge-dot"></span>
-                <span data-i18n="hero_badge">Открыт к предложениям</span>
-            </div>
-            <h1>
-                <span data-i18n="hero_greeting" class="hero-greeting">Привет, я Александр</span>
-                <span class="hero-typing-line">
-                    <span data-i18n="hero_iam" class="hero-iam">Я — </span>
-                    <span class="typing-text" id="typing-text"></span>
-                    <span class="typing-cursor">|</span>
-                </span>
-            </h1>
-            <p class="hero-description" data-i18n="hero_description">Разрабатываю полнофункциональные приложения с использованием современных технологий. Углубленно изучаю машинное обучение и создаю решения, решающие реальные задачи.</p>
-            <a href="#contact" class="cta-button" data-i18n="hero_cta">Связаться со мной</a>
+    <div class="hero-body">
+      <p class="hero-lede">
+        I'm <strong>Alexander</strong> — a full-stack developer and ML student at <strong>Moscow Aviation Institute</strong>. I build performant client-server systems, offline-first PWAs, and machine-learning-powered tools that ship.
+      </p>
+      <div class="hero-aside">
+        <div class="role-rotator">
+          <span class="lbl">Currently</span>
+          <div class="rstage" id="rotator"><span class="in">Full-Stack Engineer</span></div>
         </div>
+        <div class="cta-row">
+          <a href="#projects" class="btn primary">View work <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a href="#contact" class="btn">Get in touch <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
 
-    <section id="about" class="fade-in">
-        <div class="container">
-            <h2 class="section-title" data-i18n="about_title">Обо мне</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p data-i18n="about_p1">Я — студент НИУ МАИ по направлению «Прикладная математика и информатика» с глубокими знаниями в программировании и анализе данных. Специализируюсь на разработке клиент-серверных приложений и изучении методов машинного обучения.</p>
-                    <p data-i18n="about_p2">Мой подход основан на постоянном обучении, применении лучших практик и внимании к деталям. Верю, что сильные технические решения рождаются на стыке фундаментальных знаний и креативного мышления. Участвую в олимпиадах и хакатонах для развития профессиональных навыков.</p>
-                    <p data-i18n="about_p3">Свободно владею английским языком (Upper-Intermediate/B2). В свободное время играю на гитаре, слушаю музыку и углубляю знания в области машинного обучения и анализа данных.</p>
-                </div>
-                <div class="about-image">
-                    <div class="profile-photo-wrapper">
-                        <picture>
-                            <source srcset="/assets/images/photo.webp" type="image/webp">
-                            <source srcset="/assets/images/photo-alt.jpg" type="image/jpeg">
-                            <img src="/assets/images/photo-alt.jpg" 
-                                 alt="Alexander Makedonskiy - Full-Stack Developer" 
-                                 class="profile-photo" 
-                                 loading="lazy" 
-                                 decoding="async"
-                                 width="400" 
-                                 height="400">
-                        </picture>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="projects" class="fade-in">
-        <div class="container">
-            <h2 class="section-title" data-i18n="projects_title">Проекты и достижения</h2>
-            <div class="projects-unified">
-                <ol class="timeline" role="list">
-                    <li class="timeline-item">
-                        <h3 data-i18n="project3_title">Finly — PWA для управления финансами</h3>
-                        <h4 data-i18n="project3_role">Тимлид, Full-Stack Разработчик</h4>
-                        <time class="date" datetime="2026">2026</time>
-                        <p data-i18n="project3_desc">PWA-приложение для управления личными финансами с офлайн-поддержкой и AI-ассистентом. Проект от компании Т1 (Иннотех) в рамках учебного проекта МАИ (направление 01.03.02 — Прикладная математика и информатика).</p>
-                        <ul>
-                            <li data-i18n="project3_feat1">Offline-first архитектура: IndexedDB, Service Worker (Workbox), полная функциональность без интернета</li>
-                            <li data-i18n="project3_feat2">AI-ассистент с автокатегоризацией операций и парсингом естественного языка</li>
-                            <li data-i18n="project3_feat3">Бюджеты, финансовые цели, повторяющиеся операции, импорт/экспорт данных</li>
-                            <li data-i18n="project3_feat4">Аналитика с графиками (Recharts, Chart.js), тёмная/светлая темы</li>
-                        </ul>
-                        <p><strong data-i18n="project3_stack_label">Стек:</strong> TypeScript, React 18, React Router, Zustand, Tailwind CSS, Dexie.js, Vite, PWA</p>
-                        <div class="project-links">
-                            <a href="https://github.com/Shadovv-Government/Finly" target="_blank" rel="noopener" class="project-link" aria-label="Finly на GitHub">
-                                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="/assets/icons.svg#icon-04"></use></svg>
-                                <span data-i18n="project3_link_repo">Репозиторий</span>
-                            </a>
-                            <a href="https://finly-ruby.vercel.app" target="_blank" rel="noopener" class="project-link" aria-label="Finly App">
-                                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><use href="/assets/icons.svg#icon-05"></use></svg>
-                                <span data-i18n="project3_link_app">App</span>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="timeline-item">
-                        <h3 data-i18n="project1_title">МАИ Таблетки — Приложение для контроля лечения</h3>
-                        <h4 data-i18n="project1_role">Full-Stack Разработчик</h4>
-                        <time class="date" datetime="2025">2025</time>
-                        <p data-i18n="project1_desc">Полнофункциональная система для контроля приёма лекарств с синхронизацией данных между пациентами и доверенными лицами («мед-друзьями»).</p>
-                        <ul>
-                            <li data-i18n="project1_feat1">Клиент-серверная архитектура с оффлайн-режимом и автоматической синхронизацией</li>
-                            <li data-i18n="project1_feat2">Система QR-кодов с временным ограничением (3 минуты) для безопасного подключения</li>
-                            <li data-i18n="project1_feat3">Настраиваемые push-уведомления и гибкое расписание приёма (ежедневный/периодический режимы)</li>
-                            <li data-i18n="project1_feat4">Реализация принципов сохранения медицинской тайны</li>
-                        </ul>
-                        <p><strong data-i18n="project1_stack_label">Стек:</strong> Python, FastAPI, PostgreSQL, Docker, React Native, Expo</p>
-                        <div class="project-links">
-                            <a href="https://github.com/programx-dev/MAI-tablets" target="_blank" rel="noopener" class="project-link" aria-label="MAI Tablets Backend on GitHub">
-                                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="/assets/icons.svg#icon-04"></use></svg>
-                                <span data-i18n="project1_link_backend">Backend</span>
-                            </a>
-                            <a href="https://github.com/programx-dev/MAI-tablets-client" target="_blank" rel="noopener" class="project-link" aria-label="MAI Tablets Client on GitHub">
-                                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="/assets/icons.svg#icon-04"></use></svg>
-                                <span data-i18n="project1_link_client">Клиент</span>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="timeline-item">
-                        <h3 data-i18n="project2_title">Олимпиадные достижения</h3>
-                        <h4 data-i18n="project2_subtitle">Информатика и математика</h4>
-                        <time class="date" datetime="2022">2022–2025</time>
-                        <ul>
-                            <li data-i18n="project2_item1">Финалист олимпиады ИТМО (2024–2025)</li>
-                            <li data-i18n="project2_item2">Финалист олимпиады РОСАТОМА по информатике и математике (2022–2024)</li>
-                            <li data-i18n="project2_item3">Участник финала Московской предпрофессиональной олимпиады по программе «Аэрокосмос»: разработка прототипа кубсата для расшифровки сообщений</li>
-                        </ul>
-                    </li>
-                </ol>
-            </div>
-        </div>
-    </section>
+<div class="marquee" aria-hidden="true">
+  <div class="mtrack">
+    <span>Python<span class="star">+</span>JavaScript<span class="star">+</span>TypeScript<span class="star">+</span>C<span class="star">+</span>C++<span class="star">+</span>Git<span class="star">+</span>GitHub<span class="star">+</span>GitLab<span class="star">+</span>GitHub Actions<span class="star">+</span>GitLab CI<span class="star">+</span>HTML5<span class="star">+</span>Docker<span class="star">+</span>Kubernetes<span class="star">+</span>React<span class="star">+</span>React Router<span class="star">+</span>React Hook Form<span class="star">+</span>Vite<span class="star">+</span>Webpack<span class="star">+</span>Node.js<span class="star">+</span>NPM<span class="star">+</span>FastAPI<span class="star">+</span>Nginx<span class="star">+</span>MySQL<span class="star">+</span>Redis<span class="star">+</span>NumPy<span class="star">+</span>Pandas<span class="star">+</span>Matplotlib<span class="star">+</span>TensorFlow<span class="star">+</span>Keras<span class="star">+</span>PyTorch<span class="star">+</span>scikit‑learn<span class="star">+</span>AWS<span class="star">+</span>Google Cloud<span class="star">+</span>Vercel<span class="star">+</span>Cloudflare<span class="star">+</span>Swagger<span class="star">+</span>WireGuard<span class="star">+</span>Figma<span class="star">+</span>JWT<span class="star">+</span>CMake<span class="star">+</span></span>
+    <span>Python<span class="star">+</span>JavaScript<span class="star">+</span>TypeScript<span class="star">+</span>C<span class="star">+</span>C++<span class="star">+</span>Git<span class="star">+</span>GitHub<span class="star">+</span>GitLab<span class="star">+</span>GitHub Actions<span class="star">+</span>GitLab CI<span class="star">+</span>HTML5<span class="star">+</span>Docker<span class="star">+</span>Kubernetes<span class="star">+</span>React<span class="star">+</span>React Router<span class="star">+</span>React Hook Form<span class="star">+</span>Vite<span class="star">+</span>Webpack<span class="star">+</span>Node.js<span class="star">+</span>NPM<span class="star">+</span>FastAPI<span class="star">+</span>Nginx<span class="star">+</span>MySQL<span class="star">+</span>Redis<span class="star">+</span>NumPy<span class="star">+</span>Pandas<span class="star">+</span>Matplotlib<span class="star">+</span>TensorFlow<span class="star">+</span>Keras<span class="star">+</span>PyTorch<span class="star">+</span>scikit‑learn<span class="star">+</span>AWS<span class="star">+</span>Google Cloud<span class="star">+</span>Vercel<span class="star">+</span>Cloudflare<span class="star">+</span>Swagger<span class="star">+</span>WireGuard<span class="star">+</span>Figma<span class="star">+</span>JWT<span class="star">+</span>CMake<span class="star">+</span></span>
+  </div>
+</div>
 
-    <section id="education" class="fade-in">
-        <div class="container">
-            <h2 class="section-title" data-i18n="education_title">Образование</h2>
-            <div class="education-unified">
-                <ol class="timeline" role="list">
-                    <li class="timeline-item">
-                        <h3 data-i18n="edu1_degree">Прикладная математика и информатика</h3>
-                        <h4 data-i18n="edu1_institution">НИУ Московский авиационный институт (МАИ)</h4>
-                        <time class="date" datetime="2025" data-i18n="edu1_period">2025 – настоящее время</time>
-                        <p data-i18n="edu1_desc">Профильные дисциплины: высшая математика, программирование на Python, фундаментальная информатика, архитектура вычислительных систем.</p>
-                    </li>
-                    <li class="timeline-item">
-                        <h3 data-i18n="edu2_title">Дополнительное образование</h3>
-                        <h4 data-i18n="edu2_course">Очный курс по машинному обучению и анализу данных</h4>
-                        <time class="date" datetime="2022" data-i18n="edu2_period">2022 – 2025</time>
-                        <p data-i18n="edu2_desc">НИЯУ МИФИ, институт ИНТЭЛ. Практическое применение алгоритмов ML: регрессия (Random Forest), классификация (KNN, Random Forest), кластеризация (K-Means), визуализация данных (Matplotlib, Seaborn).</p>
-                    </li>
-                    <li class="timeline-item">
-                        <h3 data-i18n="edu3_title">Предуниверситарий</h3>
-                        <h4 data-i18n="edu3_institution">НИЯУ МИФИ</h4>
-                        <time class="date" datetime="2021" data-i18n="edu3_period">2021 – 2025</time>
-                        <p data-i18n="edu3_desc">Углублённая подготовка по математике, информатике и физике перед поступлением в вуз.</p>
-                    </li>
-                </ol>
-            </div>
-        </div>
-    </section>
-
-    <section id="skills" class="fade-in">
-    <div class="container">
-        <h2 class="section-title" data-i18n="skills_title">Навыки</h2>
-        <div class="skills-categories">
-
-            <!-- Языки -->
-            <div class="skill-category fade-in">
-                <div class="skill-category-header">
-                    <div class="skill-category-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="/assets/icons.svg#icon-06"></use></svg>
-                    </div>
-                    <h3 class="skill-category-title" data-i18n="skills_cat_languages">Языки</h3>
-                </div>
-                <div class="skill-cards-grid">
-                    <div class="skill-card" data-level="90">
-                        <div class="skill-card-icon skill-icon-python">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><use href="/assets/icons.svg#icon-07"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">Python</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 90%"></div></div>
-                        </div>
-                    </div>
-                    <div class="skill-card" data-level="70">
-                        <div class="skill-card-icon skill-icon-cpp">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><use href="/assets/icons.svg#icon-08"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">C++ / C</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 70%"></div></div>
-                        </div>
-                    </div>
-                    <div class="skill-card" data-level="65">
-                        <div class="skill-card-icon skill-icon-ts">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><use href="/assets/icons.svg#icon-09"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">TypeScript</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 65%"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Backend -->
-            <div class="skill-category fade-in">
-                <div class="skill-category-header">
-                    <div class="skill-category-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="/assets/icons.svg#icon-10"></use></svg>
-                    </div>
-                    <h3 class="skill-category-title" data-i18n="skills_cat_backend">Backend</h3>
-                </div>
-                <div class="skill-cards-grid">
-                    <div class="skill-card" data-level="85">
-                        <div class="skill-card-icon skill-icon-fastapi">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><use href="/assets/icons.svg#icon-11"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">FastAPI</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 85%"></div></div>
-                        </div>
-                    </div>
-                    <div class="skill-card" data-level="80">
-                        <div class="skill-card-icon skill-icon-postgres">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><use href="/assets/icons.svg#icon-12"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">PostgreSQL</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 80%"></div></div>
-                        </div>
-                    </div>
-                    <div class="skill-card" data-level="75">
-                        <div class="skill-card-icon skill-icon-sqlalchemy">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="/assets/icons.svg#icon-13"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">SQLAlchemy</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 75%"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- DevOps & Tools -->
-            <div class="skill-category fade-in">
-                <div class="skill-category-header">
-                    <div class="skill-category-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="/assets/icons.svg#icon-14"></use></svg>
-                    </div>
-                    <h3 class="skill-category-title" data-i18n="skills_cat_devops">DevOps & Tools</h3>
-                </div>
-                <div class="skill-cards-grid">
-                    <div class="skill-card" data-level="80">
-                        <div class="skill-card-icon skill-icon-docker">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><use href="/assets/icons.svg#icon-15"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">Docker</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 80%"></div></div>
-                        </div>
-                    </div>
-                    <div class="skill-card" data-level="88">
-                        <div class="skill-card-icon skill-icon-git">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><use href="/assets/icons.svg#icon-16"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">Git</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 88%"></div></div>
-                        </div>
-                    </div>
-                    <div class="skill-card" data-level="72">
-                        <div class="skill-card-icon skill-icon-rn">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><use href="/assets/icons.svg#icon-17"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">React Native</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 72%"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ML & Data -->
-            <div class="skill-category fade-in">
-                <div class="skill-category-header">
-                    <div class="skill-category-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="/assets/icons.svg#icon-18"></use></svg>
-                    </div>
-                    <h3 class="skill-category-title" data-i18n="skills_cat_ml">ML & Data</h3>
-                </div>
-                <div class="skill-cards-grid">
-                    <div class="skill-card" data-level="75">
-                        <div class="skill-card-icon skill-icon-tf">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><use href="/assets/icons.svg#icon-19"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">TensorFlow</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 75%"></div></div>
-                        </div>
-                    </div>
-                    <div class="skill-card" data-level="82">
-                        <div class="skill-card-icon skill-icon-pandas">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><use href="/assets/icons.svg#icon-20"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">Pandas / NumPy</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 82%"></div></div>
-                        </div>
-                    </div>
-                    <div class="skill-card" data-level="70">
-                        <div class="skill-card-icon skill-icon-ml">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="/assets/icons.svg#icon-21"></use></svg>
-                        </div>
-                        <div class="skill-card-body">
-                            <span class="skill-card-name">Machine Learning</span>
-                            <div class="skill-bar"><div class="skill-bar-fill" style="--level: 70%"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+<!-- ABOUT -->
+<section id="about" data-screen-label="02 About">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-num">— 01 / About</span>
+      <h2 class="s-title">A builder with a curious mind.</h2>
+      <span class="s-meta">Moscow · 2026</span>
     </div>
+    <div class="about-grid">
+      <div class="about-prose reveal">
+        <p>I study <strong>Applied Mathematics & Computer Science</strong> at NRU MAI, with a deep focus on the boundary between strong engineering practice and modern machine learning. I care about systems that hold up under real conditions — offline, sluggish networks, low-end devices.</p>
+        <div class="pull-quote">"Strong technical solutions live at the intersection of fundamentals and creative thinking."</div>
+        <p>My work spans <strong>backend services</strong> in Python/FastAPI, <strong>cross-platform mobile apps</strong> in React Native, and <strong>data-driven tools</strong> built with the PyData stack. Outside of code I play guitar, compete in olympiads, and lose evenings to ML papers.</p>
+        <p>English: <strong>B2 (Upper-Intermediate)</strong>. Open to remote, hybrid, and Moscow-based teams.</p>
+      </div>
+      <aside class="about-aside reveal">
+        <div class="profile">
+          <div class="corner">PORTRAIT · 2026</div>
+          <picture>
+            <source srcset="/assets/images/photo.webp" type="image/webp">
+            <source srcset="/assets/images/photo-alt.jpg" type="image/jpeg">
+            <img
+              class="photo"
+              src="/assets/images/photo-alt.jpg"
+              alt="Alexander Makedonskiy portrait"
+              loading="lazy"
+              decoding="async"
+              width="400"
+              height="500"
+            >
+          </picture>
+          <div class="frame"></div>
+          <div class="tag">Alexander · Москва</div>
+        </div>
+        <div class="stats">
+          <div class="stat"><span class="v" data-count="5">0</span><span class="l">Projects shipped</span></div>
+          <div class="stat"><span class="v" data-count="5"><span class="u">×</span></span><span class="l">Olympiad finals</span></div>
+          <div class="stat"><span class="v" data-count="4"><span class="u">+</span></span><span class="l">Years coding</span></div>
+          <div class="stat"><span class="v" data-count="3"><span class="u">×</span></span><span class="l">Hackathon teams</span></div>
+        </div>
+      </aside>
+    </div>
+  </div>
 </section>
 
+<!-- PROJECTS -->
+<section id="projects" data-screen-label="03 Projects">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-num">— 02 / Selected Work</span>
+      <h2 class="s-title">Flagship case studies.</h2>
+      <span class="s-meta">2024 – 2026</span>
+    </div>
 
-    <section id="contact" class="fade-in">
-        <div class="container">
-            <h2 class="section-title" data-i18n="contact_title">Контакты</h2>
-            <div class="contact-container">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-22"></use></svg>
-                        </div>
-                        <div class="contact-text">
-                            <h3 data-i18n="contact_email_title">Email и телефон</h3>
-                            <a href="mailto:aleximlord@gmail.com">aleximlord@gmail.com</a><br>
-                            <a href="tel:+79255053027">+7 925 505-30-27</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-23"></use></svg>
-                        </div>
-                        <div class="contact-text">
-                            <h3 data-i18n="contact_location_title">Местоположение</h3>
-                            <p data-i18n="contact_location">Москва, Российская Федерация</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-24"></use></svg>
-                        </div>
-                        <div class="contact-text">
-                            <h3 data-i18n="contact_social_title">Социальные сети</h3>
-                            <div class="social-links contact-social">
-                                <a href="https://github.com/amakedoni" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
-                                <a href="https://t.me/makedoni0" target="_blank" rel="noopener" aria-label="Telegram">TG</a>
-                                <a href="https://m.vk.com/amakedoni" target="_blank" rel="noopener" aria-label="VKontakte">VK</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="contact-message">
-                    <h2 data-i18n="contact_message_title">Свяжитесь со мной</h2>
-                    <p data-i18n="contact_message_text">Открыт к интересным проектам в области разработки и машинного обучения. Готов обсудить возможности сотрудничества.</p>
-
-                    <form id="contact-form">
-                        <input type="hidden" name="access_key" value="fa82ee15-753e-4de8-96c8-4afa2dd1f19c">
-                        <label for="contact-name" class="visually-hidden">Имя</label>
-                        <input type="text" id="contact-name" name="name" data-i18n="contact_form_name" placeholder="Имя" required aria-label="Ваше имя">
-                        <label for="contact-email" class="visually-hidden">Email</label>
-                        <input type="email" id="contact-email" name="email" data-i18n="contact_form_email" placeholder="Email" required aria-label="Ваш email">
-                        <label for="contact-message" class="visually-hidden">Сообщение</label>
-                        <textarea id="contact-message" name="message" data-i18n="contact_form_message" placeholder="Сообщение" rows="4" required aria-label="Ваше сообщение"></textarea>
-                        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
-                        <button type="submit">
-                            <span data-i18n="contact_form_submit">отправить</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="/assets/icons.svg#icon-25"></use></svg>
-                        </button>
-                    </form>
-
-                    <div class="form-success-container" role="status" aria-live="polite">
-                        <div class="form-success">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="/assets/icons.svg#icon-26"></use></svg>
-                            <span data-i18n="contact_form_success">Сообщение отправлено! Отвечу в течение 24 часов.</span>
-                        </div>
-                    </div>
-                    <div class="form-error-container" role="alert" aria-live="assertive">
-                        <div class="form-error">
-                            <span data-i18n="contact_form_error">Не удалось отправить сообщение. Напишите напрямую на email.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <article class="proj-feat reveal">
+      <div class="pf-grid">
+        <div class="pf-info">
+          <span class="pf-tag"><span class="d"></span>Featured · 2026 · Team Lead</span>
+          <h3>Finly — offline-first finance PWA.</h3>
+          <span class="pf-role">Tech-lead & Full-Stack · T1 (Innotech) × NRU MAI</span>
+          <p class="pf-desc">A fully offline PWA for personal finance (IndexedDB + Service Worker via Workbox). On-device ML transaction classification with TensorFlow.js, AI financial chat via OpenRouter, receipt scanning (QR/OCR/Gemini Vision), biometric auth (WebAuthn), voice input, and deep analytics — budgets, goals, recurring operations, anomaly detection, notifications, and JSON/CSV export.</p>
+          <p class="pf-ci">CI/CD: GitHub Actions (3 workflows) · 345+ tests · Lighthouse CI · Quality Gates</p>
+          <div class="pf-stack">
+            <span class="chip">TypeScript</span><span class="chip">React 18</span><span class="chip">TensorFlow.js</span><span class="chip">Zustand</span><span class="chip">Dexie.js</span><span class="chip">Tailwind</span><span class="chip">Radix UI</span><span class="chip">Vite · PWA</span>
+          </div>
+          <div class="pf-actions">
+            <a class="btn primary" href="https://finly-ruby.vercel.app" target="_blank" rel="noopener">Open the app <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a class="btn" href="https://github.com/Shadovv-Government/Finly" target="_blank" rel="noopener">Source <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
         </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="social-links">
-                    <a href="https://github.com/amakedoni" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
-                    <a href="https://t.me/makedoni0" target="_blank" rel="noopener" aria-label="Telegram">TG</a>
-                    <a href="https://m.vk.com/amakedoni" target="_blank" rel="noopener" aria-label="VKontakte">VK</a>
-                    <a href="mailto:aleximlord@gmail.com" aria-label="Email">✉</a>
+        <div class="pf-mock">
+          <div class="device">
+            <div class="dscreen">
+              <div class="dnotch"></div>
+              <div class="app">
+                <div class="app-h"><span>09:41</span><span>FINLY</span></div>
+                <div>
+                  <div class="app-sub">Total balance</div>
+                  <div class="app-bal"><span class="cur">₽</span>284,517</div>
                 </div>
-                <p class="copyright" data-i18n="footer_copyright">© 2026 Македонский Александр. Все права защищены.</p>
+                <div class="app-graph">
+                  <svg viewBox="0 0 300 60" preserveAspectRatio="none">
+                    <path d="M0,48 L25,40 L55,44 L80,28 L110,32 L140,18 L170,24 L200,12 L230,20 L260,14 L300,4 L300,60 L0,60 Z" fill="#111" opacity=".15"/>
+                    <path d="M0,48 L25,40 L55,44 L80,28 L110,32 L140,18 L170,24 L200,12 L230,20 L260,14 L300,4" fill="none" stroke="#111" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <div class="app-tx">
+                  <div class="tx"><div class="tx-i">G</div><div class="tx-m"><span class="t">Groceries</span><span class="c">today</span></div><div class="tx-a">−1,840</div></div>
+                  <div class="tx"><div class="tx-i">S</div><div class="tx-m"><span class="t">Salary</span><span class="c">monthly</span></div><div class="tx-a">+120,000</div></div>
+                  <div class="tx"><div class="tx-i">T</div><div class="tx-m"><span class="t">Transport</span><span class="c">weekly</span></div><div class="tx-a">−890</div></div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </footer>
+      </div>
+    </article>
 
-    <button class="scroll-to-top" data-i18n="aria_scroll_top" aria-label="Вернуться наверх">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><use href="/assets/icons.svg#icon-27"></use></svg>
-        <span data-i18n="back_to_top">Наверх</span>
-    </button>
+    <div class="proj-grid">
+      <article class="pcard reveal">
+        <div class="pc-head">
+          <div><span class="pc-num">02</span><div class="pc-year">2025 · Full-Stack</div></div>
+          <div class="pc-arrow">↗</div>
+        </div>
+        <h3 class="pc-title">MAI Tablets — medication adherence platform.</h3>
+        <span class="pc-role">Backend & React Native client</span>
+        <p class="pc-desc">Client-server system for tracking medication intake, with offline-first sync, time-bound QR pairing for trusted "med-friends", configurable push reminders, and strict privacy guarantees.</p>
+        <div class="pc-stack">FastAPI · PostgreSQL · Docker · Expo</div>
+      </article>
+      <article class="pcard reveal">
+        <div class="pc-head">
+          <div><span class="pc-num">03</span><div class="pc-year">2024 · CubeSat</div></div>
+          <div class="pc-arrow">↗</div>
+        </div>
+        <h3 class="pc-title">Aerospace prototype — message-decoding CubeSat.</h3>
+        <span class="pc-role">Pre-professional Olympiad Final</span>
+        <p class="pc-desc">Built a working CubeSat prototype for the Moscow Aerospace track — onboard logic for receiving, decoding and relaying telemetry messages. Engineered the firmware-side encoding pipeline.</p>
+        <div class="pc-stack">C · Python · Embedded</div>
+      </article>
+    </div>
 
-    <!-- JavaScript -->
-    <script src="js/script.js" defer></script>
-    
-    <!-- Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js');
-            });
-        }
-    </script>
+    <div class="ach reveal">
+      <div>
+        <div class="ach-t">Recognition.<span class="ach-y">2022 — 2025 · Olympiads</span></div>
+      </div>
+      <div class="ach-list">
+        <div class="ach-item"><span class="ach-tag">ITMO · Final</span><span>Finalist, ITMO Olympiad in Computer Science (2024–2025)</span></div>
+        <div class="ach-item"><span class="ach-tag">Rosatom · Final</span><span>Finalist, Rosatom Olympiad — CS & Mathematics (2022–2024)</span></div>
+        <div class="ach-item"><span class="ach-tag">Aerospace</span><span>Moscow Pre-professional Olympiad — Aerospace track finalist</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" data-screen-label="04 Skills">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-num">— 03 / Stack</span>
+      <h2 class="s-title">Tools of the trade.</h2>
+      <span class="s-meta">Filterable</span>
+    </div>
+
+    <div class="skills-wrap reveal">
+      <div class="skills-tabs">
+        <button class="tab active" data-cat="all">All</button>
+        <button class="tab" data-cat="lang">Languages</button>
+        <button class="tab" data-cat="back">Backend</button>
+        <button class="tab" data-cat="ops">DevOps</button>
+        <button class="tab" data-cat="ml">ML & Data</button>
+        <button class="tab" data-cat="fe">Frontend &amp; PWA</button>
+      </div>
+
+      <div class="skills-categories">
+        <div class="skcat" data-cat="lang">
+          <div class="skcat-l">Languages<span class="num">— 01</span></div>
+          <div class="sk-grid">
+            <div class="sk" data-cat="lang">Python <span class="lv">90</span></div>
+            <div class="sk" data-cat="lang">C / C++ <span class="lv">70</span></div>
+            <div class="sk" data-cat="lang">TypeScript <span class="lv">65</span></div>
+          </div>
+        </div>
+        <div class="skcat" data-cat="back">
+          <div class="skcat-l">Backend<span class="num">— 02</span></div>
+          <div class="sk-grid">
+            <div class="sk" data-cat="back">FastAPI <span class="lv">85</span></div>
+            <div class="sk" data-cat="back">PostgreSQL <span class="lv">80</span></div>
+            <div class="sk" data-cat="back">SQLAlchemy <span class="lv">75</span></div>
+          </div>
+        </div>
+        <div class="skcat" data-cat="ops">
+          <div class="skcat-l">DevOps<span class="num">— 03</span></div>
+          <div class="sk-grid">
+            <div class="sk" data-cat="ops">Docker <span class="lv">80</span></div>
+            <div class="sk" data-cat="ops">Git <span class="lv">88</span></div>
+            <div class="sk" data-cat="ops">React Native <span class="lv">72</span></div>
+          </div>
+        </div>
+        <div class="skcat" data-cat="ml">
+          <div class="skcat-l">ML & Data<span class="num">— 04</span></div>
+          <div class="sk-grid">
+            <div class="sk" data-cat="ml">TensorFlow <span class="lv">75</span></div>
+            <div class="sk" data-cat="ml">Pandas / NumPy <span class="lv">82</span></div>
+            <div class="sk" data-cat="ml">scikit-learn <span class="lv">70</span></div>
+          </div>
+        </div>
+        <div class="skcat" data-cat="fe">
+          <div class="skcat-l">Frontend &amp; PWA<span class="num">— 05</span></div>
+          <div class="sk-grid">
+            <div class="sk" data-cat="fe">React <span class="lv">78</span></div>
+            <div class="sk" data-cat="fe">Tailwind CSS <span class="lv">72</span></div>
+            <div class="sk" data-cat="fe">PWA / Workbox <span class="lv">70</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" data-screen-label="05 Education">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-num">— 04 / Education</span>
+      <h2 class="s-title">Trained in rigour.</h2>
+      <span class="s-meta">2021 – Present</span>
+    </div>
+    <div class="edu-grid">
+      <article class="ecard reveal">
+        <span class="eperiod">2025 — Present</span>
+        <h3 class="edegree">Applied Mathematics & Computer Science</h3>
+        <span class="einst">NRU MAI</span>
+        <p class="edesc">Higher mathematics, Python, fundamental computer science, computing-system architecture.</p>
+      </article>
+      <article class="ecard reveal">
+        <span class="eperiod">2022 — 2025</span>
+        <h3 class="edegree">Machine Learning & Data Analysis</h3>
+        <span class="einst">NRNU MEPhI · INTEL Institute</span>
+        <p class="edesc">Applied ML — regression (Random Forest), classification (KNN, RF), clustering (K-Means), visualisation with Matplotlib & Seaborn.</p>
+      </article>
+      <article class="ecard reveal">
+        <span class="eperiod">2021 — 2025</span>
+        <h3 class="edegree">Pre-University Programme</h3>
+        <span class="einst">NRNU MEPhI</span>
+        <p class="edesc">Advanced preparation in mathematics, computer science, and physics — the foundation for everything that came after.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" data-screen-label="06 Contact">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-num">— 05 / Contact</span>
+      <h2 class="s-title">Let's build something.</h2>
+      <span class="s-meta">Replies within 24h</span>
+    </div>
+
+    <div class="contact-grid">
+      <div class="cleft reveal">
+        <h3>Got a project in mind?</h3>
+        <p>Open to interesting work in product engineering, ML tooling, and offline-first PWAs. Drop a line via the form, or pick your favourite channel below.</p>
+        <div class="channels">
+          <a class="ch" href="mailto:aleximlord@gmail.com"><span class="ch-l">Email</span><span class="ch-v">aleximlord@gmail.com</span><span class="ch-a">↗</span></a>
+          <a class="ch" href="tel:+79255053027"><span class="ch-l">Phone</span><span class="ch-v">+7 925 505 30 27</span><span class="ch-a">↗</span></a>
+          <a class="ch" href="https://t.me/makedoni0" target="_blank" rel="noopener"><span class="ch-l">Telegram</span><span class="ch-v">@makedoni0</span><span class="ch-a">↗</span></a>
+          <a class="ch" href="https://github.com/amakedoni" target="_blank" rel="noopener"><span class="ch-l">GitHub</span><span class="ch-v">amakedoni</span><span class="ch-a">↗</span></a>
+        </div>
+      </div>
+
+      <form class="cform reveal" onsubmit="event.preventDefault(); const b=this.querySelector('button'); const lang=(localStorage.getItem('language')||'en'); updateButtonTextWithIcon(b,(uiMap[lang]||uiMap.en).contactSubmitDone);">
+        <span class="cform-lbl">New message</span>
+        <input type="text" placeholder="Your name" required />
+        <input type="email" placeholder="Your email" required />
+        <textarea placeholder="Tell me about your project — what are you building, when do you need it, and what does success look like?" required></textarea>
+        <button type="submit">Send message <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<button class="scroll-to-top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+    <path d="M12 19V5M6 11l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span>Back to top</span>
+</button>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-brand">© 2026 — A. Makedonskiy</div>
+    <div class="foot-links">
+      <a href="https://github.com/amakedoni" target="_blank" rel="noopener">GH</a>
+      <a href="https://t.me/makedoni0" target="_blank" rel="noopener">TG</a>
+      <a href="https://m.vk.com/amakedoni" target="_blank" rel="noopener">VK</a>
+      <a href="mailto:aleximlord@gmail.com">✉</a>
+    </div>
+    <div class="foot-meta">Crafted in Moscow · v2026.1</div>
+  </div>
+</footer>
+
+<script>
+/* ====== CUSTOM CURSOR ====== */
+(function(){
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  if (!dot || !ring) return;
+
+  /* bail on touch */
+  if (window.matchMedia('(pointer:coarse)').matches) {
+    dot.style.display = 'none';
+    ring.style.display = 'none';
+    return;
+  }
+
+  const INTERACTIVE = 'a, button, .btn, .tab, .sk, .chip, .icon-btn, .pc-arrow, .ch, .foot-links a, .nav-links a, .resume-toggle, input, textarea, .mobile-menu-toggle, .scroll-to-top, .lang-toggle, .theme-toggle';
+  let targetX = 0, targetY = 0;
+  let ringX = 0, ringY = 0;
+  let dotX = 0, dotY = 0;
+  const LERP = 0.12; /* ring follow speed — lower = more lag */
+
+  function setHidden(h) {
+    const a = h ? 'add' : 'remove';
+    dot.classList[a]('hidden');
+    ring.classList[a]('hidden');
+  }
+
+  document.addEventListener('mousemove', (e) => {
+    targetX = e.clientX;
+    targetY = e.clientY;
+    /* dot snaps immediately on first move after hidden */
+    if (dot.classList.contains('hidden')) {
+      dotX = targetX; ringX = targetX;
+      dotY = targetY; ringY = targetY;
+      setHidden(false);
+    }
+  });
+
+  document.addEventListener('mouseleave', () => setHidden(true));
+  document.addEventListener('mouseenter', (e) => {
+    targetX = e.clientX;
+    targetY = e.clientY;
+  });
+
+  /* hover detection via event delegation */
+  document.addEventListener('mouseover', (e) => {
+    const el = e.target.closest(INTERACTIVE);
+    if (el) {
+      dot.classList.add('hover');
+      ring.classList.add('hover');
+    }
+  });
+  document.addEventListener('mouseout', (e) => {
+    const el = e.target.closest(INTERACTIVE);
+    if (el) {
+      dot.classList.remove('hover');
+      ring.classList.remove('hover');
+    }
+  });
+
+  function animate() {
+    /* dot: direct follow */
+    dotX += (targetX - dotX) * 0.35;
+    dotY += (targetY - dotY) * 0.35;
+    dot.style.transform = `translate(${dotX}px,${dotY}px)`;
+
+    /* ring: slow lag */
+    ringX += (targetX - ringX) * LERP;
+    ringY += (targetY - ringY) * LERP;
+    ring.style.transform = `translate(${ringX}px,${ringY}px)`;
+
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+})();
+
+// UI toggles (language + theme)
+const uiMap = {
+  en: {
+    nav: ['About', 'Work', 'Education', 'Stack', 'Contact'],
+    resumeLabel: 'Resume',
+    menuAria: 'Menu',
+    languageAria: 'Switch language',
+    themeAria: 'Toggle theme',
+    heroMeta: 'Available · Moscow, RU',
+    heroTitle: ['Engineering', "tomorrow's", 'interfaces.'],
+    heroLede: "I'm <strong>Alexander</strong> — a full-stack developer and ML student at <strong>Moscow Aviation Institute</strong>. I build performant client-server systems, offline-first PWAs, and machine-learning-powered tools that ship.",
+    currentLabel: 'Currently',
+    heroCtaPrimary: 'View work',
+    heroCtaSecondary: 'Get in touch',
+    scrollCue: 'SCROLL',
+    sectionNums: ['— 01 / About', '— 02 / Selected Work', '— 03 / Stack', '— 04 / Education', '— 05 / Contact'],
+    sectionTitles: ['A builder with a curious mind.', 'Flagship case studies.', 'Tools of the trade.', 'Trained in rigour.', "Let's build something."],
+    sectionMetas: ['Moscow · 2026', '2024 – 2026', 'Filterable', '2021 – Present', 'Replies within 24h'],
+    aboutP1: 'I study <strong>Applied Mathematics & Computer Science</strong> at NRU MAI, with a deep focus on the boundary between strong engineering practice and modern machine learning. I care about systems that hold up under real conditions — offline, sluggish networks, low-end devices.',
+    aboutQuote: '"Strong technical solutions live at the intersection of fundamentals and creative thinking."',
+    aboutP2: 'My work spans <strong>backend services</strong> in Python/FastAPI, <strong>cross-platform mobile apps</strong> in React Native, and <strong>data-driven tools</strong> built with the PyData stack. Outside of code I play guitar, compete in olympiads, and lose evenings to ML papers.',
+    aboutP3: 'English: <strong>B2 (Upper-Intermediate)</strong>. Open to remote, hybrid, and Moscow-based teams.',
+    portrait: 'PORTRAIT · 2026',
+    profileTag: 'Alexander · Moscow',
+    stats: ['Projects shipped', 'Olympiad finals', 'Years coding', 'Hackathon teams'],
+    featuredTag: 'Featured · 2026 · Team Lead',
+    finlyTitle: 'Finly — offline-first finance PWA.',
+    finlyRole: 'Tech-lead & Full-Stack · T1 (Innotech) × NRU MAI',
+    finlyDesc: 'A fully offline PWA for personal finance (IndexedDB + Service Worker via Workbox). On-device ML transaction classification with TensorFlow.js, AI financial chat via OpenRouter, receipt scanning (QR/OCR/Gemini Vision), biometric auth (WebAuthn), voice input, and deep analytics — budgets, goals, recurring operations, anomaly detection, notifications, and JSON/CSV export.',
+    finlyApp: 'Open the app',
+    finlySource: 'Source',
+    finlyCi: 'CI/CD: GitHub Actions (3 workflows) · 345+ tests · Lighthouse CI · Quality Gates',
+    totalBalance: 'Total balance',
+    txTitles: ['Groceries', 'Salary', 'Transport'],
+    txMeta: ['today', 'monthly', 'weekly'],
+    projectYears: ['2025 · Full-Stack', '2024 · CubeSat'],
+    projectTitles: ['MAI Tablets — medication adherence platform.', 'Aerospace prototype — message-decoding CubeSat.'],
+    projectRoles: ['Backend & React Native client', 'Pre-professional Olympiad Final'],
+    projectDescs: [
+      'Client-server system for tracking medication intake, with offline-first sync, time-bound QR pairing for trusted "med-friends", configurable push reminders, and strict privacy guarantees.',
+      'Built a working CubeSat prototype for the Moscow Aerospace track — onboard logic for receiving, decoding and relaying telemetry messages. Engineered the firmware-side encoding pipeline.'
+    ],
+    recognitionTitle: 'Recognition.',
+    recognitionMeta: '2022 — 2025 · Olympiads',
+    recognitionItems: [
+      'Finalist, ITMO Olympiad in Computer Science (2024–2025)',
+      'Finalist, Rosatom Olympiad — CS & Mathematics (2022–2024)',
+      'Moscow Pre-professional Olympiad — Aerospace track finalist'
+    ],
+    skillTabs: ['All', 'Languages', 'Backend', 'DevOps', 'ML & Data', 'Frontend & PWA'],
+    skillCats: ['Languages', 'Backend', 'DevOps', 'ML & Data', 'Frontend & PWA'],
+    educationPeriods: ['2025 — Present', '2022 — 2025', '2021 — 2025'],
+    educationDegrees: ['Applied Mathematics & Computer Science', 'Machine Learning & Data Analysis', 'Pre-University Programme'],
+    educationInst: ['NRU MAI', 'NRNU MEPhI · INTEL Institute', 'NRNU MEPhI'],
+    educationDesc: [
+      'Higher mathematics, Python, fundamental computer science, computing-system architecture.',
+      'Applied ML — regression (Random Forest), classification (KNN, RF), clustering (K-Means), visualisation with Matplotlib & Seaborn.',
+      'Advanced preparation in mathematics, computer science, and physics — the foundation for everything that came after.'
+    ],
+    contactTitle: 'Got a project in mind?',
+    contactText: 'Open to interesting work in product engineering, ML tooling, and offline-first PWAs. Drop a line via the form, or pick your favourite channel below.',
+    channelLabels: ['Email', 'Phone', 'Telegram', 'GitHub'],
+    formLabel: 'New message',
+    formName: 'Your name',
+    formEmail: 'Your email',
+    formMessage: 'Tell me about your project — what are you building, when do you need it, and what does success look like?',
+    contactSubmit: 'Send message',
+    contactSubmitDone: 'Sent ✓',
+    ariaScrollTop: 'Back to top',
+    backToTop: 'Back to top',
+    footerMeta: 'Crafted in Moscow · v2026.1',
+    roles: ['Full-Stack Engineer','ML Practitioner','PWA Specialist','Backend Architect','Mobile Builder']
+  },
+  ru: {
+    nav: ['Обо мне', 'Проекты', 'Образование', 'Стек', 'Контакты'],
+    resumeLabel: 'Резюме',
+    menuAria: 'Меню',
+    languageAria: 'Переключить язык',
+    themeAria: 'Переключить тему',
+    heroMeta: 'Открыт к предложениям · Москва, РФ',
+    heroTitle: ['Создаю', 'интерфейсы', 'будущего.'],
+    heroLede: 'Я <strong>Александр</strong> — full-stack разработчик и студент направления ML в <strong>Московском авиационном институте</strong>. Делаю быстрые клиент-серверные системы, offline-first PWA и ML-инструменты, которые реально используются.',
+    currentLabel: 'Сейчас',
+    heroCtaPrimary: 'Смотреть проекты',
+    heroCtaSecondary: 'Связаться',
+    scrollCue: 'ПРОКРУТИТЬ',
+    sectionNums: ['— 01 / Обо мне', '— 02 / Избранные проекты', '— 03 / Стек', '— 04 / Образование', '— 05 / Контакты'],
+    sectionTitles: ['Инженерия с исследовательским подходом.', 'Ключевые кейсы.', 'Инструменты разработки.', 'Сильная фундаментальная база.', 'Давайте что-нибудь создадим.'],
+    sectionMetas: ['Москва · 2026', '2024 – 2026', 'Фильтры', '2021 – н.в.', 'Отвечаю в течение 24ч'],
+    aboutP1: 'Я изучаю <strong>Прикладную математику и информатику</strong> в НИУ МАИ, совмещая инженерную практику с современным machine learning. Для меня важны системы, которые стабильно работают в реальных условиях — офлайн, при слабой сети и на недорогих устройствах.',
+    aboutQuote: '"Сильные технические решения рождаются на стыке фундаментальных знаний и креативного мышления."',
+    aboutP2: 'Мой опыт включает <strong>backend-сервисы</strong> на Python/FastAPI, <strong>кроссплатформенные мобильные приложения</strong> на React Native и <strong>data-driven решения</strong> на стеке PyData. Вне кода — гитара, олимпиады и статьи по ML.',
+    aboutP3: 'Английский: <strong>B2 (Upper-Intermediate)</strong>. Открыт к remote, hybrid и командам в Москве.',
+    portrait: 'ПОРТРЕТ · 2026',
+    profileTag: 'Александр · Москва',
+    stats: ['Реализованных проектов', 'Финалов олимпиад', 'Лет в разработке', 'Команд на хакатонах'],
+    featuredTag: 'Флагман · 2026 · Тимлид',
+    finlyTitle: 'Finly — offline-first PWA для финансов.',
+    finlyRole: 'Тимлид и Full-Stack · T1 (Иннотех) × НИУ МАИ',
+    finlyDesc: 'Полностью офлайн PWA для управления личными финансами (IndexedDB + Service Worker через Workbox). On-device ML-классификация транзакций на TensorFlow.js, AI-чат через OpenRouter, сканирование чеков (QR/OCR/Gemini Vision), биометрическая аутентификация (WebAuthn), голосовой ввод и глубокая аналитика: бюджеты, цели, повторяющиеся операции, выявление аномалий, уведомления, экспорт в JSON/CSV.',
+    finlyApp: 'Открыть приложение',
+    finlySource: 'Исходники',
+    finlyCi: 'CI/CD: GitHub Actions (3 воркфлоу) · 345+ тестов · Lighthouse CI · Quality Gates',
+    totalBalance: 'Общий баланс',
+    txTitles: ['Продукты', 'Зарплата', 'Транспорт'],
+    txMeta: ['сегодня', 'ежемесячно', 'еженедельно'],
+    projectYears: ['2025 · Full-Stack', '2024 · CubeSat'],
+    projectTitles: ['МАИ Таблетки — платформа контроля лечения.', 'Аэрокосмический прототип — CubeSat для декодирования сообщений.'],
+    projectRoles: ['Backend и клиент React Native', 'Финал предпрофессиональной олимпиады'],
+    projectDescs: [
+      'Клиент-серверная система контроля приема лекарств: offline-first синхронизация, ограниченная по времени QR-связка с доверенными «мед-друзьями», гибкие push-напоминания и строгая приватность данных.',
+      'Собран рабочий прототип CubeSat для московского аэрокосмического трека: бортовая логика приема, декодирования и передачи телеметрических сообщений; реализован firmware-пайплайн кодирования.'
+    ],
+    recognitionTitle: 'Достижения.',
+    recognitionMeta: '2022 — 2025 · Олимпиады',
+    recognitionItems: [
+      'Финалист олимпиады ИТМО по информатике (2024–2025)',
+      'Финалист олимпиады РОСАТОМ — информатика и математика (2022–2024)',
+      'Финалист Московской предпрофессиональной олимпиады — трек «Аэрокосмос»'
+    ],
+    skillTabs: ['Все', 'Языки', 'Backend', 'DevOps', 'ML и Data', 'Frontend и PWA'],
+    skillCats: ['Языки', 'Backend', 'DevOps', 'ML и Data', 'Frontend и PWA'],
+    educationPeriods: ['2025 — н.в.', '2022 — 2025', '2021 — 2025'],
+    educationDegrees: ['Прикладная математика и информатика', 'Машинное обучение и анализ данных', 'Предуниверситарий'],
+    educationInst: ['НИУ МАИ', 'НИЯУ МИФИ · Институт ИНТЭЛ', 'НИЯУ МИФИ'],
+    educationDesc: [
+      'Высшая математика, Python, фундаментальная информатика, архитектура вычислительных систем.',
+      'Практическое ML: регрессия (Random Forest), классификация (KNN, RF), кластеризация (K-Means), визуализация в Matplotlib и Seaborn.',
+      'Углубленная подготовка по математике, информатике и физике как основа инженерного мышления.'
+    ],
+    contactTitle: 'Есть идея проекта?',
+    contactText: 'Открыт к интересным задачам в продуктовой разработке, ML-инструментах и offline-first PWA. Напишите через форму или выберите удобный канал связи ниже.',
+    channelLabels: ['Почта', 'Телефон', 'Telegram', 'GitHub'],
+    formLabel: 'Новое сообщение',
+    formName: 'Ваше имя',
+    formEmail: 'Ваш email',
+    formMessage: 'Расскажите о проекте — что делаете, какие сроки и какой результат нужен?',
+    contactSubmit: 'Отправить',
+    contactSubmitDone: 'Отправлено ✓',
+    ariaScrollTop: 'Вернуться наверх',
+    backToTop: 'Наверх',
+    footerMeta: 'Сделано в Москве · v2026.1',
+    roles: ['Full-Stack разработчик','ML-практик','PWA-специалист','Backend-инженер','Мобильный разработчик']
+  }
+};
+
+let ri = 0;
+
+function updateButtonTextWithIcon(button, text) {
+  if (!button) return;
+  const svg = button.querySelector('svg');
+  button.textContent = text + ' ';
+  if (svg) button.appendChild(svg);
+}
+
+function setText(el, value, asHtml = false) {
+  if (!el || value == null) return;
+  if (asHtml) el.innerHTML = value;
+  else el.textContent = value;
+}
+
+function applyLanguage(lang) {
+  const t = uiMap[lang] || uiMap.en;
+  document.documentElement.lang = lang;
+  localStorage.setItem('language', lang);
+
+  document.querySelectorAll('.nav-links > li > a').forEach((el, i) => setText(el, t.nav[i]));
+  setText(document.querySelector('.resume-toggle'), t.resumeLabel);
+  setText(document.querySelector('.hero-meta span:nth-child(2)'), t.heroMeta);
+  setText(document.querySelector('.hero-lede'), t.heroLede, true);
+  setText(document.querySelector('.role-rotator .lbl'), t.currentLabel);
+
+  updateButtonTextWithIcon(document.querySelector('#hero .cta-row .btn.primary'), t.heroCtaPrimary);
+  updateButtonTextWithIcon(document.querySelector('#hero .cta-row .btn:not(.primary)'), t.heroCtaSecondary);
+  updateButtonTextWithIcon(document.querySelector('.pf-actions .btn.primary'), t.finlyApp);
+  updateButtonTextWithIcon(document.querySelector('.pf-actions .btn:not(.primary)'), t.finlySource);
+  updateButtonTextWithIcon(document.querySelector('.cform button[type="submit"]'), t.contactSubmit);
+
+  const aboutPs = document.querySelectorAll('.about-prose p');
+  setText(aboutPs[0], t.aboutP1, true);
+  setText(aboutPs[1], t.aboutP2, true);
+  setText(aboutPs[2], t.aboutP3, true);
+  setText(document.querySelector('.profile .corner'), t.portrait);
+  setText(document.querySelector('.profile .tag'), t.profileTag);
+  document.querySelectorAll('.stats .stat .l').forEach((el, i) => setText(el, t.stats[i]));
+
+  setText(document.querySelector('.pf-tag'), t.featuredTag);
+  setText(document.querySelector('.pf-role'), t.finlyRole);
+  setText(document.querySelector('.pf-desc'), t.finlyDesc);
+  setText(document.querySelector('.pf-ci'), t.finlyCi);
+  setText(document.querySelector('.app-sub'), t.totalBalance);
+  document.querySelectorAll('.app-tx .tx .t').forEach((el, i) => setText(el, t.txTitles[i]));
+  document.querySelectorAll('.app-tx .tx .c').forEach((el, i) => setText(el, t.txMeta[i]));
+
+  document.querySelectorAll('.proj-grid .pc-year').forEach((el, i) => setText(el, t.projectYears[i]));
+  document.querySelectorAll('.proj-grid .pc-role').forEach((el, i) => setText(el, t.projectRoles[i]));
+  document.querySelectorAll('.proj-grid .pc-desc').forEach((el, i) => setText(el, t.projectDescs[i]));
+  setText(document.querySelector('.ach .ach-y'), t.recognitionMeta);
+  document.querySelectorAll('.ach-list .ach-item > span:last-child').forEach((el, i) => setText(el, t.recognitionItems[i]));
+
+  document.querySelectorAll('.skills-tabs .tab').forEach((el, i) => setText(el, t.skillTabs[i]));
+
+  document.querySelectorAll('.ecard .eperiod').forEach((el, i) => setText(el, t.educationPeriods[i]));
+  document.querySelectorAll('.ecard .einst').forEach((el, i) => setText(el, t.educationInst[i]));
+  document.querySelectorAll('.ecard .edesc').forEach((el, i) => setText(el, t.educationDesc[i]));
+
+  setText(document.querySelector('.cleft p'), t.contactText);
+  document.querySelectorAll('.channels .ch .ch-l').forEach((el, i) => setText(el, t.channelLabels[i]));
+  setText(document.querySelector('.cform-lbl'), t.formLabel);
+  const formInputs = document.querySelectorAll('.cform input, .cform textarea');
+  setText(formInputs[0], t.formName);
+  setText(formInputs[1], t.formEmail);
+  setText(formInputs[2], t.formMessage);
+
+  setText(document.querySelector('.foot-meta'), t.footerMeta);
+  document.querySelectorAll('.lang-text').forEach((el) => { el.textContent = lang.toUpperCase(); });
+  document.querySelectorAll('.lang-toggle').forEach((el) => el.setAttribute('aria-label', t.languageAria));
+  document.querySelectorAll('.theme-toggle').forEach((el) => el.setAttribute('aria-label', t.themeAria));
+  document.querySelector('.mobile-menu-toggle')?.setAttribute('aria-label', t.menuAria);
+
+  const scrollTopBtn = document.querySelector('.scroll-to-top');
+  if (scrollTopBtn) {
+    scrollTopBtn.setAttribute('aria-label', t.ariaScrollTop);
+    const lbl = scrollTopBtn.querySelector('span');
+    if (lbl) lbl.textContent = t.backToTop;
+  }
+
+  const stageNow = document.getElementById('rotator');
+  if (stageNow && t.roles?.length) {
+    stageNow.innerHTML = '';
+    const first = document.createElement('span');
+    first.className = 'in';
+    first.textContent = t.roles[0];
+    stageNow.appendChild(first);
+    ri = 0;
+  }
+}
+
+const initialLang = (localStorage.getItem('language') || 'en').toLowerCase() === 'ru' ? 'ru' : 'en';
+applyLanguage(initialLang);
+
+const langToggleBtns = document.querySelectorAll('.lang-toggle');
+if (langToggleBtns.length) {
+  langToggleBtns.forEach((btn) => btn.addEventListener('click', () => {
+    const nextLang = (localStorage.getItem('language') || 'en') === 'ru' ? 'en' : 'ru';
+    applyLanguage(nextLang);
+  }));
+}
+
+const themeToggleBtns = document.querySelectorAll('.theme-toggle');
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark-theme');
+}
+if (themeToggleBtns.length) {
+  themeToggleBtns.forEach((btn) => btn.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark-theme');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }));
+}
+
+const resumeToggle = document.querySelector('.resume-toggle');
+const resumeDropdown = document.querySelector('.resume-dropdown');
+if (resumeToggle && resumeDropdown) {
+  resumeToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    const expanded = resumeToggle.getAttribute('aria-expanded') === 'true';
+    resumeToggle.setAttribute('aria-expanded', String(!expanded));
+    resumeDropdown.classList.toggle('open', !expanded);
+  });
+  resumeDropdown.querySelectorAll('.resume-menu a').forEach((a) => {
+    a.addEventListener('click', () => {
+      resumeToggle.setAttribute('aria-expanded', 'false');
+      resumeDropdown.classList.remove('open');
+    });
+  });
+  document.addEventListener('click', (e) => {
+    if (!resumeDropdown.contains(e.target)) {
+      resumeToggle.setAttribute('aria-expanded', 'false');
+      resumeDropdown.classList.remove('open');
+    }
+  });
+}
+
+const mobileMenuBtn = document.querySelector('.mobile-menu-toggle');
+const navEl = document.querySelector('nav');
+if (mobileMenuBtn && navEl) {
+  mobileMenuBtn.addEventListener('click', () => {
+    const expanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+    mobileMenuBtn.setAttribute('aria-expanded', String(!expanded));
+    navEl.classList.toggle('mobile-open', !expanded);
+  });
+  document.querySelectorAll('.nav-links a').forEach((a) => {
+    a.addEventListener('click', () => {
+      mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      navEl.classList.remove('mobile-open');
+    });
+  });
+}
+
+window.addEventListener('load', () => {
+  const loader = document.querySelector('.loading-screen');
+  if (loader) setTimeout(() => loader.classList.add('hidden'), 1500);
+});
+
+const scrollToTopBtn = document.querySelector('.scroll-to-top');
+if (scrollToTopBtn) {
+  const toggleScrollTop = () => {
+    if (window.pageYOffset > 300) scrollToTopBtn.classList.add('visible');
+    else scrollToTopBtn.classList.remove('visible');
+  };
+  window.addEventListener('scroll', toggleScrollTop);
+  toggleScrollTop();
+  scrollToTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// Role rotator
+const stage=document.getElementById('rotator');
+let rotatorTimer = null;
+function rotateRole(){
+  const lang=(localStorage.getItem('language')||'en').toLowerCase()==='ru'?'ru':'en';
+  const roles=(uiMap[lang]||uiMap.en).roles||[];
+  if(!roles.length||!stage)return;
+  ri=(ri+1)%roles.length;
+
+  let cur=stage.querySelector('.in');
+  if(!cur){
+    stage.innerHTML='';
+    cur=document.createElement('span');
+    cur.className='in';
+    cur.textContent=roles[ri];
+    stage.appendChild(cur);
+    return;
+  }
+
+  cur.classList.remove('in');
+  cur.classList.add('out');
+
+  setTimeout(()=>{
+    if(!stage.contains(cur))return;
+    cur.classList.remove('out');
+    cur.textContent=roles[ri];
+    requestAnimationFrame(()=>requestAnimationFrame(()=>cur.classList.add('in')));
+  },220);
+}
+if(stage){
+  if(rotatorTimer) clearInterval(rotatorTimer);
+  rotatorTimer = setInterval(rotateRole,2400);
+}
+
+// Reveal
+const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// Counters
+const cio=new IntersectionObserver((es)=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const el=e.target,target=parseInt(el.dataset.count,10);
+  const suffix=el.querySelector('.u');
+  const dur=1400,t0=performance.now();
+  function step(t){
+    const k=Math.min(1,(t-t0)/dur);
+    const value=String(Math.round(target*(1-Math.pow(1-k,3))));
+    if(suffix){
+      let textNode=el.firstChild;
+      if(!textNode||textNode.nodeType!==Node.TEXT_NODE){
+        textNode=document.createTextNode('');
+        el.insertBefore(textNode,suffix);
+      }
+      textNode.nodeValue=value;
+    }else{
+      el.textContent=value;
+    }
+    if(k<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);cio.unobserve(el);
+}),{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+
+// Skill tabs
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  const cat=t.dataset.cat;
+  document.querySelectorAll('.sk').forEach(p=>{
+    if(cat==='all'||p.dataset.cat===cat)p.classList.remove('dim');
+    else p.classList.add('dim');
+  });
+}));
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js');
+  });
+}
+
+const header = document.querySelector('header');
+if (header) {
+  const toggleHeaderState = () => {
+    if (window.pageYOffset > 50) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  };
+  window.addEventListener('scroll', toggleHeaderState);
+  toggleHeaderState();
+}
+</script>
 </body>
 </html>
