@@ -622,10 +622,9 @@ document.querySelectorAll('.skill-card').forEach(card => {
   function scheduleLoop() {
     timers.forEach(clearTimeout);
     timers = [];
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     OFFSETS.forEach((offset, i) => {
       timers.push(setTimeout(() => {
-        if (reduced) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         spawnBurst(BURSTS[i].cx, BURSTS[i].cy, BURSTS[i].angle, BURSTS[i].spread);
         triggerImpact();
       }, offset));
