@@ -519,3 +519,120 @@ document.querySelectorAll('.skill-card').forEach(card => {
 });
 
 
+// ============================================
+// SWORD FX — canvas particles + flash + shake
+// ============================================
+(function () {
+  'use strict';
+
+  const stage  = document.querySelector('.sword-stage');
+  const group  = document.querySelector('.sword-group');
+  if (!stage || !group) return;
+
+  const canvas = stage.querySelector('.sword-canvas');
+  const ctx    = canvas.getContext('2d');
+  const flash  = stage.querySelector('.sword-flash');
+  let W, H;
+
+  function resizeCanvas() {
+    const r = stage.getBoundingClientRect();
+    W = r.width  + 60;
+    H = r.height + 60;
+    canvas.width  = W;
+    canvas.height = H;
+  }
+  resizeCanvas();
+  new ResizeObserver(resizeCanvas).observe(stage);
+
+  // ── Particle system ──
+  const particles = [];
+  let animating = false;
+
+  function spawnBurst(cx, cy, baseAngleDeg, spreadDeg) {
+    const ink = getComputedStyle(document.documentElement)
+      .getPropertyValue('--ink').trim() || '#111';
+    for (let i = 0; i < 14; i++) {
+      const a = ((baseAngleDeg + (Math.random() - 0.5) * 2 * spreadDeg) * Math.PI) / 180;
+      const spd = 2.5 + Math.random() * 3.5;
+      particles.push({
+        x: cx + 30, y: cy + 30,   // +30 = canvas top/left offset
+        vx: Math.cos(a) * spd,
+        vy: Math.sin(a) * spd,
+        size:   2 + Math.random() * 4,
+        square: Math.random() > 0.5,
+        color:  ink,
+        life:   1,
+        decay:  0.028 + Math.random() * 0.018,
+      });
+    }
+    if (!animating) { animating = true; requestAnimationFrame(tick); }
+  }
+
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.vy    += 0.15;           // gravity
+      p.x     += p.vx;
+      p.y     += p.vy;
+      p.life  -= p.decay;
+      if (p.life <= 0) { particles.splice(i, 1); continue; }
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle   = p.color;
+      if (p.square) {
+        ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+      } else {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+    if (particles.length > 0) requestAnimationFrame(tick);
+    else animating = false;
+  }
+
+  // ── Flash + shake ──
+  function triggerImpact() {
+    flash.classList.add('active');
+    setTimeout(() => flash.classList.remove('active'), 180);
+    stage.classList.remove('sword-stage--shake');
+    void stage.offsetWidth;                              // force reflow to restart animation
+    stage.classList.add('sword-stage--shake');
+    stage.addEventListener('animationend',
+      () => stage.classList.remove('sword-stage--shake'), { once: true });
+  }
+
+  // ── Burst configs (stage-space coords; spawnBurst adds +30 for canvas offset) ──
+  // S1: overhand peak — blade tip is in upper-right area of stage
+  // S2: lateral peak  — blade tip is in upper-left area of stage
+  const BURSTS = [
+    { cx: 92, cy: 48,  angle:  45,  spread: 65 },  // S1 right-downward
+    { cx: 42, cy: 38,  angle: -135, spread: 65 },  // S2 upper-leftward (mirror)
+  ];
+  // 22% × 8000ms = 1760ms (S1 overhand peak)
+  // 88% × 8000ms = 7040ms (S2 lateral peak)
+  const OFFSETS = [1760, 7040];
+
+  // ── Timing sync ──
+  // animationstart fires after the 1.6s CSS delay, marking loop t=0.
+  // Each scheduleLoop call covers exactly one 8s iteration.
+  let timers = [];
+
+  function scheduleLoop() {
+    timers.forEach(clearTimeout);
+    timers = [];
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    OFFSETS.forEach((offset, i) => {
+      timers.push(setTimeout(() => {
+        if (reduced) return;
+        spawnBurst(BURSTS[i].cx, BURSTS[i].cy, BURSTS[i].angle, BURSTS[i].spread);
+        triggerImpact();
+      }, offset));
+    });
+    timers.push(setTimeout(scheduleLoop, 8000));
+  }
+
+  group.addEventListener('animationstart', scheduleLoop, { once: true });
+})();
+
