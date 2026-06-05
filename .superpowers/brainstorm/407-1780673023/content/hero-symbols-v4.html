@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sarissa vs Sword — Hero Symbol</title>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Space+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fafafa;--ink:#111;--line:#d0d0d0;
+  --display:'Pirata One',serif;--mono:'Space Mono',monospace;--sans:'Poppins',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);padding:30px;min-height:100vh}
+
+h2{font-family:var(--display);font-size:2.6rem;letter-spacing:-1px;margin-bottom:4px}
+.subtitle{color:#888;font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.18em;margin-bottom:28px}
+
+.pick-row{display:flex;gap:16px;margin-bottom:32px}
+.pick-btn{
+  font-family:var(--mono);font-size:.82rem;padding:12px 24px;
+  border:2px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);
+  cursor:pointer;transition:all .2s ease;box-shadow:3px 3px 0 1px rgba(0,0,0,.1);
+}
+.pick-btn:hover{border-color:var(--ink);transform:translate(-2px,-2px);box-shadow:5px 5px 0 1px rgba(0,0,0,.2)}
+.pick-btn.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.stage{
+  display:flex;align-items:center;gap:50px;
+  padding:40px 32px;border:2px solid var(--line);border-radius:10px;
+  background:var(--bg);min-height:200px;transition:all .3s ease;
+  box-shadow:4px 4px 0 2px rgba(0,0,0,.1);
+}
+.hero-text{flex:1}
+.hero-text h1{font-family:var(--display);font-size:clamp(2.2rem,5vw,4.2rem);line-height:.95;letter-spacing:-1.5px}
+.hero-text h1 .row{display:block}
+.hero-text h1 .accent{
+  display:inline-block;
+  background:linear-gradient(45deg,#111,#555,#111);background-size:200% 200%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shift 12s ease infinite;
+}
+@keyframes shift{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+
+.symbol-area{flex-shrink:0;width:140px;height:150px;position:relative;display:flex;align-items:center;justify-content:center}
+
+/* ===== SARISSA ===== */
+.sarissa-shaft{
+  position:absolute;left:68px;bottom:10px;width:4px;height:0;background:var(--ink);
+  border-radius:2px;transform-origin:bottom center;transition:none;
+}
+.sarissa-head-el{
+  position:absolute;left:56px;top:8px;opacity:0;
+  width:0;height:0;
+  border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:30px solid var(--ink);
+  transition:none;
+}
+.sarissa-cross-el{
+  position:absolute;left:50px;top:40px;width:0;height:3px;background:var(--ink);border-radius:2px;opacity:0;transition:none;
+}
+.spark{position:absolute;width:6px;height:6px;background:var(--ink);border-radius:1px;opacity:0;transition:none}
+
+/* ===== SWORD ===== */
+.sword-blade-el{
+  position:absolute;left:65px;top:5px;width:10px;height:80px;background:var(--ink);
+  border-radius:3px 3px 0 0;opacity:0;transition:none;
+}
+.sword-guard-el{
+  position:absolute;left:53px;top:81px;width:34px;height:5px;background:var(--ink);border-radius:2px;opacity:0;transition:none;
+}
+.sword-grip-el{
+  position:absolute;left:66px;top:88px;width:8px;height:34px;background:var(--ink);border-radius:3px;opacity:0;transition:none;
+}
+.sword-pommel-el{
+  position:absolute;left:63px;top:122px;width:14px;height:14px;background:var(--ink);border-radius:50%;opacity:0;transition:none;
+}
+
+.hint{color:#888;font-family:var(--mono);font-size:.7rem;margin-top:16px}
+</style>
+</head>
+<body>
+
+<h2>Hero Symbol · Выбор</h2>
+<p class="subtitle">JavaScript-анимации — никаких конфликтов</p>
+
+<div class="pick-row">
+  <button class="pick-btn active" data-symbol="sarissa">A — Сарисса (копьё)</button>
+  <button class="pick-btn" data-symbol="sword">B — Ксифос (меч)</button>
+</div>
+
+<div class="stage" id="stage">
+  <div class="hero-text">
+    <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+  </div>
+  <div class="symbol-area" id="symbolArea"></div>
+</div>
+
+<p class="hint" id="status">Готово. Нажми на кнопку чтобы перезапустить анимацию.</p>
+
+<script>
+const area = document.getElementById('symbolArea');
+const status = document.getElementById('status');
+
+/* ---- easing helpers ---- */
+function easeOutBack(t){const c1=1.70158;const c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)}
+function easeOutElastic(t){if(t===0||t===1)return t;return Math.pow(2,-10*t)*Math.sin((t-1)*(20*Math.PI)/3)+1}
+function easeOutCubic(t){return 1-Math.pow(1-t,3)}
+function easeOutExpo(t){return t===1?1:1-Math.pow(2,-10*t)}
+
+function animate(duration, easing, onFrame){
+  return new Promise(resolve => {
+    const start = performance.now();
+    function tick(now){
+      const elapsed = (now - start) / duration;
+      const t = Math.min(elapsed, 1);
+      onFrame(easing(t));
+      if(t < 1) requestAnimationFrame(tick);
+      else resolve();
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+function clearArea(){
+  area.innerHTML = '';
+}
+
+/* ===== SARISSA ===== */
+function buildSarissa(){
+  clearArea();
+  area.innerHTML = `
+    <div class="sarissa-shaft" id="shaft"></div>
+    <div class="sarissa-head-el" id="head"></div>
+    <div class="sarissa-cross-el" id="cross"></div>
+    <div class="spark" id="sp1" style="left:82px;top:18px"></div>
+    <div class="spark" id="sp2" style="left:46px;top:28px"></div>
+    <div class="spark" id="sp3" style="left:80px;top:50px"></div>
+  `;
+  const shaft = document.getElementById('shaft');
+  const head = document.getElementById('head');
+  const cross = document.getElementById('cross');
+  const sp1 = document.getElementById('sp1');
+  const sp2 = document.getElementById('sp2');
+  const sp3 = document.getElementById('sp3');
+
+  status.textContent = 'Сарисса: древко растёт...';
+
+  // Phase 1: shaft grows (800ms, slight overshoot)
+  animate(800, easeOutBack, t => {
+    shaft.style.height = (130 * t) + 'px';
+  }).then(() => {
+    status.textContent = 'Сарисса: наконечник!';
+    // Phase 2: head drops in
+    return animate(500, easeOutBack, t => {
+      head.style.opacity = t;
+      head.style.transform = 'translateY(' + ((1-t) * -30) + 'px) scale(' + (0.4 + t*0.6) + ')';
+    });
+  }).then(() => {
+    status.textContent = 'Сарисса: перекладина...';
+    // Phase 3: crosspiece
+    return animate(400, easeOutBack, t => {
+      cross.style.opacity = t;
+      cross.style.width = (40 * t) + 'px';
+    });
+  }).then(() => {
+    status.textContent = 'Сарисса: искры!';
+    // Phase 4: sparks
+    const sparks = [
+      {el:sp1, tx:14, ty:-18},
+      {el:sp2, tx:-10, ty:-14},
+      {el:sp3, tx:8, ty:-22},
+    ];
+    return Promise.all(sparks.map(({el,tx,ty}) => animate(500, easeOutExpo, t => {
+      const inv = 1 - t;
+      el.style.opacity = inv;
+      el.style.transform = 'translate(' + (tx*t) + 'px,' + (ty*t) + 'px) scale(' + inv + ')';
+    })));
+  }).then(() => {
+    status.textContent = 'Сарисса готова ✓. Нажми кнопку чтобы перезапустить.';
+    startShaftBreath(shaft);
+  });
+}
+
+function startShaftBreath(shaft){
+  let phase = 0;
+  function breathe(now){
+    const t = (now % 4000) / 4000;
+    const intensity = 3 + 2 * Math.sin(t * Math.PI * 2);
+    shaft.style.filter = 'drop-shadow('+intensity+'px '+intensity+'px 0 rgba(0,0,0,'+(0.18+0.14*Math.sin(t*Math.PI*2))+'))';
+    shaft._breathId = requestAnimationFrame(breathe);
+  }
+  cancelAnimationFrame(shaft._breathId || 0);
+  requestAnimationFrame(breathe);
+}
+
+/* ===== SWORD ===== */
+function buildSword(){
+  clearArea();
+  area.innerHTML = `
+    <div class="sword-blade-el" id="blade"></div>
+    <div class="sword-guard-el" id="guard"></div>
+    <div class="sword-grip-el" id="grip"></div>
+    <div class="sword-pommel-el" id="pommel"></div>
+    <div class="spark" id="sp1" style="left:58px;top:18px"></div>
+    <div class="spark" id="sp2" style="left:92px;top:30px"></div>
+    <div class="spark" id="sp3" style="left:50px;top:58px"></div>
+  `;
+  const blade = document.getElementById('blade');
+  const guard = document.getElementById('guard');
+  const grip = document.getElementById('grip');
+  const pommel = document.getElementById('pommel');
+  const sp1 = document.getElementById('sp1');
+  const sp2 = document.getElementById('sp2');
+  const sp3 = document.getElementById('sp3');
+
+  status.textContent = 'Меч: падает...';
+
+  // Phase 1: blade falls from top-left with spin
+  animate(1600, easeOutElastic, t => {
+    blade.style.opacity = Math.min(1, t * 2);
+    blade.style.transform =
+      'translate(' + ((1-t) * -40) + 'px,' + ((1-t) * -70) + 'px) rotate(' + ((1-t) * -55) + 'deg)';
+  }).then(() => {
+    status.textContent = 'Меч: гарда и рукоять...';
+    // Phase 2: guard
+    return animate(400, easeOutBack, t => {
+      guard.style.opacity = t;
+      guard.style.transform = 'scaleX(' + t + ')';
+    });
+  }).then(() => {
+    // Phase 3: grip
+    return animate(350, easeOutCubic, t => {
+      grip.style.opacity = t;
+      grip.style.transform = 'translateY(' + ((1-t) * -14) + 'px)';
+    });
+  }).then(() => {
+    // Phase 4: pommel
+    return animate(300, easeOutCubic, t => {
+      pommel.style.opacity = t;
+      pommel.style.transform = 'translateY(' + ((1-t) * -10) + 'px)';
+    });
+  }).then(() => {
+    status.textContent = 'Меч: искры!';
+    const sparks = [
+      {el:sp1, tx:12, ty:-16, rot:45},
+      {el:sp2, tx:-10, ty:-14, rot:-30},
+      {el:sp3, tx:8, ty:-20, rot:60},
+    ];
+    return Promise.all(sparks.map(({el,tx,ty,rot}) => animate(500, easeOutExpo, t => {
+      const inv = 1 - t;
+      el.style.opacity = inv;
+      el.style.transform = 'translate(' + (tx*t) + 'px,' + (ty*t) + 'px) rotate(' + (rot*t) + 'deg) scale(' + inv + ')';
+    })));
+  }).then(() => {
+    status.textContent = 'Меч готов ✓. Нажми кнопку чтобы перезапустить.';
+    startBladeGlint(blade);
+  });
+}
+
+function startBladeGlint(blade){
+  let phase = 0;
+  function glint(now){
+    const t = (now % 3200) / 3200;
+    const shadow = 3 + 2 * Math.sin(t * Math.PI * 2);
+    const bright = 1 + 0.25 * Math.sin(t * Math.PI * 2);
+    blade.style.filter = 'drop-shadow('+shadow+'px '+shadow+'px 0 rgba(0,0,0,'+(0.18+0.14*Math.sin(t*Math.PI*2))+')) brightness('+bright+')';
+    blade._glintId = requestAnimationFrame(glint);
+  }
+  cancelAnimationFrame(blade._glintId || 0);
+  requestAnimationFrame(glint);
+}
+
+/* ===== Controls ===== */
+let currentSymbol = 'sarissa';
+
+document.querySelectorAll('.pick-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pick-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentSymbol = btn.dataset.symbol;
+    if(currentSymbol === 'sarissa') buildSarissa();
+    else buildSword();
+  });
+});
+
+// Auto-start
+buildSarissa();
+</script>
+</body>
+</html>

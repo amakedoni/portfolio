@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sword — Forge + Strikes v9</title>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Space+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fafafa;--ink:#111;--line:#d0d0d0;--display:'Pirata One',serif;--mono:'Space Mono',monospace;--sans:'Poppins',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);padding:40px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+.hero-row{display:flex;align-items:center;gap:60px}
+.hero-text h1{font-family:var(--display);font-size:clamp(3rem,7vw,5.5rem);line-height:.95;letter-spacing:-2px}
+.hero-text h1 .row{display:block}
+.hero-text h1 .accent{display:inline-block;background:linear-gradient(45deg,#111,#555,#111);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 12s ease infinite}
+@keyframes shift{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+
+.stage{width:150px;height:170px;position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:visible}
+
+/* ====== SWORD ====== */
+.sword-group{transform-origin:center center;animation:swordTimeline 6s 1.6s ease-in-out infinite}
+.sword-svg{width:44px;height:130px;display:block;filter:drop-shadow(4px 4px 0 rgba(0,0,0,.18));animation:shadowPulse 3s 1.6s ease-in-out infinite, glintFlash 4s 2s ease-in-out infinite}
+
+/* ====== FORGE ENTRANCE (clip-path, once) ====== */
+.forge-mask{animation:forgeReveal 1.4s cubic-bezier(.65,0,.35,1) forwards}
+@keyframes forgeReveal{
+  0%{clip-path:inset(0 0 100% 0)}
+  100%{clip-path:inset(0 0 0 0)}
+}
+
+/* ====== SWING TIMELINE — 6s cycle ====== */
+@keyframes swordTimeline{
+  /* idle */
+  0%,8%{transform:rotate(0deg)}
+  /* windup */
+  12%{transform:rotate(-9deg)}
+  /* SLASH */
+  20%{transform:rotate(22deg)}
+  /* recoil */
+  26%{transform:rotate(-4deg)}
+  /* settle */
+  32%,100%{transform:rotate(0deg)}
+}
+
+/* ====== STRIKE PARTICLES ====== */
+.strike-particle{position:absolute;background:var(--ink);opacity:0;pointer-events:none;z-index:5}
+/* 8 particles positioned along the blade arc */
+.sp{width:6px;height:6px;border-radius:1px;animation:strikeBurst 6s 1.6s ease-out infinite}
+
+/* positions along the blade */
+.sp1{top:15px;left:52px;animation-delay:1.85s}
+.sp2{top:30px;left:34px;animation-delay:1.88s}
+.sp3{top:50px;left:28px;animation-delay:1.9s}
+.sp4{top:70px;left:24px;animation-delay:1.92s}
+.sp5{top:15px;left:70px;animation-delay:1.86s}
+.sp6{top:40px;left:76px;animation-delay:1.89s}
+.sp7{top:60px;left:80px;animation-delay:1.91s}
+.sp8{top:85px;left:78px;animation-delay:1.93s}
+
+@keyframes strikeBurst{
+  0%,12%{opacity:0;transform:translate(0,0) scale(0)}
+  20%{opacity:1;transform:translate(var(--sx,8px),var(--sy,-10px)) scale(1)}
+  35%{opacity:0;transform:translate(var(--sx,8px),var(--sy,-10px)) scale(0)}
+  100%{opacity:0;transform:translate(var(--sx,8px),var(--sy,-10px)) scale(0)}
+}
+
+/* ====== SWING TRAIL (motion line) ====== */
+.trail{
+  position:absolute;width:35px;height:3px;background:var(--ink);border-radius:2px;
+  top:50px;left:48px;opacity:0;pointer-events:none;z-index:1;
+  animation:trailFlash 6s 1.6s ease-out infinite;
+}
+@keyframes trailFlash{
+  0%,14%{opacity:0;transform:scaleX(0);transform-origin:left center}
+  20%{opacity:.35;transform:scaleX(1)}
+  28%{opacity:0;transform:scaleX(.5)}
+  100%{opacity:0;transform:scaleX(0)}
+}
+
+/* ====== IDLE: shadow + glint ====== */
+@keyframes shadowPulse{
+  0%,100%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.18)) brightness(1)}
+  50%{filter:drop-shadow(6px 6px 0 rgba(0,0,0,.3)) brightness(1)}
+}
+@keyframes glintFlash{
+  0%,45%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.18)) brightness(1)}
+  48%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.25)) brightness(1.3)}
+  52%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.18)) brightness(1)}
+  100%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.18)) brightness(1)}
+}
+
+/* ====== FORGE SPARKS (entrance) ====== */
+.forge-spark{position:absolute;width:5px;height:5px;background:var(--ink);opacity:0;pointer-events:none;z-index:5}
+.fs1{top:22px;left:62px;animation:forgeSpark .45s .5s ease-out forwards}
+.fs2{top:42px;left:56px;animation:forgeSpark .4s .7s ease-out forwards}
+.fs3{top:65px;left:64px;animation:forgeSpark .5s .9s ease-out forwards}
+.fs4{top:88px;left:58px;animation:forgeSpark .42s 1.1s ease-out forwards}
+@keyframes forgeSpark{
+  0%{opacity:1;transform:translate(0,0)}
+  100%{opacity:0;transform:translate(var(--fx,10px),var(--fy,-14px))}
+}
+
+.status{font-family:var(--mono);font-size:.68rem;color:#888;margin-top:24px;letter-spacing:.1em;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="hero-row">
+  <div class="hero-text">
+    <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+  </div>
+  <div class="stage">
+    <!-- trail behind swing -->
+    <div class="trail"></div>
+    <!-- sword group for swing rotation -->
+    <div class="sword-group">
+      <div class="forge-mask">
+        <svg class="sword-svg" viewBox="0 0 44 130" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#111"/><stop offset="45%" stop-color="#444"/>
+              <stop offset="55%" stop-color="#111"/><stop offset="100%" stop-color="#111"/>
+            </linearGradient>
+          </defs>
+          <rect x="18" y="0" width="8" height="78" rx="3" fill="url(#bg)"/>
+          <rect x="2" y="74" width="40" height="5" rx="2" fill="#111"/>
+          <rect x="19" y="81" width="6" height="32" rx="2" fill="#111"/>
+          <circle cx="22" cy="118" r="7" fill="#111"/>
+        </svg>
+      </div>
+    </div>
+    <!-- forge sparks -->
+    <div class="forge-spark fs1" style="--fx:14px;--fy:-14px"></div>
+    <div class="forge-spark fs2" style="--fx:-10px;--fy:-16px"></div>
+    <div class="forge-spark fs3" style="--fx:16px;--fy:-10px"></div>
+    <div class="forge-spark fs4" style="--fx:-12px;--fy:-18px"></div>
+    <!-- strike particles -->
+    <div class="strike-particle sp sp1" style="--sx:12px;--sy:-16px"></div>
+    <div class="strike-particle sp sp2" style="--sx:-10px;--sy:-12px"></div>
+    <div class="strike-particle sp sp3" style="--sx:-14px;--sy:-8px"></div>
+    <div class="strike-particle sp sp4" style="--sx:-16px;--sy:-4px"></div>
+    <div class="strike-particle sp sp5" style="--sx:16px;--sy:-12px"></div>
+    <div class="strike-particle sp sp6" style="--sx:18px;--sy:-6px"></div>
+    <div class="strike-particle sp sp7" style="--sx:20px;--sy:0px"></div>
+    <div class="strike-particle sp sp8" style="--sx:22px;--sy:4px"></div>
+  </div>
+</div>
+
+<div class="status">КОВКА (clip-path reveal) → удар каждые 6s: замах ← взмах → осколки → затухание</div>
+
+</body>
+</html>

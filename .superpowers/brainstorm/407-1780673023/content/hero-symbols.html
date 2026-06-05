@@ -1,0 +1,162 @@
+<style>
+  :root {
+    --bg: #fafafa;
+    --ink: #111;
+    --line: #d0d0d0;
+    --display: 'Pirata One', serif;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Poppins', sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);padding:20px}
+
+  .page-title{font-family:var(--display);font-size:3.5rem;line-height:.95;letter-spacing:-2px;margin-bottom:6px}
+  .page-title .accent{display:inline-block;background:linear-gradient(45deg,#111,#555,#111);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 12s ease infinite}
+  @keyframes shift{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+
+  .subtitle{color:#888;font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.18em;margin-bottom:2rem}
+
+  .demo-row{display:flex;align-items:center;gap:40px;padding:28px 0;border-bottom:1px solid var(--line)}
+  .demo-row:last-child{border:none}
+  .demo-title{display:flex;flex-direction:column;flex:1;min-width:0}
+  .demo-title h1{font-family:var(--display);font-size:clamp(2rem,5vw,3.8rem);line-height:.95;letter-spacing:-1.5px}
+  .demo-title h1 .accent{display:inline-block;background:linear-gradient(45deg,#111,#555,#111);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 12s ease infinite}
+  .demo-symbol{flex-shrink:0;width:120px;height:120px;display:flex;align-items:center;justify-content:center}
+  .demo-label{font-family:var(--mono);font-size:.68rem;color:#888;text-transform:uppercase;letter-spacing:.15em;margin-bottom:8px;text-align:center}
+
+  /* === SARISSA (spear) === */
+  .sarissa{position:relative;width:8px;height:130px}
+  .sarissa .shaft{position:absolute;width:4px;height:100%;background:var(--ink);left:2px;border-radius:2px;transform-origin:bottom;animation:sarissaIn 2.5s cubic-bezier(.16,1,.3,1) forwards}
+  .sarissa .head{position:absolute;top:-8px;left:-3px;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:22px solid var(--ink);opacity:0;animation:sarissaHead .6s 1.8s ease-out forwards}
+  .sarissa .cross{position:absolute;top:18px;left:-8px;width:24px;height:3px;background:var(--ink);border-radius:1px;opacity:0;animation:sarissaHead .5s 2s ease-out forwards}
+  @keyframes sarissaIn{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  @keyframes sarissaHead{to{opacity:1}}
+
+  /* === VERGINA SUN === */
+  .vergina{position:relative;width:90px;height:90px}
+  .vergina .center{position:absolute;width:16px;height:16px;background:var(--ink);border-radius:50%;top:37px;left:37px;z-index:2}
+  .vergina .ray{position:absolute;width:3px;height:36px;background:var(--ink);left:43px;top:5px;border-radius:1px;transform-origin:center 40px;opacity:0}
+  .vergina .ray:nth-child(1){animation:rayIn .5s .1s ease-out forwards}
+  .vergina .ray:nth-child(2){animation:rayIn .5s .15s ease-out forwards}
+  .vergina .ray:nth-child(3){animation:rayIn .5s .2s ease-out forwards}
+  .vergina .ray:nth-child(4){animation:rayIn .5s .25s ease-out forwards}
+  .vergina .ray:nth-child(5){animation:rayIn .5s .3s ease-out forwards}
+  .vergina .ray:nth-child(6){animation:rayIn .5s .35s ease-out forwards}
+  .vergina .ray:nth-child(7){animation:rayIn .5s .4s ease-out forwards}
+  .vergina .ray:nth-child(8){animation:rayIn .5s .45s ease-out forwards}
+  @keyframes rayIn{to{opacity:1}}
+  .vergina.spin{animation:verginaSpin 18s linear infinite}
+  @keyframes verginaSpin{to{transform:rotate(360deg)}}
+
+  /* === MACEDONIAN SHIELD === */
+  .shield{position:relative;width:100px;height:100px}
+  .shield .outer{position:absolute;inset:0;border-radius:50%;border:4px solid var(--ink);background:transparent;animation:shieldPulse 3s ease-in-out infinite}
+  .shield .inner{position:absolute;inset:18px;border-radius:50%;border:2.5px solid var(--ink)}
+  .shield .core{position:absolute;inset:36px;border-radius:50%;background:var(--ink);animation:shieldCore 2.4s ease-in-out infinite}
+  .shield .cross-h,.shield .cross-v{position:absolute;background:var(--ink);opacity:.25}
+  .shield .cross-h{width:60px;height:2px;top:48px;left:20px}
+  .shield .cross-v{width:2px;height:60px;top:20px;left:48px}
+  @keyframes shieldPulse{0%,100%{transform:scale(1);box-shadow:4px 4px 0 2px rgba(0,0,0,.18)}50%{transform:scale(1.04);box-shadow:8px 8px 0 2px rgba(0,0,0,.25)}}
+  @keyframes shieldCore{0%,100%{transform:scale(1)}50%{transform:scale(.85)}}
+
+  /* === SWORD === */
+  .sword{position:relative;width:20px;height:120px}
+  .sword .blade{position:absolute;width:8px;height:80px;background:var(--ink);left:6px;top:0;border-radius:2px 2px 0 0;animation:swordSwing 3s cubic-bezier(.34,1.56,.64,1) infinite}
+  .sword .guard{position:absolute;width:24px;height:4px;background:var(--ink);left:-2px;top:76px;border-radius:1px}
+  .sword .grip{position:absolute;width:6px;height:30px;background:var(--ink);left:7px;top:82px;border-radius:2px}
+  @keyframes swordSwing{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+
+  /* small description under each */
+  .desc{font-size:.82rem;color:#555;line-height:1.6;margin-top:6px;max-width:340px}
+
+  .option{border:2px solid var(--line);border-radius:8px;padding:20px;cursor:pointer;transition:all .2s ease}
+  .option:hover{border-color:var(--ink);box-shadow:4px 4px 0 1px rgba(0,0,0,.15);transform:translate(-2px,-2px)}
+  .option.selected{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+  .option.selected .desc{color:var(--bg);opacity:.75}
+  .option.selected .demo-label{color:var(--bg);opacity:.6}
+
+  .options-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px}
+</style>
+
+<h2>Hero Symbol — Macedonian Identity</h2>
+<p class="subtitle">Справа от заголовка «Engineering tomorrow's interfaces.»</p>
+
+<p style="color:#555;line-height:1.7;max-width:680px;margin-bottom:20px">
+  Имя <strong>Александр Македонский</strong> открывает богатый визуальный язык: сарисса (длинное копьё македонской фаланги), Вергинская звезда (16-лучевой символ династии), македонский щит, короткий меч. Ниже — 4 подхода в стилистике твоего нео-бруталистского портфолио (жирные линии, монохром, hard shadows).
+</p>
+
+<div class="options-grid">
+  <!-- A: SARISSA -->
+  <div class="option" data-choice="sarissa" onclick="toggleSelect(this)">
+    <div class="demo-label">A — Сарисса (копьё)</div>
+    <div class="demo-row">
+      <div class="demo-title">
+        <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+      </div>
+      <div class="demo-symbol">
+        <div class="sarissa"><div class="shaft"></div><div class="head"></div><div class="cross"></div></div>
+      </div>
+    </div>
+    <p class="desc">Древко «вырастает» снизу вверх при загрузке, наконечник появляется с задержкой. Символ силы, дальнобойности, стратегического мышления. Узкий вертикальный силуэт хорошо балансирует широкий заголовок.</p>
+  </div>
+
+  <!-- B: VERGINA SUN -->
+  <div class="option" data-choice="vergina" onclick="toggleSelect(this)">
+    <div class="demo-label">B — Вергинская звезда</div>
+    <div class="demo-row">
+      <div class="demo-title">
+        <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+      </div>
+      <div class="demo-symbol">
+        <div class="vergina spin">
+          <div class="center"></div>
+          <div class="ray" style="transform:rotate(0deg)"></div>
+          <div class="ray" style="transform:rotate(45deg)"></div>
+          <div class="ray" style="transform:rotate(90deg)"></div>
+          <div class="ray" style="transform:rotate(135deg)"></div>
+          <div class="ray" style="transform:rotate(180deg)"></div>
+          <div class="ray" style="transform:rotate(225deg)"></div>
+          <div class="ray" style="transform:rotate(270deg)"></div>
+          <div class="ray" style="transform:rotate(315deg)"></div>
+        </div>
+      </div>
+    </div>
+    <p class="desc">16-лучевая звезда — герб древней Македонии. Лучи появляются каскадом, затем звезда медленно вращается. Узнаваемый символ, компактный, хорошо смотрится и на мобильных.</p>
+  </div>
+
+  <!-- C: SHIELD -->
+  <div class="option" data-choice="shield" onclick="toggleSelect(this)">
+    <div class="demo-label">C — Македонский щит</div>
+    <div class="demo-row">
+      <div class="demo-title">
+        <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+      </div>
+      <div class="demo-symbol">
+        <div class="shield">
+          <div class="outer"></div>
+          <div class="inner"></div>
+          <div class="core"></div>
+          <div class="cross-h"></div>
+          <div class="cross-v"></div>
+        </div>
+      </div>
+    </div>
+    <p class="desc">Концентрические круги с пульсирующей анимацией. Символ защиты, надёжности, основательности. Хорошо рифмуется с круглыми элементами дизайна (иконки, кнопки, аватар).</p>
+  </div>
+
+  <!-- D: SWORD -->
+  <div class="option" data-choice="sword" onclick="toggleSelect(this)">
+    <div class="demo-label">D — Меч (ксифос)</div>
+    <div class="demo-row">
+      <div class="demo-title">
+        <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+      </div>
+      <div class="demo-symbol">
+        <div class="sword"><div class="blade"></div><div class="guard"></div><div class="grip"></div></div>
+      </div>
+    </div>
+    <p class="desc">Короткий македонский меч, слегка покачивается — как маятник. Символ точности, решительности. Лаконичная геометрия: три прямоугольника и никаких лишних деталей.</p>
+  </div>
+</div>
+
+<p style="color:#888;font-size:.82rem;margin-top:18px;font-family:var(--mono)">Кликни по варианту чтобы выбрать. Можно открыть страницу и посмотреть анимации вживую.</p>

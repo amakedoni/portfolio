@@ -1,0 +1,235 @@
+<style>
+.prev-stage {
+  width: 100px; height: 120px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+  overflow: visible;
+}
+.pw-sword {
+  transform-origin: 50% 78%;
+  position: relative; z-index: 2;
+}
+/* shared slash loop */
+@keyframes pw-slash {
+  0%,12%{transform:translate(0,0) rotate(0deg)}
+  22%{transform:translate(-5px,-9px) rotate(-32deg)}
+  36%{transform:translate(7px,6px) rotate(40deg)}
+  48%,60%{transform:translate(0,0) rotate(0deg)}
+  68%{transform:translate(3px,16px) rotate(28deg)}
+  80%{transform:translate(-3px,-14px) rotate(-12deg)}
+  92%,100%{transform:translate(0,0) rotate(0deg)}
+}
+.pw-sword { animation: pw-slash 3.5s 0.4s linear infinite; }
+
+/* speed lines */
+.pw-sl {
+  position: absolute; height: 2px; background: currentColor;
+  border-radius: 2px; opacity: 0; pointer-events: none;
+}
+@keyframes pw-sl1 {
+  0%,18%{opacity:0;transform:rotate(-5deg) scaleX(0)}
+  28%{opacity:.35;transform:rotate(-5deg) scaleX(1)}
+  40%{opacity:0;transform:rotate(-5deg) scaleX(0)}
+  100%{opacity:0}
+}
+@keyframes pw-sl2 {
+  0%,62%{opacity:0;transform:rotate(-50deg) scaleX(0)}
+  72%{opacity:.35;transform:rotate(-50deg) scaleX(1)}
+  84%{opacity:0;transform:rotate(-50deg) scaleX(0)}
+  100%{opacity:0}
+}
+
+/* sparks */
+.pw-sp {
+  position: absolute;
+  pointer-events: none; opacity: 0; z-index: 5;
+}
+@keyframes pw-spk {
+  0%,20%{opacity:0;transform:translate(0,0) scale(0)}
+  30%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)}
+  42%{opacity:0;transform:translate(calc(var(--dx)*2.2),calc(var(--dy)*2.2)) scale(0)}
+  100%{opacity:0}
+}
+@keyframes pw-spk2 {
+  0%,64%{opacity:0;transform:translate(0,0) scale(0)}
+  74%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)}
+  86%{opacity:0;transform:translate(calc(var(--dx)*2.2),calc(var(--dy)*2.2)) scale(0)}
+  100%{opacity:0}
+}
+
+/* glint shimmer */
+.pw-glint-mask {
+  position: absolute; inset: 0;
+  overflow: hidden; pointer-events: none; z-index: 10;
+  border-radius: 3px;
+}
+.pw-glint-ray {
+  position: absolute;
+  width: 6px; height: 200%;
+  top: -50%; left: 35%;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,.9) 50%, transparent);
+  transform: translateY(-100%);
+  animation: pw-glint 3.5s 0.4s linear infinite;
+}
+@keyframes pw-glint {
+  0%,60%{transform:translateY(-100%);opacity:0}
+  64%{opacity:1}
+  78%{transform:translateY(250%);opacity:0}
+  100%{transform:translateY(-100%);opacity:0}
+}
+
+/* arc trail */
+.pw-arc {
+  position: absolute;
+  top: -10px; left: -18px;
+  pointer-events: none; z-index: 1;
+  opacity: 0;
+  animation: pw-arc-show 3.5s 0.4s linear infinite;
+}
+@keyframes pw-arc-show {
+  0%,20%{opacity:0}
+  30%{opacity:0.5}
+  46%{opacity:0}
+  100%{opacity:0}
+}
+
+/* impact shake */
+@keyframes pw-shake {
+  0%,33%,67%,100%{transform:translateX(0)}
+  36%{transform:translateX(-2px)}
+  40%{transform:translateX(2px)}
+  44%{transform:translateX(-1px)}
+  48%{transform:translateX(1px)}
+  50%{transform:translateX(0)}
+}
+.pw-shaking { animation: pw-shake 3.5s 0.4s linear infinite; }
+</style>
+
+<h2>Какой вектор улучшения выбираем?</h2>
+<p class="subtitle">Три направления — от элегантного до кинематографичного</p>
+
+<div class="cards">
+
+  <!-- A: BLADE POLISH -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="prev-stage">
+        <div class="pw-sl" style="width:36px;top:22px;left:6px;color:#111;transform-origin:right center;animation:pw-sl1 3.5s .4s linear infinite"></div>
+        <div class="pw-sl" style="width:28px;top:38px;left:8px;color:#111;transform-origin:right center;animation:pw-sl1 3.5s .42s linear infinite"></div>
+        <div class="pw-sp" style="width:4px;height:4px;border-radius:1px;background:#111;top:12px;left:54px;animation:pw-spk 3.5s .5s linear infinite;--dx:10px;--dy:8px"></div>
+        <div class="pw-sp" style="width:3px;height:3px;border-radius:50%;background:#111;top:28px;left:60px;animation:pw-spk 3.5s .52s linear infinite;--dx:14px;--dy:3px"></div>
+        <div class="pw-sword">
+          <svg viewBox="0 0 28 84" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:84px;display:block">
+            <defs>
+              <linearGradient id="ga" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#111"/>
+                <stop offset="45%" stop-color="#555"/>
+                <stop offset="55%" stop-color="#111"/>
+              </linearGradient>
+            </defs>
+            <!-- blade with fuller groove -->
+            <rect x="11" y="0" width="6" height="50" rx="2" fill="url(#ga)"/>
+            <rect x="13.5" y="1" width="1.5" height="46" rx="0.75" fill="rgba(255,255,255,0.22)"/>
+            <!-- guard -->
+            <rect x="2" y="47" width="24" height="4" rx="1.5" fill="#111"/>
+            <!-- grip with wrapping hint -->
+            <rect x="12" y="52" width="4" height="20" rx="1.5" fill="#333"/>
+            <rect x="11.5" y="55" width="5" height="1.5" rx="0.5" fill="#111" opacity="0.5"/>
+            <rect x="11.5" y="60" width="5" height="1.5" rx="0.5" fill="#111" opacity="0.5"/>
+            <rect x="11.5" y="65" width="5" height="1.5" rx="0.5" fill="#111" opacity="0.5"/>
+            <!-- pommel -->
+            <ellipse cx="14" cy="76" rx="5" ry="4.5" fill="#111"/>
+          </svg>
+          <div class="pw-glint-mask" style="top:0;left:0;width:28px;height:50px;position:absolute">
+            <div class="pw-glint-ray"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Blade Polish</h3>
+      <p>Детальнее SVG (fuller, рикасо, обмотка рукояти). Сверкающий glint скользит по лезвию при ударе. Монохромный — максимально элегантно.</p>
+    </div>
+  </div>
+
+  <!-- B: SLASH DRAMA -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="prev-stage pw-shaking">
+        <svg class="pw-arc" viewBox="0 0 70 90" xmlns="http://www.w3.org/2000/svg" style="width:70px;height:90px">
+          <path d="M 62 2 Q 8 45 62 88" stroke="#111" stroke-width="2.5" fill="none" stroke-dasharray="10 5" opacity="0.55"/>
+          <path d="M 52 8 Q 4 45 52 82" stroke="#111" stroke-width="1.5" fill="none" opacity="0.25"/>
+        </svg>
+        <div class="pw-sl" style="width:40px;top:18px;left:4px;color:#111;transform-origin:right center;animation:pw-sl1 3.5s .4s linear infinite"></div>
+        <div class="pw-sl" style="width:32px;top:32px;left:6px;color:#111;transform-origin:right center;animation:pw-sl1 3.5s .43s linear infinite"></div>
+        <div class="pw-sl" style="width:28px;top:42px;left:5px;color:#111;transform-origin:right center;animation:pw-sl1 3.5s .46s linear infinite"></div>
+        <div class="pw-sp" style="width:5px;height:5px;border-radius:1px;background:#111;top:10px;left:56px;animation:pw-spk 3.5s .5s linear infinite;--dx:12px;--dy:10px"></div>
+        <div class="pw-sp" style="width:4px;height:4px;border-radius:50%;background:#111;top:24px;left:62px;animation:pw-spk 3.5s .52s linear infinite;--dx:16px;--dy:4px"></div>
+        <div class="pw-sp" style="width:3px;height:3px;border-radius:1px;background:#111;top:40px;left:60px;animation:pw-spk 3.5s .54s linear infinite;--dx:14px;--dy:-4px"></div>
+        <div class="pw-sp" style="width:4px;height:4px;border-radius:50%;background:#111;top:62px;left:48px;animation:pw-spk2 3.5s .5s linear infinite;--dx:-10px;--dy:-14px"></div>
+        <div class="pw-sp" style="width:3px;height:3px;border-radius:1px;background:#111;top:72px;left:36px;animation:pw-spk2 3.5s .52s linear infinite;--dx:-14px;--dy:-10px"></div>
+        <div class="pw-sword">
+          <svg viewBox="0 0 28 84" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:84px;display:block">
+            <defs>
+              <linearGradient id="gb" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#111"/>
+                <stop offset="45%" stop-color="#555"/>
+                <stop offset="55%" stop-color="#111"/>
+              </linearGradient>
+            </defs>
+            <rect x="11" y="0" width="6" height="50" rx="2" fill="url(#gb)"/>
+            <rect x="2" y="47" width="24" height="4" rx="1.5" fill="#111"/>
+            <rect x="12" y="52" width="4" height="20" rx="1.5" fill="#111"/>
+            <circle cx="14" cy="76" r="5" fill="#111"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Slash Drama</h3>
+      <p>Видимая дуга-след во время удара, +3 дополнительных искры, лёгкая тряска сцены при импакте. Агрессивный и кинематографичный.</p>
+    </div>
+  </div>
+
+  <!-- C: FULL CINEMA -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="prev-stage pw-shaking">
+        <svg class="pw-arc" viewBox="0 0 70 90" xmlns="http://www.w3.org/2000/svg" style="width:70px;height:90px">
+          <path d="M 62 2 Q 8 45 62 88" stroke="#4a7abf" stroke-width="3" fill="none" stroke-dasharray="10 5" opacity="0.6"/>
+        </svg>
+        <div class="pw-sl" style="width:38px;top:18px;left:4px;color:#4a7abf;transform-origin:right center;animation:pw-sl1 3.5s .4s linear infinite"></div>
+        <div class="pw-sl" style="width:30px;top:32px;left:6px;color:#4a7abf;transform-origin:right center;animation:pw-sl1 3.5s .43s linear infinite"></div>
+        <div class="pw-sp" style="width:5px;height:5px;border-radius:1px;background:#4a7abf;top:10px;left:56px;animation:pw-spk 3.5s .5s linear infinite;--dx:12px;--dy:10px"></div>
+        <div class="pw-sp" style="width:4px;height:4px;border-radius:50%;background:#c8860b;top:24px;left:62px;animation:pw-spk 3.5s .52s linear infinite;--dx:16px;--dy:4px"></div>
+        <div class="pw-sp" style="width:3px;height:3px;border-radius:1px;background:#4a7abf;top:40px;left:60px;animation:pw-spk 3.5s .54s linear infinite;--dx:14px;--dy:-4px"></div>
+        <div class="pw-sp" style="width:4px;height:4px;border-radius:50%;background:#c8860b;top:62px;left:48px;animation:pw-spk2 3.5s .5s linear infinite;--dx:-10px;--dy:-14px"></div>
+        <div class="pw-sword">
+          <svg viewBox="0 0 28 84" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:84px;display:block">
+            <defs>
+              <linearGradient id="gc" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1a2e5a"/>
+                <stop offset="45%" stop-color="#4a7abf"/>
+                <stop offset="55%" stop-color="#1a2e5a"/>
+              </linearGradient>
+            </defs>
+            <rect x="11" y="0" width="6" height="50" rx="2" fill="url(#gc)"/>
+            <rect x="13.5" y="1" width="1.5" height="46" rx="0.75" fill="rgba(180,220,255,0.35)"/>
+            <rect x="2" y="47" width="24" height="4" rx="1.5" fill="#222"/>
+            <rect x="12" y="52" width="4" height="20" rx="1.5" fill="#333"/>
+            <ellipse cx="14" cy="76" rx="5" ry="4.5" fill="#c8860b"/>
+          </svg>
+          <div class="pw-glint-mask" style="top:0;left:0;width:28px;height:50px;position:absolute">
+            <div class="pw-glint-ray"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Full Cinema</h3>
+      <p>Синеватое стальное лезвие + золотое навершие, glint + дуга + усиленные искры + тряска. Самый зрелищный, выходит за рамки монохрома.</p>
+    </div>
+  </div>
+
+</div>

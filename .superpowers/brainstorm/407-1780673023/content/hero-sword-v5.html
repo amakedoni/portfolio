@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sword — Hero Symbol v5</title>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Space+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fafafa;--ink:#111;--line:#d0d0d0;--display:'Pirata One',serif;--mono:'Space Mono',monospace;--sans:'Poppins',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);padding:40px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+.hero-row{display:flex;align-items:center;gap:60px}
+.hero-text h1{font-family:var(--display);font-size:clamp(3rem,7vw,5.5rem);line-height:.95;letter-spacing:-2px}
+.hero-text h1 .row{display:block}
+.hero-text h1 .accent{display:inline-block;background:linear-gradient(45deg,#111,#555,#111);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 12s ease infinite}
+@keyframes shift{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+
+.sword-stage{width:120px;height:150px;position:relative;display:flex;align-items:center;justify-content:center}
+
+/* Sword as ONE SVG — all parts move together */
+.sword-svg{width:44px;height:130px;filter:drop-shadow(4px 4px 0 rgba(0,0,0,.2));transition:filter .6s ease}
+.sword-svg:hover{filter:drop-shadow(6px 6px 0 rgba(0,0,0,.35))}
+
+.btn-row{margin-top:36px;display:flex;gap:12px}
+.restart-btn{
+  font-family:var(--mono);font-size:.78rem;padding:10px 20px;
+  border:2px solid var(--ink);border-radius:6px;background:var(--bg);color:var(--ink);
+  cursor:pointer;box-shadow:3px 3px 0 1px rgba(0,0,0,.15);transition:all .2s ease;
+}
+.restart-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 1px rgba(0,0,0,.25)}
+.status{font-family:var(--mono);font-size:.7rem;color:#888;margin-top:12px;letter-spacing:.08em}
+</style>
+</head>
+<body>
+
+<div class="hero-row">
+  <div class="hero-text">
+    <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+  </div>
+  <div class="sword-stage" id="stage">
+    <svg class="sword-svg" id="sword" viewBox="0 0 44 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- blade -->
+      <rect x="18" y="0" width="8" height="78" rx="3" fill="#111"/>
+      <!-- guard -->
+      <rect x="2" y="74" width="40" height="5" rx="2" fill="#111"/>
+      <!-- grip -->
+      <rect x="19" y="81" width="6" height="32" rx="2" fill="#111"/>
+      <!-- pommel -->
+      <circle cx="22" cy="118" r="7" fill="#111"/>
+    </svg>
+  </div>
+</div>
+
+<div class="btn-row">
+  <button class="restart-btn" onclick="play()">↻ Перезапустить</button>
+</div>
+<div class="status" id="status">Готово</div>
+
+<script>
+const sword = document.getElementById('sword');
+const status = document.getElementById('status');
+
+function easeOutBack(t){const c1=1.70158;const c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)}
+
+function animateFrame(duration, easing, onFrame){
+  return new Promise(resolve => {
+    const start = performance.now();
+    function tick(now){
+      const t = Math.min(1, (now - start) / duration);
+      onFrame(easing(t));
+      if(t < 1) requestAnimationFrame(tick);
+      else resolve();
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+async function play(){
+  // Reset
+  sword.style.opacity = '0';
+  sword.style.transform = 'translate(20px, -90px) rotate(-35deg) scale(0.3)';
+  status.textContent = 'Меч входит...';
+
+  // One clean motion: sword drops from above-left, rotates into place, lands with bounce
+  await animateFrame(1200, easeOutBack, t => {
+    const x = 20 * (1 - t);
+    const y = -90 * (1 - t);
+    const rot = -35 * (1 - t);
+    const s = 0.3 + 0.7 * t;
+    sword.style.opacity = Math.min(1, t * 2.5);
+    sword.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg) scale(${s})`;
+  });
+
+  status.textContent = 'Меч на месте ✓';
+
+  // Subtle idle: shadow breathing
+  let start = performance.now();
+  function breathe(now){
+    const t = (now - start) / 1000;
+    const shadow = 4 + 1.5 * Math.sin(t * 1.8);
+    const alpha = 0.18 + 0.12 * Math.sin(t * 1.8);
+    sword.style.filter = `drop-shadow(${shadow}px ${shadow}px 0 rgba(0,0,0,${alpha}))`;
+    sword._bid = requestAnimationFrame(breathe);
+  }
+  cancelAnimationFrame(sword._bid || 0);
+  requestAnimationFrame(breathe);
+}
+
+// Autoplay on load
+setTimeout(play, 400);
+</script>
+</body>
+</html>

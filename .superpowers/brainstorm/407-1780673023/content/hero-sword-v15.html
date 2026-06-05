@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sword — Translate + Rotate v15</title>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Space+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fafafa;--ink:#111;--line:#d0d0d0;--display:'Pirata One',serif;--mono:'Space Mono',monospace;--sans:'Poppins',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);padding:40px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+.hero-row{display:flex;align-items:center;gap:60px}
+.hero-text h1{font-family:var(--display);font-size:clamp(3rem,7vw,5.5rem);line-height:.95;letter-spacing:-2px}
+.hero-text h1 .row{display:block}
+.hero-text h1 .accent{display:inline-block;background:linear-gradient(45deg,#111,#555,#111);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 12s ease infinite}
+@keyframes shift{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+
+.stage{width:170px;height:200px;position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:visible}
+
+/* ====== SWORD ====== */
+.sword-group{transform-origin:50% 78%;animation:swordTimeline 8s 1.6s linear infinite}
+.sword-svg{width:44px;height:130px;display:block}
+
+/* ====== FORGE ====== */
+.forge-shell{animation:forgeReveal 1.4s cubic-bezier(.65,0,.35,1) forwards}
+@keyframes forgeReveal{0%{clip-path:inset(0 0 100% 0)}100%{clip-path:inset(0 0 0 0)}}
+
+/* ====== 8s TIMELINE: translate + rotate ====== */
+@keyframes swordTimeline{
+  /*
+    S1 — OVERHAND (0–4s):
+    sword rises up-left → slashes down-right
+    translate: (0,0) → (-8,-12) → (10,8)
+    rotate:    0°    → -45°     → +55°
+
+    S2 — UPPERCUT (4–8s):
+    sword drops low → slashes upward
+    translate: (0,0) → (6,22) → (-4,-18)
+    rotate:    0°    → +35°   → -10°
+  */
+
+  /* ── IDLE ── */
+  0%,1%{transform:translate(0,0) rotate(0deg)}
+
+  /* ═══ S1: OVERHAND ═══ */
+  /* windup: sword goes up-left */
+  3%{transform:translate(-2px,-3px) rotate(-5deg)}
+  5%{transform:translate(-5px,-7px) rotate(-15deg)}
+  8%{transform:translate(-8px,-12px) rotate(-30deg)}
+  11%{transform:translate(-10px,-14px) rotate(-45deg)}
+  /* SLASH: sword comes down-right */
+  14%{transform:translate(-4px,-5px) rotate(-20deg)}
+  17%{transform:translate(4px,2px) rotate(15deg)}
+  20%{transform:translate(10px,8px) rotate(45deg)}
+  22%{transform:translate(14px,12px) rotate(58deg)}
+  /* recoil */
+  24%{transform:translate(8px,5px) rotate(50deg)}
+  26%{transform:translate(11px,8px) rotate(55deg)}
+  29%{transform:translate(4px,2px) rotate(20deg)}
+  33%{transform:translate(-2px,-1px) rotate(-3deg)}
+  38%{transform:translate(1px,0) rotate(1deg)}
+  43%,47%{transform:translate(0,0) rotate(0deg)}
+
+  /* ═══ S2: UPPERCUT ═══ */
+  49%{transform:translate(0,0) rotate(0deg)}
+  /* windup: sword drops LOW + tilts far forward */
+  52%{transform:translate(2px,10px) rotate(12deg)}
+  55%{transform:translate(4px,22px) rotate(28deg)}
+  58%{transform:translate(6px,32px) rotate(42deg)}
+  61%{transform:translate(5px,36px) rotate(52deg)}
+  /* SLASH: sword rises + blade sweeps up and back */
+  64%{transform:translate(2px,22px) rotate(32deg)}
+  67%{transform:translate(-1px,2px) rotate(8deg)}
+  70%{transform:translate(-3px,-16px) rotate(-8deg)}
+  72%{transform:translate(-4px,-24px) rotate(-20deg)}
+  74%{transform:translate(-3px,-20px) rotate(-16deg)}
+  /* recoil */
+  77%{transform:translate(-1px,-8px) rotate(-8deg)}
+  80%{transform:translate(-2px,-14px) rotate(-18deg)}
+  83%{transform:translate(0px,2px) rotate(-5deg)}
+  87%{transform:translate(1px,-2px) rotate(2deg)}
+  92%{transform:translate(-1px,1px) rotate(-1deg)}
+  96%,100%{transform:translate(0,0) rotate(0deg)}
+}
+
+/* ====== SHADOW ====== */
+.sword-svg{animation:shadowT 8s 1.6s linear infinite}
+@keyframes shadowT{
+  0%,1%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.15)) brightness(1)}
+  /* S1: shadow goes hard right-down */
+  11%{filter:drop-shadow(8px 8px 0 rgba(0,0,0,.25)) brightness(1)}
+  20%{filter:drop-shadow(14px 14px 0 rgba(0,0,0,.4)) brightness(1.06)}
+  29%{filter:drop-shadow(8px 8px 0 rgba(0,0,0,.2)) brightness(1)}
+  43%,49%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.15)) brightness(1)}
+  /* S2: shadow lifts — same intensity as S1, upward direction */
+  61%{filter:drop-shadow(6px -5px 0 rgba(0,0,0,.28)) brightness(1)}
+  72%{filter:drop-shadow(3px -16px 0 rgba(0,0,0,.4)) brightness(1.06)}
+  80%{filter:drop-shadow(5px -10px 0 rgba(0,0,0,.25)) brightness(1)}
+  87%{filter:drop-shadow(5px -3px 0 rgba(0,0,0,.18)) brightness(1)}
+  96%,100%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.15)) brightness(1)}
+}
+
+/* ====== SPEED LINES ====== */
+.sl{position:absolute;height:3px;background:var(--ink);border-radius:2px;opacity:0;pointer-events:none;z-index:1}
+/* S1: sword slashes right-down → lines trail LEFT-UP (origin at RIGHT edge) */
+.sl1{width:55px;top:30px;left:20px;transform-origin:right center;animation:slS1a 8s 1.75s linear infinite}
+.sl2{width:45px;top:60px;left:24px;transform-origin:right center;animation:slS1b 8s 1.78s linear infinite}
+.sl3{width:50px;top:90px;left:22px;transform-origin:right center;animation:slS1c 8s 1.8s linear infinite}
+/* S2: sword rises up → lines trail BELOW (positioned LOW, angled steep up) */
+.sl4{width:40px;top:100px;left:68px;transform-origin:left center;animation:slS2a 8s 2.15s linear infinite}
+.sl5{width:35px;top:85px;left:72px;transform-origin:left center;animation:slS2b 8s 2.18s linear infinite}
+.sl6{width:38px;top:110px;left:70px;transform-origin:left center;animation:slS2c 8s 2.2s linear infinite}
+
+/* S1 — unchanged, user confirmed good */
+@keyframes slS1a{0%,8%{opacity:0;transform:rotate(-5deg) scaleX(0)}14%{opacity:.35;transform:rotate(-5deg) scaleX(1)}24%{opacity:0;transform:rotate(-5deg) scaleX(0)}50%,100%{opacity:0;transform:rotate(-5deg) scaleX(0)}}
+@keyframes slS1b{0%,8%{opacity:0;transform:rotate(3deg) scaleX(0)}14%{opacity:.35;transform:rotate(3deg) scaleX(1)}24%{opacity:0;transform:rotate(3deg) scaleX(0)}50%,100%{opacity:0;transform:rotate(3deg) scaleX(0)}}
+@keyframes slS1c{0%,8%{opacity:0;transform:rotate(8deg) scaleX(0)}14%{opacity:.35;transform:rotate(8deg) scaleX(1)}24%{opacity:0;transform:rotate(8deg) scaleX(0)}50%,100%{opacity:0;transform:rotate(8deg) scaleX(0)}}
+/* S2: steep upward angles, lines extend UP-LEFT trailing the rising sword */
+@keyframes slS2a{0%,52%{opacity:0;transform:rotate(-55deg) scaleX(0)}60%{opacity:.35;transform:rotate(-55deg) scaleX(1)}74%{opacity:0;transform:rotate(-55deg) scaleX(0)}100%{opacity:0;transform:rotate(-55deg) scaleX(0)}}
+@keyframes slS2b{0%,52%{opacity:0;transform:rotate(-48deg) scaleX(0)}60%{opacity:.35;transform:rotate(-48deg) scaleX(1)}74%{opacity:0;transform:rotate(-48deg) scaleX(0)}100%{opacity:0;transform:rotate(-48deg) scaleX(0)}}
+@keyframes slS2c{0%,52%{opacity:0;transform:rotate(-60deg) scaleX(0)}60%{opacity:.35;transform:rotate(-60deg) scaleX(1)}74%{opacity:0;transform:rotate(-60deg) scaleX(0)}100%{opacity:0;transform:rotate(-60deg) scaleX(0)}}
+
+/* ====== SPARKS ====== */
+.spark{position:absolute;background:var(--ink);pointer-events:none;z-index:5;opacity:0}
+.spark.sq{width:6px;height:6px;border-radius:1px}
+.spark.rnd{width:4px;height:4px;border-radius:50%}
+
+/* S1: 8 sparks */
+.s1a{top:10px;left:60px;animation:spS1 8s 1.85s linear infinite;--dx:20px;--dy:14px}
+.s1b{top:25px;left:76px;animation:spS1 8s 1.87s linear infinite;--dx:24px;--dy:10px}
+.s1c{top:50px;left:84px;animation:spS1 8s 1.89s linear infinite;--dx:28px;--dy:2px}
+.s1d{top:72px;left:82px;animation:spS1 8s 1.91s linear infinite;--dx:26px;--dy:-6px}
+.s1e{top:90px;left:72px;animation:spS1 8s 1.93s linear infinite;--dx:18px;--dy:-12px}
+.s1f{top:8px;left:44px;animation:spS1 8s 1.86s linear infinite;--dx:-18px;--dy:12px}
+.s1g{top:30px;left:30px;animation:spS1 8s 1.88s linear infinite;--dx:-24px;--dy:4px}
+.s1h{top:55px;left:24px;animation:spS1 8s 1.9s linear infinite;--dx:-28px;--dy:-4px}
+
+@keyframes spS1{0%,8%{opacity:0;transform:translate(0,0) scale(0)}18%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)}28%{opacity:0;transform:translate(calc(var(--dx)*2.5),calc(var(--dy)*2.5)) scale(0)}50%,100%{opacity:0}}
+
+/* S2: 8 sparks flying UP — synced to sword S2 peak */
+.s2a{top:80px;left:52px;animation:spS2 8s 2.05s linear infinite;--ux:12px;--uy:-22px}
+.s2b{top:68px;left:68px;animation:spS2 8s 2.07s linear infinite;--ux:18px;--uy:-18px}
+.s2c{top:52px;left:78px;animation:spS2 8s 2.09s linear infinite;--ux:22px;--uy:-12px}
+.s2d{top:36px;left:80px;animation:spS2 8s 2.11s linear infinite;--ux:18px;--uy:-8px}
+.s2e{top:20px;left:74px;animation:spS2 8s 2.13s linear infinite;--ux:10px;--uy:-4px}
+.s2f{top:84px;left:38px;animation:spS2 8s 2.06s linear infinite;--ux:-10px;--uy:-20px}
+.s2g{top:64px;left:30px;animation:spS2 8s 2.08s linear infinite;--ux:-16px;--uy:-14px}
+.s2h{top:42px;left:26px;animation:spS2 8s 2.1s linear infinite;--ux:-18px;--uy:-10px}
+
+@keyframes spS2{0%,58%{opacity:0;transform:translate(0,0) scale(0)}68%{opacity:1;transform:translate(var(--ux),var(--uy)) scale(1)}80%{opacity:0;transform:translate(calc(var(--ux)*2.5),calc(var(--uy)*2.5)) scale(0)}100%{opacity:0}}
+
+/* ====== FORGE SPARKS ====== */
+.fspark{position:absolute;width:5px;height:5px;background:var(--ink);opacity:0;pointer-events:none;z-index:5}
+.fs1{top:22px;left:62px;animation:fsparkAnim .45s .5s ease-out forwards}
+.fs2{top:42px;left:56px;animation:fsparkAnim .4s .7s ease-out forwards}
+.fs3{top:65px;left:64px;animation:fsparkAnim .5s .9s ease-out forwards}
+.fs4{top:88px;left:58px;animation:fsparkAnim .45s 1.1s ease-out forwards}
+@keyframes fsparkAnim{0%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(var(--fx,10px),var(--fy,-14px))}}
+
+.indicator{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;margin-top:20px;text-align:center}
+.indicator span{padding:6px 14px;border:2px solid var(--ink);border-radius:4px;display:inline-block}
+.indicator .l1{animation:gl1 8s 1.6s linear infinite}
+.indicator .l2{animation:gl2 8s 1.6s linear infinite}
+@keyframes gl1{0%,8%{background:transparent;color:var(--ink)}12%,24%{background:var(--ink);color:var(--bg)}30%,50%{background:transparent;color:var(--ink)}100%{background:transparent;color:var(--ink)}}
+@keyframes gl2{0%,55%{background:transparent;color:var(--ink)}60%,76%{background:var(--ink);color:var(--bg)}82%,100%{background:transparent;color:var(--ink)}}
+</style>
+</head>
+<body>
+
+<div class="hero-row">
+  <div class="hero-text">
+    <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+  </div>
+  <div class="stage">
+    <div class="sl sl1"></div><div class="sl sl2"></div><div class="sl sl3"></div>
+    <div class="sl sl4"></div><div class="sl sl5"></div><div class="sl sl6"></div>
+
+    <div class="sword-group">
+      <div class="forge-shell">
+        <svg class="sword-svg" viewBox="0 0 44 130" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#111"/><stop offset="45%" stop-color="#444"/><stop offset="55%" stop-color="#111"/></linearGradient></defs>
+          <rect x="18" y="0" width="8" height="78" rx="3" fill="url(#bg)"/>
+          <rect x="2" y="74" width="40" height="5" rx="2" fill="#111"/>
+          <rect x="19" y="81" width="6" height="32" rx="2" fill="#111"/>
+          <circle cx="22" cy="118" r="7" fill="#111"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="fspark fs1" style="--fx:14px;--fy:-14px"></div>
+    <div class="fspark fs2" style="--fx:-10px;--fy:-16px"></div>
+    <div class="fspark fs3" style="--fx:16px;--fy:-10px"></div>
+    <div class="fspark fs4" style="--fx:-12px;--fy:-18px"></div>
+
+    <div class="spark sq s1a"></div><div class="spark rnd s1b"></div>
+    <div class="spark sq s1c"></div><div class="spark rnd s1d"></div>
+    <div class="spark sq s1e"></div><div class="spark sq s1f"></div>
+    <div class="spark rnd s1g"></div><div class="spark sq s1h"></div>
+
+    <div class="spark sq s2a"></div><div class="spark rnd s2b"></div>
+    <div class="spark sq s2c"></div><div class="spark rnd s2d"></div>
+    <div class="spark sq s2e"></div><div class="spark sq s2f"></div>
+    <div class="spark rnd s2g"></div><div class="spark sq s2h"></div>
+  </div>
+</div>
+
+<div class="indicator">
+  <span class="l1">СВЕРХУ: ↖ замах → slash ↘</span>
+  &nbsp;|&nbsp;
+  <span class="l2">СНИЗУ: ↓ замах → slash ↑</span>
+</div>
+
+</body>
+</html>

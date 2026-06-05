@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sword — Alternating Strikes v13</title>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Space+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fafafa;--ink:#111;--line:#d0d0d0;--display:'Pirata One',serif;--mono:'Space Mono',monospace;--sans:'Poppins',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);padding:40px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+.hero-row{display:flex;align-items:center;gap:60px}
+.hero-text h1{font-family:var(--display);font-size:clamp(3rem,7vw,5.5rem);line-height:.95;letter-spacing:-2px}
+.hero-text h1 .row{display:block}
+.hero-text h1 .accent{display:inline-block;background:linear-gradient(45deg,#111,#555,#111);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 12s ease infinite}
+@keyframes shift{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+
+.stage{width:170px;height:185px;position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:visible}
+
+/* ====== SWORD ====== */
+.sword-group{transform-origin:50% 78%;animation:swordTimeline 6s 1.6s linear infinite}
+.sword-svg{width:44px;height:130px;display:block;animation:shadowTimeline 6s 1.6s linear infinite}
+
+/* ====== FORGE ====== */
+.forge-shell{animation:forgeReveal 1.4s cubic-bezier(.65,0,.35,1) forwards}
+@keyframes forgeReveal{0%{clip-path:inset(0 0 100% 0)}100%{clip-path:inset(0 0 0 0)}}
+
+/* ====== TIMELINE: linear, dense keyframes = easing ====== */
+@keyframes swordTimeline{
+  /* ── IDLE before S1 ── */
+  0%,2%{transform:rotate(0deg)}
+
+  /* ── STRIKE 1: OVERHAND ── */
+  3%{transform:rotate(-1deg)}
+  5%{transform:rotate(-5deg)}
+  8%{transform:rotate(-15deg)}
+  11%{transform:rotate(-30deg)}
+  14%{transform:rotate(-40deg)}       /* windup peak */
+  17%{transform:rotate(-25deg)}
+  20%{transform:rotate(10deg)}
+  22%{transform:rotate(40deg)}        /* SLASH peak */
+  24%{transform:rotate(55deg)}
+  26%{transform:rotate(62deg)}        /* follow-through */
+  28%{transform:rotate(50deg)}        /* recoil 1 */
+  30%{transform:rotate(56deg)}        /* bounce */
+  33%{transform:rotate(20deg)}
+  37%{transform:rotate(-5deg)}
+  42%{transform:rotate(2deg)}
+
+  /* ── IDLE between strikes ── */
+  46%,52%{transform:rotate(0deg)}
+
+  /* ── STRIKE 2: UPPERCUT ── */
+  53%{transform:rotate(1deg)}
+  55%{transform:rotate(5deg)}
+  58%{transform:rotate(15deg)}
+  61%{transform:rotate(28deg)}
+  64%{transform:rotate(36deg)}        /* windup peak (forward) */
+  67%{transform:rotate(15deg)}
+  70%{transform:rotate(-15deg)}
+  72%{transform:rotate(-42deg)}       /* SLASH peak (backward) */
+  74%{transform:rotate(-54deg)}
+  76%{transform:rotate(-62deg)}       /* follow-through */
+  78%{transform:rotate(-48deg)}       /* recoil 1 */
+  80%{transform:rotate(-54deg)}       /* bounce */
+  83%{transform:rotate(-18deg)}
+  87%{transform:rotate(6deg)}
+  92%{transform:rotate(-1deg)}
+
+  96%,100%{transform:rotate(0deg)}
+}
+
+/* ====== SHADOW follow strikes ====== */
+@keyframes shadowTimeline{
+  0%,2%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.15)) brightness(1)}
+
+  /* S1 */
+  14%{filter:drop-shadow(7px 7px 0 rgba(0,0,0,.25)) brightness(1)}
+  22%{filter:drop-shadow(11px 11px 0 rgba(0,0,0,.38)) brightness(1.06)}
+  30%{filter:drop-shadow(7px 7px 0 rgba(0,0,0,.22)) brightness(1)}
+  42%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.15)) brightness(1)}
+
+  46%,52%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.15)) brightness(1)}
+
+  /* S2 */
+  64%{filter:drop-shadow(-6px -6px 0 rgba(0,0,0,.25)) brightness(1)}
+  72%{filter:drop-shadow(-10px -10px 0 rgba(0,0,0,.38)) brightness(1.06)}
+  80%{filter:drop-shadow(-6px -6px 0 rgba(0,0,0,.22)) brightness(1)}
+  92%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.15)) brightness(1)}
+
+  96%,100%{filter:drop-shadow(4px 4px 0 rgba(0,0,0,.15)) brightness(1)}
+}
+
+/* ====== SPEED LINES ====== */
+.speed-line{position:absolute;height:3px;background:var(--ink);border-radius:2px;opacity:0;pointer-events:none;z-index:1;transform-origin:left center}
+.sl1{width:52px;top:26px;left:56px;transform:rotate(-5deg);animation:slFlash 6s 1.6s linear infinite}
+.sl2{width:42px;top:54px;left:60px;transform:rotate(0deg);animation:slFlash2 6s 1.6s linear infinite}
+.sl3{width:50px;top:82px;left:58px;transform:rotate(5deg);animation:slFlash 6s 1.6s linear infinite}
+
+@keyframes slFlash{
+  0%,5%{opacity:0;transform:scaleX(0)}
+  12%{opacity:.3;transform:scaleX(1)}
+  20%{opacity:.15;transform:scaleX(.7)}
+  28%{opacity:0;transform:scaleX(0)}
+  /* S2 */
+  55%{opacity:0;transform:scaleX(0)}
+  62%{opacity:.3;transform:scaleX(1)}
+  70%{opacity:.15;transform:scaleX(.7)}
+  78%{opacity:0;transform:scaleX(0)}
+  100%{opacity:0}
+}
+@keyframes slFlash2{
+  0%,5%{opacity:0;transform:scaleX(0)}
+  11%{opacity:.35;transform:scaleX(1)}
+  19%{opacity:.12;transform:scaleX(.6)}
+  27%{opacity:0;transform:scaleX(0)}
+  55%{opacity:0;transform:scaleX(0)}
+  61%{opacity:.35;transform:scaleX(1)}
+  69%{opacity:.12;transform:scaleX(.6)}
+  77%{opacity:0;transform:scaleX(0)}
+  100%{opacity:0}
+}
+
+/* ====== SPARKS ====== */
+.spark{position:absolute;background:var(--ink);pointer-events:none;z-index:5;opacity:0}
+.spark.sq{width:6px;height:6px;border-radius:1px}
+.spark.rnd{width:4px;height:4px;border-radius:50%}
+
+.sa{top:10px;left:62px;animation:spAll 6s 1.85s linear infinite}
+.sb{top:22px;left:78px;animation:spAll 6s 1.87s linear infinite}
+.sc{top:45px;left:86px;animation:spAll 6s 1.89s linear infinite}
+.sd{top:68px;left:84px;animation:spAll 6s 1.91s linear infinite}
+.se{top:88px;left:74px;animation:spAll 6s 1.93s linear infinite}
+.sf{top:8px;left:46px;animation:spAll 6s 1.86s linear infinite}
+.sg{top:28px;left:32px;animation:spAll 6s 1.88s linear infinite}
+.sh{top:52px;left:26px;animation:spAll 6s 1.9s linear infinite}
+.si{top:76px;left:24px;animation:spAll 6s 1.92s linear infinite}
+.sj{top:95px;left:28px;animation:spAll 6s 1.94s linear infinite}
+
+@keyframes spAll{
+  /* S1 burst */
+  0%,8%{opacity:0;transform:translate(0,0) scale(0)}
+  15%{opacity:1;transform:translate(var(--dx,12px),var(--dy,-14px)) scale(1)}
+  24%{opacity:.5;transform:translate(calc(var(--dx,12px)*2.2),calc(var(--dy,-14px)*2)) scale(.5)}
+  35%{opacity:0;transform:translate(calc(var(--dx,12px)*3.5),calc(var(--dy,-14px)*3)) scale(0)}
+  /* S2 burst — reverse direction */
+  58%{opacity:0;transform:translate(0,0) scale(0)}
+  65%{opacity:1;transform:translate(calc(var(--dx,12px)*-1),calc(var(--dy,-14px)*-1)) scale(1)}
+  74%{opacity:.5;transform:translate(calc(var(--dx,12px)*-2.2),calc(var(--dy,-14px)*-2)) scale(.5)}
+  85%{opacity:0;transform:translate(calc(var(--dx,12px)*-3.5),calc(var(--dy,-14px)*-3)) scale(0)}
+  100%{opacity:0}
+}
+
+/* ====== FORGE SPARKS ====== */
+.fspark{position:absolute;width:5px;height:5px;background:var(--ink);opacity:0;pointer-events:none;z-index:5}
+.fs1{top:22px;left:62px;animation:fsparkAnim .45s .5s ease-out forwards}
+.fs2{top:42px;left:56px;animation:fsparkAnim .4s .7s ease-out forwards}
+.fs3{top:65px;left:64px;animation:fsparkAnim .5s .9s ease-out forwards}
+.fs4{top:88px;left:58px;animation:fsparkAnim .42s 1.1s ease-out forwards}
+@keyframes fsparkAnim{0%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(var(--fx,10px),var(--fy,-14px))}}
+
+.indicator{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;margin-top:20px;text-align:center}
+.indicator span{padding:6px 14px;border:2px solid var(--ink);border-radius:4px;display:inline-block}
+.indicator .overhand{animation:indFlash 6s 1.6s linear infinite}
+.indicator .uppercut{animation:indFlash2 6s 1.6s linear infinite}
+@keyframes indFlash{
+  0%,10%{background:transparent;color:var(--ink)}
+  14%,30%{background:var(--ink);color:var(--bg)}
+  35%,100%{background:transparent;color:var(--ink)}
+}
+@keyframes indFlash2{
+  0%,55%{background:transparent;color:var(--ink)}
+  60%,80%{background:var(--ink);color:var(--bg)}
+  85%,100%{background:transparent;color:var(--ink)}
+}
+</style>
+</head>
+<body>
+
+<div class="hero-row">
+  <div class="hero-text">
+    <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+  </div>
+  <div class="stage">
+    <div class="speed-line sl1"></div>
+    <div class="speed-line sl2"></div>
+    <div class="speed-line sl3"></div>
+
+    <div class="sword-group">
+      <div class="forge-shell">
+        <svg class="sword-svg" viewBox="0 0 44 130" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#111"/><stop offset="45%" stop-color="#444"/>
+              <stop offset="55%" stop-color="#111"/><stop offset="100%" stop-color="#111"/>
+            </linearGradient>
+          </defs>
+          <rect x="18" y="0" width="8" height="78" rx="3" fill="url(#bg)"/>
+          <rect x="2" y="74" width="40" height="5" rx="2" fill="#111"/>
+          <rect x="19" y="81" width="6" height="32" rx="2" fill="#111"/>
+          <circle cx="22" cy="118" r="7" fill="#111"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="fspark fs1" style="--fx:14px;--fy:-14px"></div>
+    <div class="fspark fs2" style="--fx:-10px;--fy:-16px"></div>
+    <div class="fspark fs3" style="--fx:16px;--fy:-10px"></div>
+    <div class="fspark fs4" style="--fx:-12px;--fy:-18px"></div>
+
+    <div class="spark sq sa" style="--dx:18px;--dy:-20px"></div>
+    <div class="spark rnd sb" style="--dx:22px;--dy:-16px"></div>
+    <div class="spark sq sc" style="--dx:26px;--dy:-8px"></div>
+    <div class="spark rnd sd" style="--dx:24px;--dy:4px"></div>
+    <div class="spark sq se" style="--dx:16px;--dy:14px"></div>
+    <div class="spark sq sf" style="--dx:-16px;--dy:-18px"></div>
+    <div class="spark rnd sg" style="--dx:-22px;--dy:-10px"></div>
+    <div class="spark sq sh" style="--dx:-26px;--dy:0px"></div>
+    <div class="spark rnd si" style="--dx:-20px;--dy:10px"></div>
+    <div class="spark sq sj" style="--dx:-12px;--dy:18px"></div>
+  </div>
+</div>
+
+<div class="indicator">
+  <span class="overhand">СВЕРХУ</span>
+  &nbsp;→&nbsp;
+  <span class="uppercut">СНИЗУ</span>
+</div>
+
+</body>
+</html>

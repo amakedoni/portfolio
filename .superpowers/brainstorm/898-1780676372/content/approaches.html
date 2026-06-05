@@ -1,0 +1,295 @@
+<style>
+/* ── shared stage ── */
+.demo-stage {
+  width: 110px; height: 130px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 10px;
+  overflow: visible;
+}
+
+/* ── sword motion ── */
+@keyframes sw {
+  0%,10%{transform:translate(0,0) rotate(0deg)}
+  20%{transform:translate(-6px,-11px) rotate(-36deg)}
+  34%{transform:translate(9px,7px) rotate(44deg)}
+  46%,54%{transform:translate(0,0) rotate(0deg)}
+  64%{transform:translate(4px,20px) rotate(32deg)}
+  78%{transform:translate(-4px,-18px) rotate(-14deg)}
+  90%,100%{transform:translate(0,0) rotate(0deg)}
+}
+.sw-grp { transform-origin:50% 78%; animation: sw 3.2s .4s linear infinite; position:relative; z-index:2; }
+
+/* ── shadow ── */
+@keyframes sh {
+  0%,10%{filter:drop-shadow(3px 3px 0 rgba(0,0,0,.15))}
+  22%{filter:drop-shadow(10px 10px 0 rgba(0,0,0,.38)) brightness(1.05)}
+  36%{filter:drop-shadow(3px 3px 0 rgba(0,0,0,.15))}
+  100%{filter:drop-shadow(3px 3px 0 rgba(0,0,0,.15))}
+}
+.sw-svg { animation: sh 3.2s .4s linear infinite; display:block; }
+
+/* ── speed lines ── */
+.sl { position:absolute; height:2px; background:#111; border-radius:2px; opacity:0; pointer-events:none; }
+@keyframes sl1 {
+  0%,16%{opacity:0;transform:rotate(-5deg) scaleX(0)}
+  26%{opacity:.38;transform:rotate(-5deg) scaleX(1)}
+  38%{opacity:0;transform:rotate(-5deg) scaleX(0)}
+  100%{opacity:0}
+}
+@keyframes sl2 {
+  0%,60%{opacity:0;transform:rotate(-52deg) scaleX(0)}
+  70%{opacity:.38;transform:rotate(-52deg) scaleX(1)}
+  82%{opacity:0;transform:rotate(-52deg) scaleX(0)}
+  100%{opacity:0}
+}
+
+/* ── CSS sparks (approach 1 style) ── */
+.sp-css { position:absolute; background:#111; opacity:0; pointer-events:none; z-index:5; }
+@keyframes sp1 {
+  0%,18%{opacity:0;transform:translate(0,0) scale(0)}
+  28%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)}
+  40%{opacity:0;transform:translate(calc(var(--dx)*2.3),calc(var(--dy)*2.3)) scale(0)}
+  100%{opacity:0}
+}
+@keyframes sp2 {
+  0%,62%{opacity:0;transform:translate(0,0) scale(0)}
+  72%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)}
+  84%{opacity:0;transform:translate(calc(var(--dx)*2.3),calc(var(--dy)*2.3)) scale(0)}
+  100%{opacity:0}
+}
+
+/* ── SVG arc trail ── */
+.arc-svg {
+  position:absolute; top:-10px; left:-16px;
+  pointer-events:none; z-index:1; opacity:0;
+  animation: arc-show 3.2s .4s linear infinite;
+}
+@keyframes arc-show {
+  0%,18%{opacity:0} 28%{opacity:.55} 44%{opacity:0} 100%{opacity:0}
+}
+
+/* ── shake (JS simulated with CSS for preview) ── */
+@keyframes shake {
+  0%,28%,56%,100%{transform:translate(0,0)}
+  31%{transform:translate(-2px,0)}
+  34%{transform:translate(2px,0)}
+  37%{transform:translate(-1px,0)}
+  40%{transform:translate(0,0)}
+}
+.shaking { animation: shake 3.2s .4s linear infinite; }
+
+/* ── impact flash ── */
+.flash {
+  position:absolute; inset:0;
+  background: #fff; border-radius:4px;
+  opacity:0; pointer-events:none; z-index:20;
+  animation: flash-anim 3.2s .4s linear infinite;
+}
+@keyframes flash-anim {
+  0%,30%{opacity:0} 33%{opacity:.55} 38%{opacity:0} 100%{opacity:0}
+}
+
+/* ── canvas sparks label ── */
+.canvas-badge {
+  position:absolute; bottom:2px; right:2px;
+  font-size:.52rem; letter-spacing:.08em; text-transform:uppercase;
+  color:#888; font-family:monospace; pointer-events:none;
+}
+
+/* ── motion blur (simulated with filter) ── */
+@keyframes mblur {
+  0%,15%{filter:drop-shadow(3px 3px 0 rgba(0,0,0,.15)) blur(0px)}
+  22%{filter:drop-shadow(8px 8px 0 rgba(0,0,0,.3)) blur(1.5px)}
+  34%{filter:drop-shadow(3px 3px 0 rgba(0,0,0,.15)) blur(0px)}
+  100%{filter:drop-shadow(3px 3px 0 rgba(0,0,0,.15)) blur(0px)}
+}
+.sw-blur { animation: mblur 3.2s .4s linear infinite; display:block; }
+
+/* ── ghost afterimage ── */
+.ghost {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  opacity:0; pointer-events:none; z-index:1;
+}
+@keyframes ghost1 {
+  0%,16%{opacity:0;transform:translate(-50%,-50%) translate(-3px,-5px) rotate(-15deg)}
+  22%{opacity:.18;transform:translate(-50%,-50%) translate(-3px,-5px) rotate(-15deg)}
+  30%{opacity:0}
+  100%{opacity:0}
+}
+@keyframes ghost2 {
+  0%,19%{opacity:0;transform:translate(-50%,-50%) translate(4px,3px) rotate(22deg)}
+  26%{opacity:.1;transform:translate(-50%,-50%) translate(4px,3px) rotate(22deg)}
+  34%{opacity:0}
+  100%{opacity:0}
+}
+.g1 { animation: ghost1 3.2s .4s linear infinite; }
+.g2 { animation: ghost2 3.2s .4s linear infinite; }
+
+/* ── glint (approach 3) ── */
+.glint-wrap { position:absolute; top:0; left:0; width:28px; height:50px; overflow:hidden; pointer-events:none; z-index:10; }
+.glint-ray {
+  position:absolute; width:5px; height:200%;
+  top:-50%; left:35%;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,.85) 50%, transparent);
+  animation: glint 3.2s .4s linear infinite;
+}
+@keyframes glint {
+  0%,56%{transform:translateY(-100%);opacity:0}
+  62%{opacity:1}
+  76%{transform:translateY(250%);opacity:0}
+  100%{transform:translateY(-100%);opacity:0}
+}
+</style>
+
+<h2>Три подхода к реализации</h2>
+<p class="subtitle">Все дают «Slash Drama» — разница в богатстве эффектов и сложности кода</p>
+
+<div class="cards">
+
+  <!-- APPROACH 1 -->
+  <div class="card" data-choice="1" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="demo-stage shaking">
+        <svg class="arc-svg" viewBox="0 0 68 90" xmlns="http://www.w3.org/2000/svg" style="width:68px;height:90px">
+          <path d="M 60 4 Q 6 45 60 86" stroke="#111" stroke-width="2.5" fill="none" stroke-dasharray="9 5" opacity="0.5"/>
+          <path d="M 50 10 Q 3 45 50 80" stroke="#111" stroke-width="1.5" fill="none" opacity="0.22"/>
+        </svg>
+        <!-- speed lines -->
+        <div class="sl" style="width:38px;top:20px;left:5px;transform-origin:right;animation:sl1 3.2s .4s linear infinite"></div>
+        <div class="sl" style="width:30px;top:34px;left:7px;transform-origin:right;animation:sl1 3.2s .43s linear infinite"></div>
+        <div class="sl" style="width:26px;top:70px;left:62px;transform-origin:left;animation:sl2 3.2s .4s linear infinite"></div>
+        <!-- CSS sparks: 10 total (existing 8 + 2 extra) -->
+        <div class="sp-css" style="width:4px;height:4px;border-radius:1px;top:10px;left:58px;animation:sp1 3.2s .48s linear infinite;--dx:12px;--dy:9px"></div>
+        <div class="sp-css" style="width:3px;height:3px;border-radius:50%;top:26px;left:64px;animation:sp1 3.2s .50s linear infinite;--dx:16px;--dy:3px"></div>
+        <div class="sp-css" style="width:4px;height:4px;border-radius:1px;top:42px;left:62px;animation:sp1 3.2s .52s linear infinite;--dx:14px;--dy:-5px"></div>
+        <div class="sp-css" style="width:3px;height:3px;border-radius:50%;top:6px;left:44px;animation:sp1 3.2s .49s linear infinite;--dx:-14px;--dy:10px"></div>
+        <div class="sp-css" style="width:4px;height:4px;border-radius:1px;top:22px;left:34px;animation:sp1 3.2s .51s linear infinite;--dx:-18px;--dy:3px"></div>
+        <!-- S2 sparks -->
+        <div class="sp-css" style="width:4px;height:4px;border-radius:1px;top:68px;left:54px;animation:sp2 3.2s .48s linear infinite;--dx:12px;--dy:-15px"></div>
+        <div class="sp-css" style="width:3px;height:3px;border-radius:50%;top:80px;left:42px;animation:sp2 3.2s .50s linear infinite;--dx:-10px;--dy:-18px"></div>
+        <div class="sp-css" style="width:4px;height:4px;border-radius:1px;top:76px;left:30px;animation:sp2 3.2s .52s linear infinite;--dx:-14px;--dy:-12px"></div>
+        <!-- sword -->
+        <div class="sw-grp">
+          <svg class="sw-svg" viewBox="0 0 28 84" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:84px">
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#111"/><stop offset="45%" stop-color="#555"/><stop offset="55%" stop-color="#111"/></linearGradient></defs>
+            <rect x="11" y="0" width="6" height="50" rx="2" fill="url(#g1)"/>
+            <rect x="2" y="47" width="24" height="4" rx="1.5" fill="#111"/>
+            <rect x="12" y="52" width="4" height="20" rx="1.5" fill="#111"/>
+            <circle cx="14" cy="76" r="5" fill="#111"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>1 — CSS+ / Lean</h3>
+      <p>SVG-дуга на CSS keyframes, 3 дополнительных CSS-искры, тряска через <code>classList</code>. Нет нового риска — всё в рамках текущего стека.</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>+</h4><ul><li>Минимум JS</li><li>Никакого рефактора</li></ul></div>
+        <div class="cons"><h4>−</h4><ul><li>Искры предсказуемые</li><li>Нет flash</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPROACH 2 -->
+  <div class="card" data-choice="2" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="demo-stage shaking">
+        <svg class="arc-svg" viewBox="0 0 68 90" xmlns="http://www.w3.org/2000/svg" style="width:68px;height:90px">
+          <path d="M 60 4 Q 6 45 60 86" stroke="#111" stroke-width="3" fill="none" stroke-dasharray="9 5" opacity="0.6"/>
+        </svg>
+        <div class="sl" style="width:38px;top:20px;left:5px;transform-origin:right;animation:sl1 3.2s .4s linear infinite"></div>
+        <div class="sl" style="width:30px;top:34px;left:7px;transform-origin:right;animation:sl1 3.2s .43s linear infinite"></div>
+        <!-- canvas badge -->
+        <div class="canvas-badge">canvas ✦</div>
+        <!-- simulate scatter sparks with varied sizes/positions -->
+        <div class="sp-css" style="width:6px;height:6px;border-radius:2px;top:8px;left:60px;animation:sp1 3.2s .48s linear infinite;--dx:16px;--dy:12px"></div>
+        <div class="sp-css" style="width:2px;height:2px;border-radius:50%;top:16px;left:66px;animation:sp1 3.2s .49s linear infinite;--dx:22px;--dy:6px"></div>
+        <div class="sp-css" style="width:4px;height:4px;border-radius:1px;top:28px;left:64px;animation:sp1 3.2s .50s linear infinite;--dx:18px;--dy:-2px"></div>
+        <div class="sp-css" style="width:2px;height:5px;border-radius:1px;top:42px;left:62px;animation:sp1 3.2s .51s linear infinite;--dx:12px;--dy:-9px"></div>
+        <div class="sp-css" style="width:5px;height:2px;border-radius:1px;top:6px;left:46px;animation:sp1 3.2s .485s linear infinite;--dx:-20px;--dy:14px"></div>
+        <div class="sp-css" style="width:2px;height:2px;border-radius:50%;top:22px;left:36px;animation:sp1 3.2s .495s linear infinite;--dx:-26px;--dy:4px"></div>
+        <div class="sp-css" style="width:4px;height:4px;border-radius:50%;top:38px;left:28px;animation:sp1 3.2s .505s linear infinite;--dx:-22px;--dy:-6px"></div>
+        <!-- impact flash -->
+        <div class="flash"></div>
+        <!-- sword -->
+        <div class="sw-grp">
+          <svg class="sw-svg" viewBox="0 0 28 84" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:84px">
+            <defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#111"/><stop offset="45%" stop-color="#555"/><stop offset="55%" stop-color="#111"/></linearGradient></defs>
+            <rect x="11" y="0" width="6" height="50" rx="2" fill="url(#g2)"/>
+            <rect x="2" y="47" width="24" height="4" rx="1.5" fill="#111"/>
+            <rect x="12" y="52" width="4" height="20" rx="1.5" fill="#111"/>
+            <circle cx="14" cy="76" r="5" fill="#111"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>2 — Canvas Hybrid ⭐ Рекомендую</h3>
+      <p>CSS для движения меча, <code>&lt;canvas&gt;</code> поверх — для физичных частиц (gravity, scatter). SVG-дуга на CSS. JS-тряска + impact flash.</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>+</h4><ul><li>Органичные искры</li><li>Impact flash</li><li>Меч — без изменений</li></ul></div>
+        <div class="cons"><h4>−</h4><ul><li>~60 строк нового JS</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPROACH 3 -->
+  <div class="card" data-choice="3" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="demo-stage shaking">
+        <svg class="arc-svg" viewBox="0 0 68 90" xmlns="http://www.w3.org/2000/svg" style="width:68px;height:90px">
+          <path d="M 60 4 Q 6 45 60 86" stroke="#111" stroke-width="3" fill="none" stroke-dasharray="9 5" opacity="0.6"/>
+        </svg>
+        <div class="sl" style="width:38px;top:20px;left:5px;transform-origin:right;animation:sl1 3.2s .4s linear infinite"></div>
+        <!-- ghost afterimages -->
+        <div class="ghost g1">
+          <svg viewBox="0 0 28 84" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:84px">
+            <rect x="11" y="0" width="6" height="50" rx="2" fill="#111"/>
+            <rect x="2" y="47" width="24" height="4" rx="1.5" fill="#111"/>
+            <rect x="12" y="52" width="4" height="20" rx="1.5" fill="#111"/>
+            <circle cx="14" cy="76" r="5" fill="#111"/>
+          </svg>
+        </div>
+        <div class="ghost g2">
+          <svg viewBox="0 0 28 84" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:84px">
+            <rect x="11" y="0" width="6" height="50" rx="2" fill="#111"/>
+            <rect x="2" y="47" width="24" height="4" rx="1.5" fill="#111"/>
+            <rect x="12" y="52" width="4" height="20" rx="1.5" fill="#111"/>
+            <circle cx="14" cy="76" r="5" fill="#111"/>
+          </svg>
+        </div>
+        <div class="canvas-badge">canvas ✦✦</div>
+        <!-- sparks -->
+        <div class="sp-css" style="width:6px;height:6px;border-radius:2px;top:8px;left:60px;animation:sp1 3.2s .48s linear infinite;--dx:16px;--dy:12px"></div>
+        <div class="sp-css" style="width:2px;height:2px;border-radius:50%;top:16px;left:66px;animation:sp1 3.2s .49s linear infinite;--dx:22px;--dy:6px"></div>
+        <div class="sp-css" style="width:4px;height:4px;border-radius:1px;top:28px;left:64px;animation:sp1 3.2s .50s linear infinite;--dx:18px;--dy:-2px"></div>
+        <div class="sp-css" style="width:2px;height:2px;border-radius:50%;top:6px;left:46px;animation:sp1 3.2s .485s linear infinite;--dx:-20px;--dy:14px"></div>
+        <div class="sp-css" style="width:4px;height:4px;border-radius:50%;top:22px;left:36px;animation:sp1 3.2s .495s linear infinite;--dx:-26px;--dy:4px"></div>
+        <div class="flash"></div>
+        <!-- motion blur sword -->
+        <div class="sw-grp">
+          <svg class="sw-blur" viewBox="0 0 28 84" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:84px">
+            <defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#111"/><stop offset="45%" stop-color="#555"/><stop offset="55%" stop-color="#111"/></linearGradient></defs>
+            <rect x="11" y="0" width="6" height="50" rx="2" fill="url(#g3)"/>
+            <!-- fuller -->
+            <rect x="13.5" y="1" width="1.5" height="46" rx="0.75" fill="rgba(255,255,255,0.22)"/>
+            <rect x="2" y="47" width="24" height="4" rx="1.5" fill="#111"/>
+            <rect x="12" y="52" width="4" height="20" rx="1.5" fill="#111"/>
+            <ellipse cx="14" cy="76" rx="5" ry="4.5" fill="#111"/>
+          </svg>
+          <div class="glint-wrap"><div class="glint-ray"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>3 — Full Canvas</h3>
+      <p>Детальный SVG + CSS blur на меч во время удара (motion blur) + afterimage-дубли + canvas-частицы + glint + flash. Максимум.</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>+</h4><ul><li>Самое зрелищное</li><li>Motion blur</li><li>Afterimage-тени</li></ul></div>
+        <div class="cons"><h4>−</h4><ul><li>~150 строк нового JS</li><li>Сложнее под dark theme</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+</div>

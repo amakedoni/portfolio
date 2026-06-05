@@ -1,0 +1,338 @@
+<style>
+  :root {
+    --bg: #fafafa;
+    --ink: #111;
+    --line: #d0d0d0;
+    --display: 'Pirata One', serif;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Poppins', sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);padding:24px}
+  h2{font-family:var(--display);font-size:2.4rem;letter-spacing:-1px;margin-bottom:4px}
+  .subtitle{color:#888;font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.18em;margin-bottom:2rem}
+
+  .demo-row{display:flex;align-items:center;gap:40px;padding:32px 28px}
+  .demo-title{flex:1;min-width:0}
+  .demo-title h1{font-family:var(--display);font-size:clamp(2rem,4.5vw,3.6rem);line-height:.95;letter-spacing:-1.5px}
+  .demo-title h1 .row{display:block}
+  .demo-title h1 .accent{display:inline-block;background:linear-gradient(45deg,#111,#555,#111);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 12s ease infinite}
+  @keyframes shift{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+  .demo-symbol{flex-shrink:0;width:130px;height:140px;display:flex;align-items:center;justify-content:center;position:relative}
+  .demo-label{font-family:var(--mono);font-size:.7rem;color:#888;text-transform:uppercase;letter-spacing:.15em;margin-bottom:0}
+
+  .option{border:2px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .25s ease;margin-bottom:16px;background:var(--bg)}
+  .option:hover{border-color:var(--ink);box-shadow:6px 6px 0 1px rgba(0,0,0,.18);transform:translate(-2px,-2px)}
+  .option.selected{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+  .option.selected .demo-label{color:var(--bg);opacity:.65}
+  .option.selected .desc{color:var(--bg);opacity:.8}
+  .desc{font-size:.82rem;color:#555;line-height:1.65;padding:0 28px 24px;max-width:520px}
+
+  /* ====== A: SARISSA v2 ====== */
+  .sarissa-container{position:relative;width:40px;height:130px}
+  .sarissa-shaft{
+    position:absolute;width:4px;height:100%;background:var(--ink);left:18px;bottom:0;
+    border-radius:2px;transform-origin:bottom center;
+    animation:sarissaShaft 2.8s cubic-bezier(.16,1,.3,1) forwards, sarissaBreathe 4s 3s ease-in-out infinite;
+  }
+  @keyframes sarissaShaft{
+    0%{transform:scaleY(0);opacity:0}
+    30%{transform:scaleY(0);opacity:0}
+    60%{transform:scaleY(1.08);opacity:1}
+    75%{transform:scaleY(.96)}
+    100%{transform:scaleY(1)}
+  }
+  @keyframes sarissaBreathe{
+    0%,100%{filter:drop-shadow(3px 3px 0 rgba(0,0,0,.2))}
+    50%{filter:drop-shadow(5px 5px 0 rgba(0,0,0,.35))}
+  }
+  .sarissa-head{
+    position:absolute;top:-8px;left:10px;
+    width:0;height:0;
+    border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:26px solid var(--ink);
+    opacity:0;
+    animation:sarissaTip .7s 1.8s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+  @keyframes sarissaTip{
+    0%{opacity:0;transform:translateY(-20px) scale(.5)}
+    60%{opacity:1;transform:translateY(2px) scale(1.1)}
+    100%{opacity:1;transform:translateY(0) scale(1)}
+  }
+  .sarissa-crosspiece{
+    position:absolute;top:22px;left:2px;
+    width:36px;height:3px;background:var(--ink);border-radius:2px;
+    opacity:0;
+    animation:sarissaCross .5s 2.1s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+  @keyframes sarissaCross{
+    0%{opacity:0;transform:scaleX(0)}
+    100%{opacity:1;transform:scaleX(1)}
+  }
+  .sarissa-spark{
+    position:absolute;width:5px;height:5px;background:var(--ink);border-radius:1px;opacity:0;
+  }
+  .sarissa-spark:nth-child(4){top:-2px;left:30px;animation:sparkFly .7s 2.1s ease-out forwards}
+  .sarissa-spark:nth-child(5){top:12px;left:-8px;animation:sparkFly .6s 2.2s ease-out forwards}
+  .sarissa-spark:nth-child(6){top:30px;left:36px;animation:sparkFly .8s 2.3s ease-out forwards}
+  @keyframes sparkFly{
+    0%{opacity:1;transform:translate(0,0) scale(1)}
+    100%{opacity:0;transform:translate(var(--sx,12px),var(--sy,-15px)) scale(0)}
+  }
+
+  /* ====== B: VERGINA SUN v2 ====== */
+  .vergina-container{position:relative;width:110px;height:110px}
+  .vergina-center{
+    position:absolute;width:14px;height:14px;background:var(--ink);border-radius:50%;
+    top:48px;left:48px;z-index:10;
+    animation:vgCore .7s .5s cubic-bezier(.34,1.56,.64,1) forwards, vgCorePulse 2.2s 1.4s ease-in-out infinite;
+    opacity:0;
+  }
+  @keyframes vgCore{
+    0%{opacity:0;transform:scale(0)}
+    100%{opacity:1;transform:scale(1)}
+  }
+  @keyframes vgCorePulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(0,0,0,.3)}
+    50%{box-shadow:0 0 0 8px rgba(0,0,0,.06)}
+  }
+  .vg-ray{
+    position:absolute;width:3px;height:38px;background:var(--ink);left:53px;top:4px;
+    border-radius:2px;transform-origin:center 51px;
+    opacity:0;
+  }
+  .vg-ray{animation:vgRayPop .45s var(--rd,0s) cubic-bezier(.34,1.56,.64,1) forwards}
+  @keyframes vgRayPop{
+    0%{opacity:0;transform:rotate(var(--ra,0deg)) scaleY(0)}
+    100%{opacity:1;transform:rotate(var(--ra,0deg)) scaleY(1)}
+  }
+  .vergina-container.spin{animation:vgSpin 24s 2.5s linear infinite}
+  @keyframes vgSpin{
+    0%{transform:rotate(0deg)}
+    100%{transform:rotate(360deg)}
+  }
+
+  /* ====== C: SHIELD v2 ====== */
+  .shield-container{position:relative;width:110px;height:110px}
+  .shield-outer{
+    position:absolute;inset:0;border-radius:50%;border:4px solid var(--ink);
+    animation:shieldEntry .9s cubic-bezier(.16,1,.3,1) forwards, shieldOuterPulse 3.5s 1.2s ease-in-out infinite;
+    opacity:0;
+  }
+  @keyframes shieldEntry{
+    0%{opacity:0;transform:scale(.3) rotate(-30deg)}
+    60%{opacity:1;transform:scale(1.08) rotate(3deg)}
+    100%{opacity:1;transform:scale(1) rotate(0deg)}
+  }
+  @keyframes shieldOuterPulse{
+    0%,100%{box-shadow:4px 4px 0 2px rgba(0,0,0,.15)}
+    50%{box-shadow:8px 8px 0 3px rgba(0,0,0,.28)}
+  }
+  .shield-ring2{
+    position:absolute;inset:16px;border-radius:50%;border:2.5px solid var(--ink);
+    animation:shieldRingIn .6s .4s cubic-bezier(.34,1.56,.64,1) forwards, shieldRingSpin 6s 1.5s linear infinite;
+    opacity:0;
+  }
+  @keyframes shieldRingIn{
+    0%{opacity:0;transform:scale(.5)}
+    100%{opacity:1;transform:scale(1)}
+  }
+  @keyframes shieldRingSpin{
+    from{transform:rotate(0deg)}
+    to{transform:rotate(360deg)}
+  }
+  .shield-core{
+    position:absolute;inset:34px;border-radius:50%;background:var(--ink);
+    animation:shieldCoreIn .5s .7s cubic-bezier(.34,1.56,.64,1) forwards, shieldCoreBeat 2s 1.4s ease-in-out infinite;
+    opacity:0;
+  }
+  @keyframes shieldCoreIn{
+    0%{opacity:0;transform:scale(0)}
+    100%{opacity:1;transform:scale(1)}
+  }
+  @keyframes shieldCoreBeat{
+    0%,100%{transform:scale(1)}
+    30%{transform:scale(.82)}
+    60%{transform:scale(1.06)}
+  }
+  .shield-notch{
+    position:absolute;background:var(--bg);z-index:2;opacity:0;
+    animation:notchIn .35s .9s ease-out forwards;
+  }
+  .shield-notch.n1{width:18px;height:3px;top:48px;left:8px}
+  .shield-notch.n2{width:18px;height:3px;top:48px;right:8px}
+  .shield-notch.n3{width:3px;height:18px;top:8px;left:48px}
+  .shield-notch.n4{width:3px;height:18px;bottom:8px;left:48px}
+  @keyframes notchIn{
+    0%{opacity:0;transform:scale(0)}
+    100%{opacity:1;transform:scale(1)}
+  }
+
+  /* ====== D: SWORD v2 ====== */
+  .sword-container{position:relative;width:40px;height:130px}
+  .sword-blade{
+    position:absolute;width:10px;height:78px;background:var(--ink);left:15px;top:0;
+    border-radius:3px 3px 0 0;
+    animation:swordFall 2.5s cubic-bezier(.16,1,.3,1) forwards, swordGlint 3s 2.8s ease-in-out infinite;
+  }
+  @keyframes swordFall{
+    0%{opacity:0;transform:translateY(-60px) rotate(-45deg)}
+    35%{opacity:0;transform:translateY(-60px) rotate(-45deg)}
+    55%{opacity:1;transform:translateY(4px) rotate(5deg)}
+    70%{transform:translateY(-2px) rotate(-2deg)}
+    85%{transform:translateY(1px) rotate(1deg)}
+    100%{opacity:1;transform:translateY(0) rotate(0deg)}
+  }
+  @keyframes swordGlint{
+    0%,100%{
+      background:linear-gradient(180deg,var(--ink) 0%,var(--ink) 30%,#444 45%,var(--ink) 55%,var(--ink) 100%);
+      filter:drop-shadow(3px 3px 0 rgba(0,0,0,.2));
+    }
+    50%{
+      background:linear-gradient(180deg,var(--ink) 0%,var(--ink) 20%,#666 35%,var(--ink) 45%,var(--ink) 100%);
+      filter:drop-shadow(5px 5px 0 rgba(0,0,0,.35));
+    }
+  }
+  .sword-guard{
+    position:absolute;width:32px;height:5px;background:var(--ink);left:4px;top:74px;
+    border-radius:2px;
+    animation:swordGuard .5s 1.6s cubic-bezier(.34,1.56,.64,1) forwards;
+    opacity:0;
+  }
+  @keyframes swordGuard{
+    0%{opacity:0;transform:scaleX(0)}
+    100%{opacity:1;transform:scaleX(1)}
+  }
+  .sword-grip{
+    position:absolute;width:8px;height:34px;background:var(--ink);left:16px;top:81px;
+    border-radius:3px;
+    animation:swordGrip .4s 1.8s ease-out forwards;
+    opacity:0;
+  }
+  @keyframes swordGrip{
+    0%{opacity:0;transform:translateY(-10px)}
+    100%{opacity:1;transform:translateY(0)}
+  }
+  .sword-pommel{
+    position:absolute;width:12px;height:12px;background:var(--ink);left:14px;top:116px;
+    border-radius:50%;
+    animation:swordGrip .4s 2s ease-out forwards;
+    opacity:0;
+  }
+  /* particles */
+  .sword-particle{
+    position:absolute;width:4px;height:4px;background:var(--ink);opacity:0;
+  }
+  .sword-particle:nth-child(5){top:10px;left:2px;animation:swordPart .6s 1.8s ease-out forwards}
+  .sword-particle:nth-child(6){top:20px;left:34px;animation:swordPart .7s 1.9s ease-out forwards}
+  .sword-particle:nth-child(7){top:50px;left:-4px;animation:swordPart .55s 2s ease-out forwards}
+  @keyframes swordPart{
+    0%{opacity:1;transform:translate(0,0) rotate(0deg)}
+    100%{opacity:0;transform:translate(var(--px,10px),var(--py,-12px)) rotate(var(--pr,90deg))}
+  }
+
+  .label-row{display:flex;align-items:center;gap:12px;padding:0 28px 12px}
+  .label-row .tag{font-family:var(--mono);font-size:.62rem;padding:3px 8px;border:1.5px solid var(--ink);border-radius:3px;letter-spacing:.08em}
+  .option.selected .label-row .tag{border-color:var(--bg);color:var(--bg)}
+</style>
+
+<h2>Hero Symbol v2 — Премиум-анимации</h2>
+<p class="subtitle">Полностью переписанные анимации: bounce easing, каскады, частицы, многоступенчатые keyframes</p>
+
+<!-- A: SARISSA -->
+<div class="option" data-choice="sarissa" onclick="toggleSelect(this)">
+  <div class="label-row"><span class="tag">A</span><span class="demo-label">Сарисса — копьё македонской фаланги</span></div>
+  <div class="demo-row">
+    <div class="demo-title">
+      <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+    </div>
+    <div class="demo-symbol">
+      <div class="sarissa-container">
+        <div class="sarissa-shaft"></div>
+        <div class="sarissa-head"></div>
+        <div class="sarissa-crosspiece"></div>
+        <div class="sarissa-spark" style="--sx:14px;--sy:-18px"></div>
+        <div class="sarissa-spark" style="--sx:-10px;--sy:-14px"></div>
+        <div class="sarissa-spark" style="--sx:8px;--sy:-22px"></div>
+      </div>
+    </div>
+  </div>
+  <p class="desc">Древко вырастает с bounce-физикой (overshoot → settle). Наконечник влетает сверху с упругим easing. Перекладина раскрывается горизонтально. Искры разлетаются при ударе. После входа — дыхание тени.</p>
+</div>
+
+<!-- B: VERGINA SUN -->
+<div class="option" data-choice="vergina" onclick="toggleSelect(this)">
+  <div class="label-row"><span class="tag">B</span><span class="demo-label">Вергинская звезда — 16 лучей</span></div>
+  <div class="demo-row">
+    <div class="demo-title">
+      <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+    </div>
+    <div class="demo-symbol">
+      <div class="vergina-container spin">
+        <div class="vergina-center"></div>
+        <div class="vg-ray" style="--ra:0deg;--rd:0s"></div>
+        <div class="vg-ray" style="--ra:22.5deg;--rd:.06s"></div>
+        <div class="vg-ray" style="--ra:45deg;--rd:.12s"></div>
+        <div class="vg-ray" style="--ra:67.5deg;--rd:.18s"></div>
+        <div class="vg-ray" style="--ra:90deg;--rd:.24s"></div>
+        <div class="vg-ray" style="--ra:112.5deg;--rd:.3s"></div>
+        <div class="vg-ray" style="--ra:135deg;--rd:.36s"></div>
+        <div class="vg-ray" style="--ra:157.5deg;--rd:.42s"></div>
+        <div class="vg-ray" style="--ra:180deg;--rd:.05s"></div>
+        <div class="vg-ray" style="--ra:202.5deg;--rd:.11s"></div>
+        <div class="vg-ray" style="--ra:225deg;--rd:.17s"></div>
+        <div class="vg-ray" style="--ra:247.5deg;--rd:.23s"></div>
+        <div class="vg-ray" style="--ra:270deg;--rd:.29s"></div>
+        <div class="vg-ray" style="--ra:292.5deg;--rd:.35s"></div>
+        <div class="vg-ray" style="--ra:315deg;--rd:.41s"></div>
+        <div class="vg-ray" style="--ra:337.5deg;--rd:.47s"></div>
+      </div>
+    </div>
+  </div>
+  <p class="desc">16 лучей выстреливают каскадом с интервалом 60ms, каждый с упругим easing (overshoot). Центр появляется с bounce-масштабированием и пульсирует теневой волной. Вся звезда медленно вращается (24s).</p>
+</div>
+
+<!-- C: SHIELD -->
+<div class="option" data-choice="shield" onclick="toggleSelect(this)">
+  <div class="label-row"><span class="tag">C</span><span class="demo-label">Македонский щит — оборона и мощь</span></div>
+  <div class="demo-row">
+    <div class="demo-title">
+      <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+    </div>
+    <div class="demo-symbol">
+      <div class="shield-container">
+        <div class="shield-outer"></div>
+        <div class="shield-ring2"></div>
+        <div class="shield-core"></div>
+        <div class="shield-notch n1"></div>
+        <div class="shield-notch n2"></div>
+        <div class="shield-notch n3"></div>
+        <div class="shield-notch n4"></div>
+      </div>
+    </div>
+  </div>
+  <p class="desc">Щит влетает с вращением и масштабированием (совмещённый вход). Внешнее кольцо пульсирует тенью. Среднее кольцо вращается против часовой (контраст с внешним). Ядро «бьётся» как сердце. Четыре засечки проявляются каскадом.</p>
+</div>
+
+<!-- D: SWORD -->
+<div class="option" data-choice="sword" onclick="toggleSelect(this)">
+  <div class="label-row"><span class="tag">D</span><span class="demo-label">Ксифос — короткий меч</span></div>
+  <div class="demo-row">
+    <div class="demo-title">
+      <h1><span class="row">Engineering</span><span class="row"><span class="accent">tomorrow's</span></span><span class="row">interfaces.</span></h1>
+    </div>
+    <div class="demo-symbol">
+      <div class="sword-container">
+        <div class="sword-blade"></div>
+        <div class="sword-guard"></div>
+        <div class="sword-grip"></div>
+        <div class="sword-pommel"></div>
+        <div class="sword-particle" style="--px:12px;--py:-14px;--pr:45deg"></div>
+        <div class="sword-particle" style="--px:-8px;--py:-18px;--pr:-30deg"></div>
+        <div class="sword-particle" style="--px:6px;--py:-20px;--pr:60deg"></div>
+      </div>
+    </div>
+  </div>
+  <p class="desc">Меч «падает» сверху с вращением, втыкается с физикой отскока (4 фазы settle). Гарда раскрывается в стороны, рукоять и навершие выезжают снизу. После входа — анимированный глинт (блик) бежит по лезвию каждые 3 секунды.</p>
+</div>
+
+<p style="color:#888;font-size:.82rem;margin-top:12px;font-family:var(--mono);padding:0 28px">Обнови страницу (F5) чтобы перезапустить анимации. Кликни по варианту для выбора.</p>
