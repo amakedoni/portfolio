@@ -671,6 +671,16 @@ body.dark-theme .sword-svg-el stop:nth-child(3){stop-color:var(--ink)}
 @keyframes ssl5{0%,76%{opacity:0;transform:rotate(-68deg) scaleX(0)}84%{opacity:.3;transform:rotate(-68deg) scaleX(1)}92%{opacity:0;transform:rotate(-68deg) scaleX(0)}100%{opacity:0;transform:rotate(-68deg) scaleX(0)}}
 @keyframes ssl6{0%,76%{opacity:0;transform:rotate(-74deg) scaleX(0)}84%{opacity:.3;transform:rotate(-74deg) scaleX(1)}92%{opacity:0;transform:rotate(-74deg) scaleX(0)}100%{opacity:0;transform:rotate(-74deg) scaleX(0)}}
 
+/* arc trails */
+@keyframes arcS1{0%,11%{stroke-dashoffset:250;opacity:0}14%{stroke-dashoffset:250;opacity:.5}21%{stroke-dashoffset:0;opacity:.5}26%{stroke-dashoffset:0;opacity:0}100%{stroke-dashoffset:250;opacity:0}}
+@keyframes arcS1soft{0%,11%{stroke-dashoffset:250;opacity:0}14%{stroke-dashoffset:250;opacity:.22}21%{stroke-dashoffset:0;opacity:.22}26%{stroke-dashoffset:0;opacity:0}100%{stroke-dashoffset:250;opacity:0}}
+@keyframes arcS2{0%,77%{stroke-dashoffset:250;opacity:0}80%{stroke-dashoffset:250;opacity:.5}87%{stroke-dashoffset:0;opacity:.5}92%{stroke-dashoffset:0;opacity:0}100%{stroke-dashoffset:250;opacity:0}}
+@keyframes arcS2soft{0%,77%{stroke-dashoffset:250;opacity:0}80%{stroke-dashoffset:250;opacity:.22}87%{stroke-dashoffset:0;opacity:.22}92%{stroke-dashoffset:0;opacity:0}100%{stroke-dashoffset:250;opacity:0}}
+.sword-arc-s1 .arc-main{animation:arcS1 8s 1.6s linear infinite}
+.sword-arc-s1 .arc-soft{animation:arcS1soft 8s 1.6s linear infinite}
+.sword-arc-s2 .arc-main{animation:arcS2 8s 1.6s linear infinite}
+.sword-arc-s2 .arc-soft{animation:arcS2soft 8s 1.6s linear infinite}
+
 /* sword sparks */
 .sword-spark{position:absolute;background:var(--ink);pointer-events:none;z-index:5;opacity:0}
 .sword-spark.sq{width:5px;height:5px;border-radius:1px}
@@ -863,6 +873,14 @@ body.dark-theme .sword-svg-el stop:nth-child(3){stop-color:var(--ink)}
       <div class="sword-stage" aria-hidden="true">
         <div class="sword-sl sl1"></div><div class="sword-sl sl2"></div><div class="sword-sl sl3"></div>
         <div class="sword-sl sl4"></div><div class="sword-sl sl5"></div><div class="sword-sl sl6"></div>
+        <svg class="sword-arc sword-arc-s1" viewBox="0 0 150 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:1">
+          <path class="arc-main" d="M 25 18 Q 95 88 138 158" stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="250" stroke-dashoffset="250"/>
+          <path class="arc-soft" d="M 18 26 Q 86 92 128 162" stroke="var(--ink)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="250" stroke-dashoffset="250"/>
+        </svg>
+        <svg class="sword-arc sword-arc-s2" viewBox="0 0 150 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:1">
+          <path class="arc-main" d="M 125 152 Q 55 82 12 12" stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="250" stroke-dashoffset="250"/>
+          <path class="arc-soft" d="M 132 158 Q 64 88 22 18" stroke="var(--ink)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="250" stroke-dashoffset="250"/>
+        </svg>
         <div class="sword-group">
           <div class="forge-shell">
             <svg class="sword-svg-el" viewBox="0 0 44 130" xmlns="http://www.w3.org/2000/svg">
