@@ -92,17 +92,6 @@ body.dark-theme{
   --line-soft:#2a2a2a;
 }
 
-/* subtle plus-pattern background like original */
-.bg-pattern{
-  position:fixed;inset:0;z-index:-2;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='30' y1='25' x2='30' y2='35' stroke='%23111111' stroke-width='1'/%3E%3Cline x1='25' y1='30' x2='35' y2='30' stroke='%23111111' stroke-width='1'/%3E%3C/svg%3E");
-  background-size:60px 60px;opacity:.10;
-}
-body.dark-theme .bg-pattern{
-  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='30' y1='25' x2='30' y2='35' stroke='%23f5f5f5' stroke-width='1'/%3E%3Cline x1='25' y1='30' x2='35' y2='30' stroke='%23f5f5f5' stroke-width='1'/%3E%3C/svg%3E");
-  opacity:.14;
-}
-
 .wrap{width:90%;max-width:1280px;margin:0 auto;padding:0 20px}
 .skip-link{
   position:absolute;top:-44px;left:0;background:var(--ink);color:var(--bg);
@@ -607,35 +596,16 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   .reveal{opacity:1;transform:none}
 }
 
-/* ====== CUSTOM CURSOR ====== */
-.cursor-dot{
-  position:fixed;top:0;left:0;z-index:9999;
-  width:6px;height:6px;margin-left:-3px;margin-top:-3px;
-  background:var(--ink);border-radius:50%;
-  pointer-events:none;will-change:transform;
-  transition:width .25s ease,height .25s ease,margin .25s ease,background .25s ease;
+/* pixel grid cursor trail overlay */
+.cursor-pixel-overlay{
+  position:fixed;inset:0;z-index:9990;pointer-events:none;
 }
-.cursor-ring{
-  position:fixed;top:0;left:0;z-index:9998;
-  width:28px;height:28px;margin-left:-14px;margin-top:-14px;
-  border:1.5px solid var(--ink);border-radius:50%;
-  pointer-events:none;will-change:transform;
-  transition:width .3s ease,height .3s ease,margin .3s ease,border-color .3s ease,opacity .25s ease;
+.cursor-pixel-canvas{
+  display:block;width:100%;height:100%;
+  image-rendering:pixelated;image-rendering:crisp-edges;
 }
-/* hover over interactive */
-.cursor-dot.hover{
-  width:10px;height:10px;margin-left:-5px;margin-top:-5px;
-  background:var(--bg);border:2px solid var(--ink);
-}
-.cursor-ring.hover{
-  width:48px;height:48px;margin-left:-24px;margin-top:-24px;
-  border-width:2px;border-color:var(--ink-2);
-}
-/* hidden states */
-.cursor-dot.hidden,.cursor-ring.hidden{opacity:0}
-/* hide on touch */
 @media (pointer:coarse){
-  .cursor-dot,.cursor-ring{display:none}
+  .cursor-pixel-overlay{display:none}
 }
 
 /* responsive */
@@ -682,9 +652,6 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
 </head>
 <body>
 
-<div class="cursor-dot"></div>
-<div class="cursor-ring"></div>
-
 <a href="#hero" class="skip-link">Skip to content</a>
 
 <div class="loading-screen">
@@ -695,7 +662,6 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   </div>
 </div>
 
-<div class="bg-pattern"></div>
 
 <header>
   <div class="wrap">
@@ -1064,81 +1030,6 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
 </footer>
 
 <script>
-/* ====== CUSTOM CURSOR ====== */
-(function(){
-  const dot = document.querySelector('.cursor-dot');
-  const ring = document.querySelector('.cursor-ring');
-  if (!dot || !ring) return;
-
-  /* bail on touch */
-  if (window.matchMedia('(pointer:coarse)').matches) {
-    dot.style.display = 'none';
-    ring.style.display = 'none';
-    return;
-  }
-
-  const INTERACTIVE = 'a, button, .btn, .tab, .sk, .chip, .icon-btn, .pc-arrow, .ch, .foot-links a, .nav-links a, .resume-toggle, input, textarea, .mobile-menu-toggle, .scroll-to-top, .lang-toggle, .theme-toggle';
-  let targetX = 0, targetY = 0;
-  let ringX = 0, ringY = 0;
-  let dotX = 0, dotY = 0;
-  const LERP = 0.12; /* ring follow speed — lower = more lag */
-
-  function setHidden(h) {
-    const a = h ? 'add' : 'remove';
-    dot.classList[a]('hidden');
-    ring.classList[a]('hidden');
-  }
-
-  document.addEventListener('mousemove', (e) => {
-    targetX = e.clientX;
-    targetY = e.clientY;
-    /* dot snaps immediately on first move after hidden */
-    if (dot.classList.contains('hidden')) {
-      dotX = targetX; ringX = targetX;
-      dotY = targetY; ringY = targetY;
-      setHidden(false);
-    }
-  });
-
-  document.addEventListener('mouseleave', () => setHidden(true));
-  document.addEventListener('mouseenter', (e) => {
-    targetX = e.clientX;
-    targetY = e.clientY;
-  });
-
-  /* hover detection via event delegation */
-  document.addEventListener('mouseover', (e) => {
-    const el = e.target.closest(INTERACTIVE);
-    if (el) {
-      dot.classList.add('hover');
-      ring.classList.add('hover');
-    }
-  });
-  document.addEventListener('mouseout', (e) => {
-    const el = e.target.closest(INTERACTIVE);
-    if (el) {
-      dot.classList.remove('hover');
-      ring.classList.remove('hover');
-    }
-  });
-
-  function animate() {
-    /* dot: direct follow */
-    dotX += (targetX - dotX) * 0.35;
-    dotY += (targetY - dotY) * 0.35;
-    dot.style.transform = `translate(${dotX}px,${dotY}px)`;
-
-    /* ring: slow lag */
-    ringX += (targetX - ringX) * LERP;
-    ringY += (targetY - ringY) * LERP;
-    ring.style.transform = `translate(${ringX}px,${ringY}px)`;
-
-    requestAnimationFrame(animate);
-  }
-
-  requestAnimationFrame(animate);
-})();
-
 // UI toggles (language + theme)
 const uiMap = {
   en: {
@@ -1546,5 +1437,6 @@ if (header) {
   toggleHeaderState();
 }
 </script>
+<script src="js/cursor.js" defer></script>
 </body>
 </html>
