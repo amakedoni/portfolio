@@ -675,6 +675,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#projects">Work</a></li>
+        <li><a href="#skills">Stack</a></li>
         <li><a href="#education">Education</a></li>
         <li class="nav-item resume-dropdown" role="menu">
           <button class="resume-toggle" aria-haspopup="true" aria-expanded="false">Resume</button>
@@ -683,7 +684,6 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
             <li role="none"><a href="resume.docx" download="Македонский_Александр_резюме.docx" role="menuitem">DOCX</a></li>
           </ul>
         </li>
-        <li><a href="#skills">Stack</a></li>
         <li><a href="#contact">Contact</a></li>
         <li class="mobile-controls">
           <button class="icon-btn lang-toggle" aria-label="Language"><span class="lang-text">EN</span></button>
@@ -998,11 +998,11 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
         </div>
       </div>
 
-      <form class="cform reveal" onsubmit="event.preventDefault(); const b=this.querySelector('button'); const lang=(localStorage.getItem('language')||'en'); updateButtonTextWithIcon(b,(uiMap[lang]||uiMap.en).contactSubmitDone);">
+      <form class="cform reveal" id="contact-form">
         <span class="cform-lbl">New message</span>
-        <input type="text" placeholder="Your name" required />
-        <input type="email" placeholder="Your email" required />
-        <textarea placeholder="Tell me about your project — what are you building, when do you need it, and what does success look like?" required></textarea>
+        <input type="text" name="name" autocomplete="name" placeholder="Your name" required />
+        <input type="email" name="email" autocomplete="email" placeholder="Your email" required />
+        <textarea name="message" placeholder="Tell me about your project — what are you building, when do you need it, and what does success look like?" required></textarea>
         <button type="submit">Send message <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </form>
     </div>
@@ -1033,7 +1033,9 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
 // UI toggles (language + theme)
 const uiMap = {
   en: {
-    nav: ['About', 'Work', 'Education', 'Stack', 'Contact'],
+    pageTitle: 'Alexander Makedonskiy — Full-Stack & ML Engineer',
+    metaDescription: 'Full-stack developer and ML student building offline-first PWAs, backend services, and machine-learning-powered tools.',
+    nav: ['About', 'Work', 'Stack', 'Education', 'Contact'],
     resumeLabel: 'Resume',
     menuAria: 'Menu',
     languageAria: 'Switch language',
@@ -1097,14 +1099,16 @@ const uiMap = {
     formEmail: 'Your email',
     formMessage: 'Tell me about your project — what are you building, when do you need it, and what does success look like?',
     contactSubmit: 'Send message',
-    contactSubmitDone: 'Sent ✓',
+    contactSubmitDone: 'Opening email...',
     ariaScrollTop: 'Back to top',
     backToTop: 'Back to top',
     footerMeta: 'Crafted in Moscow · v2026.1',
     roles: ['Full-Stack Engineer','ML Practitioner','PWA Specialist','Backend Architect','Mobile Builder']
   },
   ru: {
-    nav: ['Обо мне', 'Проекты', 'Образование', 'Стек', 'Контакты'],
+    pageTitle: 'Александр Македонский — Full-Stack & ML Engineer',
+    metaDescription: 'Студент МАИ, Full-Stack разработчик. Специализируюсь на Python, FastAPI, React Native и машинном обучении.',
+    nav: ['Обо мне', 'Проекты', 'Стек', 'Образование', 'Контакты'],
     resumeLabel: 'Резюме',
     menuAria: 'Меню',
     languageAria: 'Переключить язык',
@@ -1168,7 +1172,7 @@ const uiMap = {
     formEmail: 'Ваш email',
     formMessage: 'Расскажите о проекте — что делаете, какие сроки и какой результат нужен?',
     contactSubmit: 'Отправить',
-    contactSubmitDone: 'Отправлено ✓',
+    contactSubmitDone: 'Открываю почту...',
     ariaScrollTop: 'Вернуться наверх',
     backToTop: 'Наверх',
     footerMeta: 'Сделано в Москве · v2026.1',
@@ -1187,6 +1191,10 @@ function updateButtonTextWithIcon(button, text) {
 
 function setText(el, value, asHtml = false) {
   if (!el || value == null) return;
+  if (el.matches?.('input, textarea')) {
+    el.placeholder = value;
+    return;
+  }
   if (asHtml) el.innerHTML = value;
   else el.textContent = value;
 }
@@ -1198,7 +1206,14 @@ function applyLanguage(lang) {
 
   document.querySelectorAll('.nav-links > li > a').forEach((el, i) => setText(el, t.nav[i]));
   setText(document.querySelector('.resume-toggle'), t.resumeLabel);
+  document.title = t.pageTitle || t.heroTitle?.join(' ') || document.title;
+  document.querySelector('meta[name="description"]')?.setAttribute('content', t.metaDescription || document.querySelector('meta[name="description"]')?.content || '');
   setText(document.querySelector('.hero-meta span:nth-child(2)'), t.heroMeta);
+  document.querySelectorAll('#hero h1 .row').forEach((el, i) => {
+    if (!t.heroTitle?.[i]) return;
+    if (i === 1) el.innerHTML = `<span class="accent">${t.heroTitle[i]}</span>`;
+    else el.textContent = t.heroTitle[i];
+  });
   setText(document.querySelector('.hero-lede'), t.heroLede, true);
   setText(document.querySelector('.role-rotator .lbl'), t.currentLabel);
 
@@ -1210,6 +1225,7 @@ function applyLanguage(lang) {
 
   const aboutPs = document.querySelectorAll('.about-prose p');
   setText(aboutPs[0], t.aboutP1, true);
+  setText(document.querySelector('.pull-quote'), t.aboutQuote);
   setText(aboutPs[1], t.aboutP2, true);
   setText(aboutPs[2], t.aboutP3, true);
   setText(document.querySelector('.profile .corner'), t.portrait);
@@ -1217,6 +1233,7 @@ function applyLanguage(lang) {
   document.querySelectorAll('.stats .stat .l').forEach((el, i) => setText(el, t.stats[i]));
 
   setText(document.querySelector('.pf-tag'), t.featuredTag);
+  setText(document.querySelector('.pf-info h3'), t.finlyTitle);
   setText(document.querySelector('.pf-role'), t.finlyRole);
   setText(document.querySelector('.pf-desc'), t.finlyDesc);
   setText(document.querySelector('.pf-ci'), t.finlyCi);
@@ -1225,17 +1242,35 @@ function applyLanguage(lang) {
   document.querySelectorAll('.app-tx .tx .c').forEach((el, i) => setText(el, t.txMeta[i]));
 
   document.querySelectorAll('.proj-grid .pc-year').forEach((el, i) => setText(el, t.projectYears[i]));
+  document.querySelectorAll('.proj-grid .pc-title').forEach((el, i) => setText(el, t.projectTitles[i]));
   document.querySelectorAll('.proj-grid .pc-role').forEach((el, i) => setText(el, t.projectRoles[i]));
   document.querySelectorAll('.proj-grid .pc-desc').forEach((el, i) => setText(el, t.projectDescs[i]));
+  const recognitionTitle = document.querySelector('.ach .ach-t');
+  if (recognitionTitle) {
+    const meta = recognitionTitle.querySelector('.ach-y');
+    recognitionTitle.firstChild.nodeValue = t.recognitionTitle;
+    if (meta && !recognitionTitle.contains(meta)) recognitionTitle.appendChild(meta);
+  }
   setText(document.querySelector('.ach .ach-y'), t.recognitionMeta);
   document.querySelectorAll('.ach-list .ach-item > span:last-child').forEach((el, i) => setText(el, t.recognitionItems[i]));
 
   document.querySelectorAll('.skills-tabs .tab').forEach((el, i) => setText(el, t.skillTabs[i]));
+  document.querySelectorAll('.skcat .skcat-l').forEach((el, i) => {
+    const num = el.querySelector('.num')?.outerHTML || '';
+    el.innerHTML = `${t.skillCats[i] || el.textContent}${num}`;
+  });
 
   document.querySelectorAll('.ecard .eperiod').forEach((el, i) => setText(el, t.educationPeriods[i]));
+  document.querySelectorAll('.ecard .edegree').forEach((el, i) => setText(el, t.educationDegrees[i]));
   document.querySelectorAll('.ecard .einst').forEach((el, i) => setText(el, t.educationInst[i]));
   document.querySelectorAll('.ecard .edesc').forEach((el, i) => setText(el, t.educationDesc[i]));
 
+  document.querySelectorAll('.s-head').forEach((head, i) => {
+    setText(head.querySelector('.s-num'), t.sectionNums[i]);
+    setText(head.querySelector('.s-title'), t.sectionTitles[i]);
+    setText(head.querySelector('.s-meta'), t.sectionMetas[i]);
+  });
+  setText(document.querySelector('.cleft h3'), t.contactTitle);
   setText(document.querySelector('.cleft p'), t.contactText);
   document.querySelectorAll('.channels .ch .ch-l').forEach((el, i) => setText(el, t.channelLabels[i]));
   setText(document.querySelector('.cform-lbl'), t.formLabel);
@@ -1344,6 +1379,31 @@ if (scrollToTopBtn) {
   toggleScrollTop();
   scrollToTopBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+  contactForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const lang = (localStorage.getItem('language') || 'en').toLowerCase() === 'ru' ? 'ru' : 'en';
+    const t = uiMap[lang] || uiMap.en;
+    const button = contactForm.querySelector('button[type="submit"]');
+    const formData = new FormData(contactForm);
+    const name = String(formData.get('name') || '').trim();
+    const email = String(formData.get('email') || '').trim();
+    const message = String(formData.get('message') || '').trim();
+    const subject = lang === 'ru'
+      ? `Портфолио: сообщение от ${name}`
+      : `Portfolio inquiry from ${name}`;
+    const body = lang === 'ru'
+      ? `Имя: ${name}\nEmail: ${email}\n\nСообщение:\n${message}`
+      : `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+
+    updateButtonTextWithIcon(button, t.contactSubmitDone);
+    window.location.href = `mailto:aleximlord@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    setTimeout(() => updateButtonTextWithIcon(button, t.contactSubmit), 1600);
   });
 }
 
