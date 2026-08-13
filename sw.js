@@ -1,5 +1,5 @@
 // Service Worker для базового офлайн-режима
-const CACHE_NAME = 'portfolio-v1.3.0';
+const CACHE_NAME = 'portfolio-v1.4.0';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -13,8 +13,8 @@ const urlsToCache = [
   '/js/translations.js',
   '/js/lang.js',
   '/js/theme.js',
-  '/Makedonskiy_Alexander_Resume_2026.pdf',
-  '/Makedonskiy_Alexander_Resume_2026.docx'
+  '/resume.pdf',
+  '/resume.docx'
 ];
 
 // Установка Service Worker
