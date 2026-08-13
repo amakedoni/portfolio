@@ -519,6 +519,7 @@ section{padding:7rem 0;position:relative}
 .cform:hover{transform:translate(-4px,4px);box-shadow:6px 6px 0 2px var(--ink)}
 .cform-lbl{font-family:var(--mono);font-size:.72rem;color:var(--ink-2);letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
 .cform-lbl::before{content:"";width:8px;height:8px;background:var(--ink);border-radius:50%;animation:blink 2s infinite}
+.cform-note{font-size:.8rem;line-height:1.5;color:var(--ink-3);margin-top:-.35rem}
 .cform input,.cform textarea{
   width:100%;background:var(--bg);
   border:1.5px solid var(--line);border-radius:var(--r-md);
@@ -638,58 +639,18 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   .pf-info{padding:2rem 1.5rem}
   .pf-mock{padding:2rem 1rem}
   .scroll-to-top{right:16px;bottom:16px;padding:.65rem .85rem}
-  .git-wrap{padding:1.75rem}
-  .git-top{flex-direction:column;align-items:stretch}
+  .git-wrap{padding:1.75rem;flex-direction:column;align-items:stretch}
 }
 
-/* ====== GITHUB ACTIVITY ====== */
+/* ====== GITHUB ====== */
 .git-wrap{
   background:var(--bg-2);border:2px solid var(--line);border-radius:var(--r-xl);
   padding:2.75rem;box-shadow:var(--shadow-md);transition:var(--t);
-  display:flex;flex-direction:column;gap:2rem;
+  display:flex;justify-content:space-between;align-items:center;gap:2rem;
 }
 .git-wrap:hover{transform:translate(-4px,4px);border-color:var(--ink);box-shadow:6px 6px 0 2px var(--ink)}
-.git-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
-.git-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:2rem;flex:1}
-.git-stat{display:flex;flex-direction:column;gap:.25rem}
-.git-stat .v{font-family:var(--display);font-size:2.75rem;line-height:1;color:var(--ink);letter-spacing:-1px}
-.git-stat .l{font-family:var(--mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.18em;text-transform:uppercase;margin-top:.4rem}
-.git-chart-container{display:flex;flex-direction:column;gap:1rem;width:100%;overflow:hidden}
-.git-scroll{overflow-x:auto;padding-bottom:1rem;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
-.git-scroll::-webkit-scrollbar{height:6px}
-.git-scroll::-webkit-scrollbar-thumb{background-color:var(--line);border-radius:3px}
-.git-grid-layout{display:grid;grid-template-columns:auto 1fr;gap:10px;min-width:700px}
-.git-days{display:grid;grid-template-rows:repeat(7,10px);gap:3px;font-family:var(--mono);font-size:8px;color:var(--ink-3);align-items:center;padding-top:15px}
-.git-days span{height:10px;line-height:10px}
-.git-content{display:flex;flex-direction:column;gap:4px}
-.git-months{display:grid;grid-template-columns:repeat(12,1fr);font-family:var(--mono);font-size:8px;color:var(--ink-3);margin-bottom:3px;padding-left:2px}
-.git-cells{display:grid;grid-auto-flow:column;grid-template-columns:repeat(53,10px);grid-template-rows:repeat(7,10px);gap:3px}
-.git-cell{
-  width:100%;height:100%;background:var(--bg-3);border-radius:1.5px;
-  transition:background-color .2s ease,transform .2s ease;
-  transform:scale(0);
-}
-.reveal.in .git-cell{
-  animation:popIn .3s cubic-bezier(.34,1.56,.64,1) forwards;
-  animation-delay:var(--delay);
-}
-@keyframes popIn{to{transform:scale(1)}}
-.git-cell:hover{transform:scale(1.3) !important;z-index:10;outline:1px solid var(--ink)}
-.git-cell.lvl-0{background:var(--bg-3)}
-.git-cell.lvl-1{background:var(--ink);opacity:.18}
-.git-cell.lvl-2{background:var(--ink);opacity:.45}
-.git-cell.lvl-3{background:var(--ink);opacity:.75}
-.git-cell.lvl-4{background:var(--ink);opacity:1}
-.git-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;padding-top:.5rem;border-top:1px dashed var(--line)}
-.git-info{font-family:var(--mono);font-size:.72rem;color:var(--ink-3)}
-.git-legend{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;color:var(--ink-3)}
-.git-leg-cells{display:flex;gap:3px}
-.git-leg-cells .cell{width:10px;height:10px;border-radius:1.5px}
-.git-leg-cells .lvl-0{background:var(--bg-3)}
-.git-leg-cells .lvl-1{background:var(--ink);opacity:.18}
-.git-leg-cells .lvl-2{background:var(--ink);opacity:.45}
-.git-leg-cells .lvl-3{background:var(--ink);opacity:.75}
-.git-leg-cells .lvl-4{background:var(--ink);opacity:1}
+.git-copy{max-width:760px;font-size:1.0625rem;line-height:1.8;color:var(--ink-2)}
+.git-view-btn{flex:0 0 auto}
 </style>
 </head>
 <body>
@@ -794,7 +755,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-num">— 01 / About</span>
-      <h2 class="s-title">A builder with a curious mind.</h2>
+      <h2 class="s-title">How I work.</h2>
       <span class="s-meta">Moscow · 2026</span>
     </div>
     <div class="about-grid">
@@ -837,7 +798,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-num">— 02 / Selected Work</span>
-      <h2 class="s-title">Flagship case studies.</h2>
+      <h2 class="s-title">Selected projects.</h2>
       <span class="s-meta">2024 – 2026</span>
     </div>
 
@@ -926,8 +887,8 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-num">— 03 / Stack</span>
-      <h2 class="s-title">Tools of the trade.</h2>
-      <span class="s-meta">Filterable</span>
+      <h2 class="s-title">Skills and tools.</h2>
+      <span class="s-meta">Filter by area</span>
     </div>
 
     <div class="skills-wrap reveal">
@@ -996,7 +957,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-num">— 04 / Education</span>
-      <h2 class="s-title">Trained in rigour.</h2>
+      <h2 class="s-title">Education.</h2>
       <span class="s-meta">2021 – Present</span>
     </div>
     <div class="edu-grid">
@@ -1027,85 +988,16 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-num">— 05 / GitHub</span>
-      <h2 class="s-title">Open-source pulse.</h2>
-      <span class="s-meta">Live data</span>
+      <h2 class="s-title">Code and experiments.</h2>
+      <span class="s-meta">GitHub profile</span>
     </div>
 
     <div class="git-wrap reveal">
-      <div class="git-top">
-        <div class="git-stats">
-          <div class="git-stat">
-            <span class="v">12<span class="u">+</span></span>
-            <span class="l">Repositories</span>
-          </div>
-          <div class="git-stat">
-            <span class="v">340<span class="u">+</span></span>
-            <span class="l">Commits 2026</span>
-          </div>
-          <div class="git-stat">
-            <span class="v">5<span class="u">+</span></span>
-            <span class="l">Languages</span>
-          </div>
-          <div class="git-stat">
-            <span class="v">19</span>
-            <span class="l">Streak</span>
-          </div>
-        </div>
-        <a class="btn git-view-btn" href="https://github.com/amakedoni" target="_blank" rel="noopener">
-          View profile
-          <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-
-      <div class="git-chart-container">
-        <div class="git-scroll">
-          <div class="git-grid-layout">
-            <div class="git-days">
-              <span>Mon</span>
-              <span></span>
-              <span>Wed</span>
-              <span></span>
-              <span>Fri</span>
-              <span></span>
-              <span></span>
-            </div>
-            <div class="git-content">
-              <div class="git-months">
-                <span>Jan</span>
-                <span>Feb</span>
-                <span>Mar</span>
-                <span>Apr</span>
-                <span>May</span>
-                <span>Jun</span>
-                <span>Jul</span>
-                <span>Aug</span>
-                <span>Sep</span>
-                <span>Oct</span>
-                <span>Nov</span>
-                <span>Dec</span>
-              </div>
-              <div class="git-cells" id="git-cells">
-                <!-- Will be dynamically populated via JS for smooth wave animation -->
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="git-footer">
-          <span class="git-info">Randomized realistic representation of @amakedoni profile</span>
-          <div class="git-legend">
-            <span>Less</span>
-            <div class="git-leg-cells">
-              <div class="cell lvl-0"></div>
-              <div class="cell lvl-1"></div>
-              <div class="cell lvl-2"></div>
-              <div class="cell lvl-3"></div>
-              <div class="cell lvl-4"></div>
-            </div>
-            <span>More</span>
-          </div>
-        </div>
-      </div>
+      <p class="git-copy">My GitHub contains source code for educational and product projects, experiments, and development history. The main projects are featured above; the complete profile is available through the link.</p>
+      <a class="btn git-view-btn" href="https://github.com/amakedoni" target="_blank" rel="noopener">
+        View profile
+        <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
   </div>
 </section>
@@ -1115,14 +1007,14 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-num">— 06 / Contact</span>
-      <h2 class="s-title">Let's build something.</h2>
-      <span class="s-meta">Replies within 24h</span>
+      <h2 class="s-title">Open to new opportunities.</h2>
+      <span class="s-meta">Email · Telegram</span>
     </div>
 
     <div class="contact-grid">
       <div class="cleft reveal">
-        <h3>Got a project in mind?</h3>
-        <p>Open to interesting work in product engineering, ML tooling, and offline-first PWAs. Drop a line via the form, or pick your favourite channel below.</p>
+        <h3>Let's connect.</h3>
+        <p>If you would like to discuss a role, internship, collaborative project, or simply connect, use any of the channels below. Telegram and email are the quickest ways to reach me.</p>
         <div class="channels">
           <a class="ch" href="mailto:aleximlord@gmail.com"><span class="ch-l">Email</span><span class="ch-v">aleximlord@gmail.com</span><span class="ch-a">↗</span></a>
           <a class="ch" href="tel:+79255053027"><span class="ch-l">Phone</span><span class="ch-v">+7 925 505 30 27</span><span class="ch-a">↗</span></a>
@@ -1133,6 +1025,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
 
       <form class="cform reveal" id="contact-form">
         <span class="cform-lbl">New message</span>
+        <p class="cform-note">Submitting the form opens your email application with a prepared message.</p>
         <input type="text" name="name" autocomplete="name" placeholder="Your name" required />
         <input type="email" name="email" autocomplete="email" placeholder="Your email" required />
         <textarea name="message" placeholder="Tell me about your project — what are you building, when do you need it, and what does success look like?" required></textarea>
@@ -1181,8 +1074,8 @@ const uiMap = {
     heroCtaSecondary: 'Download resume',
     scrollCue: 'SCROLL',
     sectionNums: ['— 01 / About', '— 02 / Selected Work', '— 03 / Stack', '— 04 / Education', '— 05 / GitHub', '— 06 / Contact'],
-    sectionTitles: ['A builder with a curious mind.', 'Flagship case studies.', 'Tools of the trade.', 'Trained in rigour.', 'Open-source pulse.', "Let's build something."],
-    sectionMetas: ['Moscow · 2026', '2024 – 2026', 'Filterable', '2021 – Present', 'Live activity', 'Replies within 24h'],
+    sectionTitles: ['How I work.', 'Selected projects.', 'Skills and tools.', 'Education.', 'Code and experiments.', 'Open to new opportunities.'],
+    sectionMetas: ['Moscow · 2026', '2024 – 2026', 'Filter by area', '2021 – Present', 'GitHub profile', 'Email · Telegram'],
     aboutP1: 'I enjoy building a product end to end: shaping its architecture and data model, writing APIs, creating the interface, and bringing it to a working release. I pay particular attention to offline-first behavior, performance, and a clear user experience.',
     aboutP2: 'I study machine learning and apply it in educational and product projects. I take part in olympiads and play guitar. My English level is <strong>B2</strong>. I am open to remote, hybrid, and Moscow-based opportunities.',
     portrait: 'PORTRAIT · 2026',
@@ -1222,10 +1115,11 @@ const uiMap = {
       'On-site course in machine learning and data analysis: regression, classification, clustering, and data visualization.',
       'Advanced study of mathematics, computer science, and physics.'
     ],
-    contactTitle: 'Got a project in mind?',
-    contactText: 'Open to interesting work in product engineering, ML tooling, and offline-first PWAs. Drop a line via the form, or pick your favourite channel below.',
+    contactTitle: "Let's connect.",
+    contactText: 'If you would like to discuss a role, internship, collaborative project, or simply connect, use any of the channels below. Telegram and email are the quickest ways to reach me.',
     channelLabels: ['Email', 'Phone', 'Telegram', 'GitHub'],
     formLabel: 'New message',
+    formNote: 'Submitting the form opens your email application with a prepared message.',
     formName: 'Your name',
     formEmail: 'Your email',
     formMessage: 'Tell me about your project — what are you building, when do you need it, and what does success look like?',
@@ -1234,11 +1128,8 @@ const uiMap = {
     ariaScrollTop: 'Back to top',
     backToTop: 'Back to top',
     footerMeta: 'Crafted in Moscow · v2026.1',
-    gitStats: ['Repositories', 'Commits 2026', 'Languages', 'Streak'],
     gitView: 'View profile',
-    gitInfo: 'Randomized realistic representation of @amakedoni profile',
-    gitDays: ['Mon', 'Wed', 'Fri'],
-    gitMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    gitText: 'My GitHub contains source code for educational and product projects, experiments, and development history. The main projects are featured above; the complete profile is available through the link.',
     roles: ['Full-Stack Developer', 'Backend Developer', 'Applied ML Student']
   },
   ru: {
@@ -1257,8 +1148,8 @@ const uiMap = {
     heroCtaSecondary: 'Скачать резюме',
     scrollCue: 'ПРОКРУТИТЬ',
     sectionNums: ['— 01 / Обо мне', '— 02 / Избранные проекты', '— 03 / Стек', '— 04 / Образование', '— 05 / GitHub', '— 06 / Контакты'],
-    sectionTitles: ['A builder with a curious mind.', 'Flagship case studies.', 'Tools of the trade.', 'Trained in rigour.', 'Open-source pulse.', "Let's build something."],
-    sectionMetas: ['Москва · 2026', '2024 – 2026', 'Фильтры', '2021 – н.в.', 'Живая активность', 'Отвечаю в течение 24ч'],
+    sectionTitles: ['Как я работаю.', 'Избранные проекты.', 'Навыки и инструменты.', 'Образование.', 'Код и эксперименты.', 'Открыт к новым задачам.'],
+    sectionMetas: ['Москва · 2026', '2024 – 2026', 'По направлениям', '2021 – н.в.', 'Профиль GitHub', 'Email · Telegram'],
     aboutP1: 'Мне нравится собирать продукт целиком: продумывать архитектуру и данные, писать API, создавать интерфейс и доводить проект до рабочего состояния. Особое внимание уделяю offline-first подходу, производительности и понятному пользовательскому опыту.',
     aboutP2: 'Изучаю машинное обучение и применяю его в учебных и продуктовых задачах. Участвую в олимпиадах, играю на гитаре. Английский — <strong>B2</strong>. Рассматриваю удалённую, гибридную и очную работу в Москве.',
     portrait: 'ПОРТРЕТ · 2026',
@@ -1281,7 +1172,7 @@ const uiMap = {
       'Разработал клиент-серверную систему с backend на FastAPI и мобильным клиентом React Native. Приложение синхронизирует данные после работы без сети, поддерживает ограниченное по времени QR-подключение доверенных пользователей и настраиваемые напоминания.',
       'В составе финального задания аэрокосмического трека собрал рабочий прототип CubeSat. Реализовал бортовую логику приёма, декодирования и передачи телеметрических сообщений, а также программную часть кодирования.'
     ],
-    recognitionTitle: 'Recognition.',
+    recognitionTitle: 'Достижения.',
     recognitionMeta: '2022 — 2025 · Олимпиады',
     recognitionItems: [
       'Финалист олимпиады ИТМО по информатике (2024–2025)',
@@ -1298,10 +1189,11 @@ const uiMap = {
       'Очный курс по машинному обучению и анализу данных: регрессия, классификация, кластеризация и визуализация данных.',
       'Углублённая подготовка по математике, информатике и физике.'
     ],
-    contactTitle: 'Got a project in mind?',
-    contactText: 'Открыт к интересным задачам в продуктовой разработке, ML-инструментах и offline-first PWA. Напишите через форму или выберите удобный канал связи ниже.',
+    contactTitle: 'Давайте познакомимся.',
+    contactText: 'Если хотите обсудить работу, стажировку, совместный проект или просто познакомиться — напишите удобным способом. Быстрее всего отвечаю в Telegram и по электронной почте.',
     channelLabels: ['Почта', 'Телефон', 'Telegram', 'GitHub'],
     formLabel: 'Новое сообщение',
+    formNote: 'После отправки откроется ваше почтовое приложение с подготовленным письмом.',
     formName: 'Ваше имя',
     formEmail: 'Ваш email',
     formMessage: 'Расскажите о проекте — что делаете, какие сроки и какой результат нужен?',
@@ -1310,11 +1202,8 @@ const uiMap = {
     ariaScrollTop: 'Вернуться наверх',
     backToTop: 'Наверх',
     footerMeta: 'Сделано в Москве · v2026.1',
-    gitStats: ['Репозиториев', 'Коммитов 2026', 'Языков', 'Текущий стрик'],
     gitView: 'Смотреть профиль',
-    gitInfo: 'Реалистичное случайное представление профиля @amakedoni',
-    gitDays: ['Пн', 'Ср', 'Пт'],
-    gitMonths: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+    gitText: 'В GitHub — исходный код учебных и продуктовых проектов, эксперименты и история разработки. Основные работы собраны выше, полный профиль доступен по ссылке.',
     roles: ['Full-Stack разработчик', 'Backend-разработчик', 'Студент прикладного ML']
   }
 };
@@ -1411,28 +1300,15 @@ function applyLanguage(lang) {
   setText(document.querySelector('.cleft p'), t.contactText);
   document.querySelectorAll('.channels .ch .ch-l').forEach((el, i) => setText(el, t.channelLabels[i]));
   setText(document.querySelector('.cform-lbl'), t.formLabel);
+  setText(document.querySelector('.cform-note'), t.formNote);
   const formInputs = document.querySelectorAll('.cform input, .cform textarea');
   setText(formInputs[0], t.formName);
   setText(formInputs[1], t.formEmail);
   setText(formInputs[2], t.formMessage);
 
-  // Apply GitHub translations
-  document.querySelectorAll('.git-stat').forEach((stat, i) => {
-    if (t.gitStats && t.gitStats[i]) setText(stat.querySelector('.l'), t.gitStats[i]);
-  });
+  setText(document.querySelector('.git-copy'), t.gitText);
   const gitBtn = document.querySelector('.git-view-btn');
   if (gitBtn && t.gitView) updateButtonTextWithIcon(gitBtn, t.gitView);
-  setText(document.querySelector('.git-info'), t.gitInfo);
-
-  // Translate days/months in GitHub grid
-  const daySpans = document.querySelectorAll('.git-days span');
-  const activeDays = [0, 2, 4]; // Mon, Wed, Fri
-  activeDays.forEach((idx, i) => {
-    if (daySpans[idx] && t.gitDays && t.gitDays[i]) daySpans[idx].textContent = t.gitDays[i];
-  });
-  document.querySelectorAll('.git-months span').forEach((span, i) => {
-    if (t.gitMonths && t.gitMonths[i]) span.textContent = t.gitMonths[i];
-  });
 
   setText(document.querySelector('.foot-meta'), t.footerMeta);
   document.querySelectorAll('.lang-text').forEach((el) => { el.textContent = lang.toUpperCase(); });
@@ -1652,80 +1528,6 @@ if (header) {
   toggleHeaderState();
 }
 
-// GitHub Contributions Grid Generator
-function initGitHubGrid() {
-  const gridEl = document.getElementById('git-cells');
-  if (!gridEl) return;
-  gridEl.innerHTML = '';
-  
-  // Seed for pseudo-random number generator to keep it consistent
-  let seed = 2026;
-  function random() {
-    let x = Math.sin(seed++) * 10000;
-    return x - Math.floor(x);
-  }
-
-  const columns = 53;
-  const rows = 7;
-  
-  for (let c = 0; c < columns; c++) {
-    for (let r = 0; r < rows; r++) {
-      const rVal = random();
-      let lvl = 0;
-
-      // Weekdays (1-5) have higher commits chance, weekends (0, 6) have lower
-      if (r >= 1 && r <= 5) {
-        if (rVal < 0.25) lvl = 0;
-        else if (rVal < 0.60) lvl = 1;
-        else if (rVal < 0.85) lvl = 2;
-        else if (rVal < 0.95) lvl = 3;
-        else lvl = 4;
-      } else {
-        if (rVal < 0.70) lvl = 0;
-        else if (rVal < 0.92) lvl = 1;
-        else lvl = 2;
-      }
-
-      // Add streaks / sprint weeks
-      if ((c >= 5 && c <= 7) || (c >= 18 && c <= 20) || (c >= 34 && c <= 37) || (c >= 45 && c <= 47)) {
-        if (lvl > 0 && rVal > 0.3) {
-          lvl = Math.min(4, lvl + 1);
-        }
-      }
-
-      const cell = document.createElement('div');
-      cell.className = `git-cell lvl-${lvl}`;
-      
-      // Calculate realistic contribution count
-      let contribs = 0;
-      if (lvl === 1) contribs = Math.floor(random() * 2) + 1;
-      else if (lvl === 2) contribs = Math.floor(random() * 3) + 3;
-      else if (lvl === 3) contribs = Math.floor(random() * 3) + 6;
-      else if (lvl === 4) contribs = Math.floor(random() * 6) + 9;
-
-      const lang = (localStorage.getItem('language') || 'en').toLowerCase() === 'ru' ? 'ru' : 'en';
-      const tooltipText = contribs > 0 
-        ? (lang === 'ru' ? `${contribs} контрибуций` : `${contribs} contributions`)
-        : (lang === 'ru' ? 'Нет контрибуций' : 'No contributions');
-      cell.setAttribute('title', tooltipText);
-      
-      // Delays from left to right wave-like effect
-      const delay = c * 12 + r * 6;
-      cell.style.setProperty('--delay', `${delay}ms`);
-      
-      gridEl.appendChild(cell);
-    }
-  }
-}
-
-// Re-generate grid when language toggles to update tooltips
-document.querySelectorAll('.lang-toggle').forEach(btn => {
-  btn.addEventListener('click', () => {
-    setTimeout(initGitHubGrid, 50);
-  });
-});
-
-initGitHubGrid();
 </script>
 <script src="js/cursor.js" defer></script>
 </body>
