@@ -40,3 +40,6 @@ dist/
 build/
 *.min.js
 *.min.css.superpowers/
+
+# Local Git worktrees
+.worktrees/
