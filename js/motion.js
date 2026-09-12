@@ -43,7 +43,9 @@
     }, { threshold: 0.12, rootMargin: '0px 0px -48px' });
 
     document.querySelectorAll('.reveal:not(.in)').forEach((element, index) => {
-      element.style.setProperty('--reveal-delay', `${Math.min(index % 3, 2) * 70}ms`);
+      if (!element.style.getPropertyValue('--reveal-delay')) {
+        element.style.setProperty('--reveal-delay', `${Math.min(index % 3, 2) * 70}ms`);
+      }
       revealObserver.observe(element);
     });
   }
@@ -373,6 +375,99 @@
     observer.observe(section);
   }
 
+  function initEducation() {
+    const section = document.querySelector('#education');
+    if (!section) return;
+    section.querySelectorAll('.ecard').forEach((card, index) => {
+      card.style.setProperty('--reveal-delay', `${index * 90}ms`);
+    });
+
+    const activate = () => {
+      section.style.setProperty('--timeline-progress', '1');
+      section.classList.add('education-in');
+    };
+    if (preferences.reducedMotion) {
+      activate();
+      return;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      activate();
+      observer.disconnect();
+    }, { threshold: 0.2 });
+    observer.observe(section);
+  }
+
+  function moveGridFocus(cell, delta) {
+    const cells = [...document.querySelectorAll('.git-cell')];
+    const current = Number.parseInt(cell.dataset.index || '0', 10);
+    const next = cells[Math.max(0, Math.min(cells.length - 1, current + delta))];
+    if (!next) return;
+    cells.forEach((item) => { item.tabIndex = item === next ? 0 : -1; });
+    next.focus();
+  }
+
+  function initGitHubGridInteractions() {
+    const section = document.querySelector('#github');
+    const grid = document.querySelector('#git-cells');
+    const tooltip = document.querySelector('#git-tooltip');
+    if (!section || !grid || !tooltip) return;
+
+    function positionTooltip(x, y) {
+      const left = Math.max(8, Math.min(innerWidth - tooltip.offsetWidth - 18, x));
+      const top = Math.max(8, Math.min(innerHeight - tooltip.offsetHeight - 18, y));
+      tooltip.style.left = `${Math.round(left)}px`;
+      tooltip.style.top = `${Math.round(top)}px`;
+    }
+
+    function showTooltip(cell, x, y) {
+      tooltip.textContent = cell.dataset.tooltip || '';
+      tooltip.hidden = false;
+      positionTooltip(x, y);
+    }
+
+    function hideTooltip() {
+      tooltip.hidden = true;
+    }
+
+    grid.addEventListener('pointerover', (event) => {
+      const cell = event.target.closest('.git-cell');
+      if (cell) showTooltip(cell, event.clientX, event.clientY);
+    });
+    grid.addEventListener('pointermove', (event) => {
+      if (!tooltip.hidden) positionTooltip(event.clientX, event.clientY);
+    }, { passive: true });
+    grid.addEventListener('pointerout', hideTooltip);
+    grid.addEventListener('focusin', (event) => {
+      const cell = event.target.closest('.git-cell');
+      if (!cell) return;
+      const rect = cell.getBoundingClientRect();
+      showTooltip(cell, rect.right, rect.bottom);
+    });
+    grid.addEventListener('focusout', hideTooltip);
+    grid.addEventListener('keydown', (event) => {
+      const cell = event.target.closest('.git-cell');
+      if (!cell) return;
+      const deltas = { ArrowRight: 7, ArrowLeft: -7, ArrowDown: 1, ArrowUp: -1 };
+      const delta = deltas[event.key];
+      if (!delta) return;
+      event.preventDefault();
+      moveGridFocus(cell, delta);
+    });
+
+    const activate = () => section.classList.add('github-in');
+    if (preferences.reducedMotion) {
+      activate();
+    } else {
+      const observer = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        activate();
+        observer.disconnect();
+      }, { threshold: 0.18 });
+      observer.observe(section);
+    }
+  }
+
   function refresh() {
     syncCapabilityClasses();
     initReveals();
@@ -399,6 +494,8 @@
     safeInit('marquee', () => initMarquee(scheduler));
     safeInit('projects', () => initProjects(pointerController));
     safeInit('skills', initSkills);
+    safeInit('education', initEducation);
+    safeInit('github', initGitHubGridInteractions);
     refresh();
     requestAnimationFrame(() => root.classList.add('motion-ready'));
   }

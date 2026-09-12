@@ -321,6 +321,25 @@ test('featured project draws its graph and uses shallow device depth', async () 
   await context.close();
 });
 
+test('education timeline and GitHub grid expose their completed scenes', async () => {
+  const { context, page } = await openPage();
+  await page.locator('#education').scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => document.querySelector('#education')?.classList.contains('education-in'), null, { timeout: 1500 });
+  assert.equal(await page.locator('#education').evaluate((el) => getComputedStyle(el).getPropertyValue('--timeline-progress').trim()), '1');
+
+  await page.locator('#github').scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => document.querySelector('#github')?.classList.contains('github-in'), null, { timeout: 1500 });
+  assert.equal(await page.locator('#git-cells').getAttribute('role'), 'grid');
+
+  const first = page.locator('.git-cell').first();
+  await first.focus();
+  assert.equal(await first.getAttribute('tabindex'), '0');
+  assert.equal(await page.locator('#git-tooltip').isVisible(), true);
+  await first.press('ArrowRight');
+  assert.equal(await page.locator('.git-cell').nth(7).getAttribute('tabindex'), '0');
+  await context.close();
+});
+
 test('secondary project cards share the same hover lift without link affordances', async () => {
   const { context, page } = await openPage();
   const cards = page.locator('.pcard');
