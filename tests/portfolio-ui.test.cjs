@@ -105,8 +105,13 @@ test('the loader releases the page without an artificial delay', { timeout: 2000
 
 test('service worker caches the motion entry point with a new cache version', () => {
   const source = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
-  assert.match(source, /portfolio-v1\.6\.0/);
+  assert.match(source, /portfolio-v1\.6\.1/);
   assert.match(source, /['"]\/js\/motion\.js['"]/);
+});
+
+test('reveal observer keeps the viewport bottom inside its root', () => {
+  const source = fs.readFileSync(path.join(root, 'js', 'motion.js'), 'utf8');
+  assert.match(source, /rootMargin:\s*'0px'/);
 });
 
 test('motion layout stays inside representative viewport widths', async () => {
@@ -135,6 +140,38 @@ test('motion bootstrap publishes a capability profile without hiding content', a
   await page.waitForFunction(() => document.documentElement.classList.contains('motion-ready'));
   assert.equal(await page.evaluate(() => Boolean(window.PortfolioMotion?.preferences)), true);
   assert.equal(await page.locator('#hero h1').isVisible(), true);
+  await context.close();
+});
+
+test('footer content reveals at the end of the document', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1280, height: 720 } });
+  await page.waitForFunction(() => document.querySelectorAll('.git-cell').length > 0);
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+  await page.waitForTimeout(100);
+  await page.evaluate(() => {
+    document.querySelector('.foot').classList.remove('in');
+    window.PortfolioMotion.refresh();
+  });
+  await page.waitForTimeout(500);
+
+  const footer = page.locator('.foot');
+  assert.equal(await footer.evaluate((element) => element.classList.contains('in')), true);
+  assert.equal(await footer.evaluate((element) => getComputedStyle(element).opacity), '1');
+  await context.close();
+});
+
+test('contact section uses one closing spacing interval before the footer', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1280, height: 720 } });
+  await page.locator('#contact').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1000);
+
+  const gap = await page.evaluate(() => {
+    const contactGrid = document.querySelector('.contact-grid').getBoundingClientRect();
+    const footer = document.querySelector('footer').getBoundingClientRect();
+    return footer.top - contactGrid.bottom;
+  });
+
+  assert.ok(gap <= 128, `Contact-to-footer gap should be one spacing interval, received ${gap}px`);
   await context.close();
 });
 
