@@ -137,6 +137,36 @@ test('scroll progress and active navigation follow the visible section', async (
   await context.close();
 });
 
+test('hero and about scenes settle into their final state', async () => {
+  const { context, page } = await openPage();
+  await page.waitForFunction(() => document.documentElement.classList.contains('hero-in'), null, { timeout: 1500 });
+  assert.equal(await page.locator('#hero h1 .row').first().evaluate((el) => getComputedStyle(el).opacity), '1');
+
+  await page.locator('#about').scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => document.querySelector('#about')?.classList.contains('about-in'), null, { timeout: 1500 });
+  await page.waitForFunction(() => {
+    const values = [...document.querySelectorAll('[data-count]')]
+      .map((item) => item.childNodes[0]?.textContent.trim());
+    return JSON.stringify(values) === JSON.stringify(['5', '5', '4', '3']);
+  }, null, { timeout: 2500 });
+  assert.deepEqual(await page.locator('[data-count]').evaluateAll((items) => items.map((item) => item.childNodes[0].textContent.trim())), ['5', '5', '4', '3']);
+  await context.close();
+});
+
+test('portrait parallax only responds to a fine pointer', async () => {
+  const desktop = await openPage();
+  await desktop.page.locator('.profile').scrollIntoViewIfNeeded();
+  const box = await desktop.page.locator('.profile').boundingBox();
+  await desktop.page.mouse.move(box.x + box.width * 0.8, box.y + box.height * 0.2);
+  await desktop.page.waitForTimeout(80);
+  assert.notEqual(await desktop.page.locator('.profile').evaluate((el) => getComputedStyle(el).getPropertyValue('--portrait-x').trim()), '');
+  await desktop.context.close();
+
+  const touch = await openPage({ hasTouch: true, viewport: { width: 390, height: 844 } });
+  assert.equal(await touch.page.evaluate(() => document.documentElement.classList.contains('has-fine-pointer')), false);
+  await touch.context.close();
+});
+
 test('dark theme keeps hero and graph accents readable during the switch', async () => {
   const { context, page } = await openPage();
   await page.locator('.controls .theme-toggle').click();

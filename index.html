@@ -275,6 +275,17 @@ body.dark-theme .theme-toggle .sun-icon{opacity:1;transform:scale(1) rotate(0deg
   animation:shift 12s ease infinite;
 }
 @keyframes shift{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+.motion-ready #hero [data-motion="hero-row"],
+.motion-ready #hero [data-motion="hero-detail"]{
+  opacity:0;transform:translateY(34px);
+  transition:opacity 720ms var(--ease-out),transform 820ms var(--ease-out);
+  transition-delay:var(--intro-delay,0ms)
+}
+.motion-ready.hero-in #hero [data-motion]{opacity:1;transform:none}
+.motion-ready #hero h1 .row{overflow:hidden}
+.motion-ready #hero h1 .accent{
+  translate:calc(var(--pointer-x,0) * 4px) calc(var(--pointer-y,0) * 3px)
+}
 
 .hero-body{
   display:grid;grid-template-columns:1.4fr 1fr;gap:60px;align-items:end;
@@ -355,7 +366,15 @@ section:not(#hero)::after{
 .profile:hover{transform:translate(-4px,-4px);border-color:var(--ink);box-shadow:6px 6px 0 2px var(--ink)}
 .profile picture{
   position:absolute;inset:14px;display:block;overflow:hidden;border-radius:var(--r-lg);
+  transform:translate(calc(var(--portrait-x,0) * 7px),calc(var(--portrait-y,0) * 7px)) scale(1.035);
+  transition:transform 180ms ease-out;
 }
+.profile::after{
+  content:"";position:absolute;inset:14px;background:var(--ink);z-index:4;
+  transform:scaleY(0);transform-origin:bottom;pointer-events:none
+}
+.motion-ready #about:not(.about-in) .profile::after{transform:scaleY(1)}
+.motion-ready #about.about-in .profile::after{transform:scaleY(0);transition:transform 700ms var(--ease-out)}
 .profile .photo{
   width:100%;height:100%;object-fit:cover;display:block;
   object-position:center top;
@@ -394,7 +413,7 @@ section:not(#hero)::after{
   padding:1rem 0;background:var(--bg-2);
   mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
 }
-.mtrack{display:flex;gap:48px;animation:mscroll 80s linear infinite;width:max-content}
+.mtrack{display:flex;gap:48px;width:max-content;animation:none;transform:translate3d(var(--marquee-x,0px),0,0);will-change:transform}
 .mtrack span{font-family:var(--display);font-size:1.85rem;color:var(--ink);white-space:nowrap;display:inline-flex;align-items:center;gap:48px;line-height:1}
 .mtrack .star{font-family:var(--mono);font-size:.9rem;color:var(--ink-3)}
 @keyframes mscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -830,7 +849,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
 <!-- HERO -->
 <section id="hero" data-screen-label="01 Hero">
   <div class="wrap">
-    <div class="hero-meta">
+    <div class="hero-meta" data-motion="hero-detail">
       <span class="dot"></span>
       <span>Available · Moscow, RU</span>
       <span class="sep"></span>
@@ -838,21 +857,21 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
     </div>
 
     <h1>
-      <span class="row">Engineering</span>
-      <span class="row"><span class="accent">tomorrow's</span></span>
-      <span class="row">interfaces.</span>
+      <span class="row" data-motion="hero-row">Engineering</span>
+      <span class="row" data-motion="hero-row"><span class="accent">tomorrow's</span></span>
+      <span class="row" data-motion="hero-row">interfaces.</span>
     </h1>
 
     <div class="hero-body">
-      <p class="hero-lede">
+      <p class="hero-lede" data-motion="hero-detail">
         I'm <strong>Alexander</strong> — a full-stack developer and ML student at <strong>Moscow Aviation Institute</strong>. I build performant client-server systems, offline-first PWAs, and machine-learning-powered tools that ship.
       </p>
       <div class="hero-aside">
-        <div class="role-rotator">
+        <div class="role-rotator" data-motion="hero-detail">
           <span class="lbl">Currently</span>
           <div class="rstage" id="rotator"><span class="in">Full-Stack Engineer</span></div>
         </div>
-        <div class="cta-row">
+        <div class="cta-row" data-motion="hero-detail">
           <a href="#projects" class="btn primary">View work <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           <a href="#contact" class="btn">Get in touch <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
@@ -886,7 +905,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
         <p>English: <strong>B2 (Upper-Intermediate)</strong>. Open to remote, hybrid, and Moscow-based teams.</p>
       </div>
       <aside class="about-aside reveal">
-        <div class="profile">
+        <div class="profile" data-pointer="portrait">
           <div class="corner">PORTRAIT · 2026</div>
           <picture>
             <source srcset="/assets/images/photo.webp" type="image/webp">
@@ -1723,39 +1742,6 @@ function syncRoleRotator() {
 }
 syncRoleRotator();
 reducedMotionMedia.addEventListener('change', syncRoleRotator);
-
-// Counters
-function setCounterValue(el, value) {
-  const suffix=el.querySelector('.u');
-  if(suffix){
-    let textNode=el.firstChild;
-    if(!textNode||textNode.nodeType!==Node.TEXT_NODE){
-      textNode=document.createTextNode('');
-      el.insertBefore(textNode,suffix);
-    }
-    textNode.nodeValue=value;
-  }else{
-    el.textContent=value;
-  }
-}
-const counterEls=document.querySelectorAll('[data-count]');
-if(reducedMotionMedia.matches){
-  counterEls.forEach((el)=>setCounterValue(el,String(parseInt(el.dataset.count,10))));
-}else{
-  const cio=new IntersectionObserver((es)=>es.forEach(e=>{
-    if(!e.isIntersecting)return;
-    const el=e.target,target=parseInt(el.dataset.count,10);
-  const dur=1400,t0=performance.now();
-  function step(t){
-    const k=Math.min(1,(t-t0)/dur);
-    const value=String(Math.round(target*(1-Math.pow(1-k,3))));
-    setCounterValue(el,value);
-    if(k<1)requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);cio.unobserve(el);
-  }),{threshold:.5});
-  counterEls.forEach(el=>cio.observe(el));
-}
 
 // Skill tabs
 const skillTabs=document.querySelectorAll('.skills-tabs .tab');

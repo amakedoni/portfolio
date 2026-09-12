@@ -7,6 +7,7 @@
   let revealObserver = null;
   let scheduler = null;
   let scrollDirector = null;
+  let pointerController = null;
 
   const preferences = {
     get reducedMotion() {
@@ -116,6 +117,159 @@
     return { refresh: markDirty };
   }
 
+  function createPointerController(frameScheduler) {
+    const targets = new Set();
+    const subscribers = new Set();
+    let clientX = innerWidth / 2;
+    let clientY = innerHeight / 2;
+    let dirty = false;
+
+    function register(element, writer) {
+      targets.add({ element, writer });
+    }
+
+    function render() {
+      if (!dirty || !preferences.finePointer || preferences.reducedMotion) return false;
+      dirty = false;
+      targets.forEach(({ element, writer }) => {
+        const rect = element.getBoundingClientRect();
+        const x = Math.max(-1, Math.min(1, ((clientX - rect.left) / rect.width - 0.5) * 2));
+        const y = Math.max(-1, Math.min(1, ((clientY - rect.top) / rect.height - 0.5) * 2));
+        writer(element, x, y);
+      });
+      subscribers.forEach((writer) => writer(clientX, clientY));
+      return false;
+    }
+
+    window.addEventListener('pointermove', (event) => {
+      clientX = event.clientX;
+      clientY = event.clientY;
+      dirty = true;
+      frameScheduler.request();
+    }, { passive: true });
+
+    frameScheduler.add(render);
+    return {
+      register,
+      subscribe(writer) {
+        subscribers.add(writer);
+        return () => subscribers.delete(writer);
+      },
+    };
+  }
+
+  function initHero(pointer) {
+    [...document.querySelectorAll('#hero [data-motion]')].forEach((element, index) => {
+      element.style.setProperty('--intro-delay', `${90 + index * 75}ms`);
+    });
+    const accent = document.querySelector('#hero .accent');
+    if (accent) {
+      pointer.register(accent, (element, x, y) => {
+        element.style.setProperty('--pointer-x', x.toFixed(3));
+        element.style.setProperty('--pointer-y', y.toFixed(3));
+      });
+    }
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('hero-in')));
+  }
+
+  function setCounterValue(element, value) {
+    const suffix = element.querySelector('.u');
+    if (!suffix) {
+      element.textContent = value;
+      return;
+    }
+    let textNode = element.firstChild;
+    if (!textNode || textNode.nodeType !== Node.TEXT_NODE) {
+      textNode = document.createTextNode('');
+      element.insertBefore(textNode, suffix);
+    }
+    textNode.nodeValue = value;
+  }
+
+  function animateCounter(element, duration, delay, frameScheduler) {
+    const target = Number.parseInt(element.dataset.count || '0', 10);
+    if (duration === 0) {
+      setCounterValue(element, String(target));
+      return;
+    }
+
+    setCounterValue(element, '0');
+    let start = null;
+    let removeJob = null;
+    removeJob = frameScheduler.add((time) => {
+      if (start === null) start = time + delay;
+      if (time < start) return true;
+      const progress = Math.min(1, (time - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCounterValue(element, String(Math.round(target * eased)));
+      if (progress < 1) return true;
+      removeJob();
+      return false;
+    });
+    frameScheduler.request();
+  }
+
+  function initAbout(pointer, frameScheduler) {
+    const section = document.querySelector('#about');
+    const profile = document.querySelector('.profile');
+    if (!section || !profile) return;
+
+    pointer.register(profile, (element, x, y) => {
+      element.style.setProperty('--portrait-x', x.toFixed(3));
+      element.style.setProperty('--portrait-y', y.toFixed(3));
+    });
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      section.classList.add('about-in');
+      document.querySelectorAll('[data-count]').forEach((element, index) => {
+        animateCounter(element, preferences.reducedMotion ? 0 : 900, index * 90, frameScheduler);
+      });
+      observer.disconnect();
+    }, { threshold: 0.25 });
+    observer.observe(section);
+  }
+
+  function initMarquee(frameScheduler) {
+    const marquee = document.querySelector('.marquee');
+    const track = document.querySelector('.mtrack');
+    if (!marquee || !track) return;
+
+    let visible = false;
+    let offset = 0;
+    let lastTime = 0;
+    let lastScrollY = window.scrollY;
+    let impulse = 0;
+
+    window.addEventListener('scroll', () => {
+      const nextScrollY = window.scrollY;
+      impulse = Math.max(-60, Math.min(60, (nextScrollY - lastScrollY) * 2.4));
+      lastScrollY = nextScrollY;
+      frameScheduler.request();
+    }, { passive: true });
+
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) frameScheduler.request();
+    }).observe(marquee);
+
+    frameScheduler.add((time) => {
+      if (!visible || preferences.reducedMotion) {
+        lastTime = time;
+        return false;
+      }
+      const delta = Math.min(40, lastTime ? time - lastTime : 16) / 1000;
+      lastTime = time;
+      impulse *= 0.92;
+      offset -= (18 + impulse) * delta;
+      const halfWidth = Math.max(1, track.scrollWidth / 2);
+      if (offset <= -halfWidth) offset += halfWidth;
+      if (offset > 0) offset -= halfWidth;
+      track.style.setProperty('--marquee-x', `${offset.toFixed(2)}px`);
+      return true;
+    });
+  }
+
   function refresh() {
     syncCapabilityClasses();
     initReveals();
@@ -136,6 +290,10 @@
     root.dataset.motionInitialized = 'true';
     scheduler = createFrameScheduler();
     scrollDirector = safeInit('scroll', () => createScrollDirector(scheduler));
+    pointerController = safeInit('pointer', () => createPointerController(scheduler));
+    safeInit('hero', () => initHero(pointerController));
+    safeInit('about', () => initAbout(pointerController, scheduler));
+    safeInit('marquee', () => initMarquee(scheduler));
     refresh();
     requestAnimationFrame(() => root.classList.add('motion-ready'));
   }
