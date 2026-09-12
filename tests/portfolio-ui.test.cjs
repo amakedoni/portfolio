@@ -118,6 +118,25 @@ test('motion bootstrap publishes a capability profile without hiding content', a
   await context.close();
 });
 
+test('scroll progress and active navigation follow the visible section', async () => {
+  const { context, page } = await openPage();
+  await page.locator('#projects').scrollIntoViewIfNeeded();
+  await page.waitForFunction(
+    () => document.querySelector('a[href="#projects"]')?.getAttribute('aria-current') === 'location',
+    null,
+    { timeout: 1500 },
+  );
+
+  const state = await page.evaluate(() => ({
+    progress: Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scroll-progress')),
+    section: document.querySelector('[data-section-current]')?.textContent,
+  }));
+
+  assert.ok(state.progress > 0.1 && state.progress < 0.9);
+  assert.equal(state.section, '02');
+  await context.close();
+});
+
 test('dark theme keeps hero and graph accents readable during the switch', async () => {
   const { context, page } = await openPage();
   await page.locator('.controls .theme-toggle').click();

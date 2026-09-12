@@ -130,6 +130,22 @@ body.dark-theme{
 @keyframes loaderSpin{to{transform:rotate(360deg)}}
 @keyframes loaderBar{from{width:0}to{width:100%}}
 
+.scroll-progress{
+  position:fixed;inset:0 0 auto;z-index:220;height:2px;
+  background:transparent;pointer-events:none
+}
+.scroll-progress span{
+  display:block;width:100%;height:100%;background:var(--ink);
+  transform:scaleX(var(--scroll-progress,0));transform-origin:left center;
+  will-change:transform
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:210;pointer-events:none;opacity:.018;
+  background:repeating-radial-gradient(circle at 0 0,var(--ink) 0 1px,transparent 1px 4px);
+  mix-blend-mode:multiply
+}
+body.dark-theme::before{mix-blend-mode:screen;opacity:.014}
+
 /* ====== HEADER ====== */
 header{
   position:sticky;top:0;z-index:50;
@@ -203,7 +219,14 @@ nav.mobile-open .menu-line-top{transform:translateY(6px) rotate(45deg)}
 nav.mobile-open .menu-line-mid{opacity:0;transform:scaleX(0)}
 nav.mobile-open .menu-line-bottom{transform:translateY(-6px) rotate(-45deg)}
 .mobile-menu-toggle:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 1px var(--ink);border-color:var(--ink)}
-.controls{display:flex;gap:12px}
+.controls{display:flex;align-items:center;gap:12px}
+.section-status{
+  display:inline-flex;align-items:center;gap:4px;margin-right:4px;
+  font-family:var(--mono);font-size:.65rem;letter-spacing:.12em;color:var(--ink-3)
+}
+.section-status-sep{opacity:.5}
+.nav-links a[aria-current="location"]{color:var(--ink)}
+.nav-links a[aria-current="location"]::after{width:100%}
 .mobile-controls{display:none}
 .icon-btn{
   width:44px;height:44px;border:2px solid var(--line);border-radius:var(--r-md);
@@ -292,6 +315,11 @@ body.dark-theme .theme-toggle .sun-icon{opacity:1;transform:scale(1) rotate(0deg
 
 /* ====== SECTION HEADER ====== */
 section{padding:7rem 0;position:relative}
+section:not(#hero)::after{
+  content:"+";position:absolute;right:max(20px,5vw);top:-9px;
+  color:var(--line);font-family:var(--mono);font-size:18px;line-height:1;
+  pointer-events:none
+}
 .s-head{
   display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;
   padding-bottom:1.5rem;border-bottom:1px solid var(--line);
@@ -750,6 +778,8 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   </div>
 </div>
 
+<div class="scroll-progress" aria-hidden="true"><span></span></div>
+
 
 <header>
   <div class="wrap">
@@ -784,6 +814,9 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
         </li>
       </ul>
       <div class="controls">
+        <span class="section-status" aria-hidden="true">
+          <span data-section-current>00</span><span class="section-status-sep">/</span><span>06</span>
+        </span>
         <button class="icon-btn lang-toggle" aria-label="Language"><span class="lang-text">EN</span></button>
         <button class="icon-btn theme-toggle" aria-label="Theme">
           <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/assets/icons.svg#icon-02"></use></svg>
