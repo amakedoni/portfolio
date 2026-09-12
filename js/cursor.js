@@ -39,8 +39,11 @@
   var trailTimer = null;
   var spawnTimer = null;
   var enabled = true;
+  var started = false;
   var gridW = 0;
   var gridH = 0;
+  var pointerMedia = window.matchMedia('(pointer: fine)');
+  var reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   /* ---- Helpers ---------------------------------------------------------- */
   function cellKey(col, row) {
@@ -297,12 +300,9 @@
 
   /* ---- Lifecycle -------------------------------------------------------- */
   function start() {
-    var hasFinePointer = window.matchMedia('(pointer: fine)').matches;
-    if (!hasFinePointer) {
-      enabled = false;
-      wrapper.style.display = 'none';
-      return;
-    }
+    if (!pointerMedia.matches || reducedMotionMedia.matches) return stop();
+    if (started) return;
+    started = true;
     enabled = true;
     wrapper.style.display = '';
     resize();
@@ -316,6 +316,8 @@
 
   function stop() {
     enabled = false;
+    started = false;
+    wrapper.style.display = 'none';
     cells.clear();
     trails = [];
     if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
@@ -328,10 +330,12 @@
   }
 
   /* ---- Init ------------------------------------------------------------- */
-  start();
+  function syncPreference() {
+    if (pointerMedia.matches && !reducedMotionMedia.matches) start();
+    else stop();
+  }
 
-  // Re-evaluate on pointer type change
-  window.matchMedia('(pointer: fine)').addEventListener('change', function (e) {
-    if (e.matches) { start(); } else { stop(); }
-  });
+  syncPreference();
+  pointerMedia.addEventListener('change', syncPreference);
+  reducedMotionMedia.addEventListener('change', syncPreference);
 })();
