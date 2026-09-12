@@ -303,6 +303,76 @@
     observer.observe(section);
   }
 
+  function captureSkillLayout() {
+    const container = document.querySelector('.skills-categories');
+    if (!container || preferences.reducedMotion) return null;
+    return {
+      height: container.getBoundingClientRect().height,
+      positions: new Map([...container.querySelectorAll('.skcat:not([hidden])')].map((item) => [
+        item,
+        item.getBoundingClientRect(),
+      ])),
+    };
+  }
+
+  function animateSkillLayout(snapshot) {
+    const container = document.querySelector('.skills-categories');
+    if (!container) return;
+    if (!snapshot || preferences.reducedMotion) {
+      scrollDirector?.refresh();
+      return;
+    }
+
+    const finalHeight = container.getBoundingClientRect().height;
+    container.dataset.animating = 'true';
+    container.style.height = `${snapshot.height}px`;
+
+    container.querySelectorAll('.skcat:not([hidden])').forEach((item) => {
+      const first = snapshot.positions.get(item);
+      const last = item.getBoundingClientRect();
+      const start = first
+        ? { transform: `translate(${first.left - last.left}px,${first.top - last.top}px)`, opacity: 0.7 }
+        : { transform: 'translateY(10px)', opacity: 0 };
+      item.animate([
+        start,
+        { transform: 'translate(0,0)', opacity: 1 },
+      ], { duration: 360, easing: 'cubic-bezier(.16,1,.3,1)' });
+    });
+
+    requestAnimationFrame(() => {
+      container.style.transition = 'height 360ms var(--ease-out)';
+      container.style.height = `${finalHeight}px`;
+    });
+    window.setTimeout(() => {
+      container.style.height = '';
+      container.style.transition = '';
+      delete container.dataset.animating;
+      scrollDirector?.refresh();
+    }, 380);
+  }
+
+  function initSkills() {
+    const section = document.querySelector('#skills');
+    if (!section) return;
+
+    section.querySelectorAll('.sk').forEach((skill) => {
+      const level = Number.parseInt(skill.querySelector('.lv')?.textContent || '0', 10) / 100;
+      skill.style.setProperty('--skill-level', String(Math.max(0, Math.min(1, level))));
+    });
+
+    const activate = () => section.classList.add('skills-in');
+    if (preferences.reducedMotion) {
+      activate();
+      return;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      activate();
+      observer.disconnect();
+    }, { threshold: 0.2 });
+    observer.observe(section);
+  }
+
   function refresh() {
     syncCapabilityClasses();
     initReveals();
@@ -328,6 +398,7 @@
     safeInit('about', () => initAbout(pointerController, scheduler));
     safeInit('marquee', () => initMarquee(scheduler));
     safeInit('projects', () => initProjects(pointerController));
+    safeInit('skills', initSkills);
     refresh();
     requestAnimationFrame(() => root.classList.add('motion-ready'));
   }
@@ -337,6 +408,10 @@
   document.addEventListener('visibilitychange', syncCapabilityClasses);
 
   window.PortfolioMotion = { preferences, refresh, safeInit };
+  Object.assign(window.PortfolioMotion, {
+    captureSkillLayout,
+    animateSkillLayout,
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init, { once: true });

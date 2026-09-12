@@ -564,10 +564,10 @@ section:not(#hero)::after{
 .tab:hover{border-color:var(--ink);color:var(--ink)}
 .tab.active{background:var(--ink);color:var(--bg);border-color:var(--ink);box-shadow:var(--shadow-sm)}
 
-.skills-categories{display:flex;flex-direction:column;gap:2rem;transition:opacity 160ms ease,transform 220ms var(--ease-out)}
-.skills-categories.is-switching{opacity:0;transform:translateY(8px)}
+.skills-categories{display:flex;flex-direction:column;gap:2rem;height:auto;overflow:clip}
+.skills-categories[data-animating="true"]{pointer-events:none}
 .skills-categories.filtered .skcat:not([hidden]){border:none;padding-bottom:0}
-.skcat{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start;padding-bottom:1.75rem;border-bottom:1px dashed var(--line)}
+.skcat{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start;padding-bottom:1.75rem;border-bottom:1px dashed var(--line);transition:transform 360ms var(--ease-out),opacity 220ms ease}
 .skcat:last-child{border:none;padding-bottom:0}
 .skcat-l{
   font-family:var(--display);font-size:1.5rem;color:var(--ink);
@@ -582,7 +582,16 @@ section:not(#hero)::after{
   font-family:var(--mono);font-size:.85rem;color:var(--ink);
   box-shadow:2px 2px 0 1px rgba(0,0,0,.1);
   transition:transform var(--motion-ui) var(--ease-out),background-color var(--motion-fast) ease,color var(--motion-fast) ease,border-color var(--motion-fast) ease,box-shadow var(--motion-ui) var(--ease-out);position:relative;
+  overflow:hidden;isolation:isolate;
 }
+.sk::before{
+  content:"";position:absolute;inset:auto 0 0;height:2px;background:var(--line-soft);z-index:-2
+}
+.sk::after{
+  content:"";position:absolute;inset:auto 0 0;height:2px;background:var(--ink);
+  transform:scaleX(0);transform-origin:left;transition:transform 700ms var(--ease-out);z-index:-1
+}
+#skills.skills-in .sk::after{transform:scaleX(var(--skill-level,0))}
 .sk:hover{transform:translate(-2px,-2px);background:var(--ink);color:var(--bg);border-color:var(--ink);box-shadow:4px 4px 0 1px var(--ink-2)}
 .sk .lv{font-size:.65rem;opacity:.6;letter-spacing:.05em}
 .sk.dim{opacity:.25;filter:grayscale(1)}
@@ -1782,10 +1791,11 @@ reducedMotionMedia.addEventListener('change', syncRoleRotator);
 // Skill tabs
 const skillTabs=document.querySelectorAll('.skills-tabs .tab');
 const skillCategories=document.querySelector('.skills-categories');
-let skillFilterTimer=null;
 function showSkillCategory(cat){
+  const snapshot=window.PortfolioMotion?.captureSkillLayout?.();
   document.querySelectorAll('.skcat').forEach((group)=>{group.hidden=cat!=='all'&&group.dataset.cat!==cat});
   skillCategories?.classList.toggle('filtered',cat!=='all');
+  window.PortfolioMotion?.animateSkillLayout?.(snapshot);
 }
 skillTabs.forEach((tab)=>tab.addEventListener('click',()=>{
   skillTabs.forEach((item)=>{
@@ -1794,17 +1804,7 @@ skillTabs.forEach((tab)=>tab.addEventListener('click',()=>{
     item.setAttribute('aria-pressed',String(active));
   });
   const cat=tab.dataset.cat;
-  if(skillFilterTimer)clearTimeout(skillFilterTimer);
-  if(reducedMotionMedia.matches){
-    showSkillCategory(cat);
-    skillCategories?.classList.remove('is-switching');
-    return;
-  }
-  skillCategories?.classList.add('is-switching');
-  skillFilterTimer=setTimeout(()=>{
-    showSkillCategory(cat);
-    skillCategories?.classList.remove('is-switching');
-  },160);
+  showSkillCategory(cat);
 }));
 
 if ('serviceWorker' in navigator) {

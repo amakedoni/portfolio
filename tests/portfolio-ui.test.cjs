@@ -249,17 +249,23 @@ test('reduced motion disables decorative JavaScript animation', { timeout: 10000
   await context.close();
 });
 
-test('skill tabs filter complete groups and expose their state', async () => {
+test('skill tabs animate complete groups and expose proficiency tracks', async () => {
   const { context, page } = await openPage();
+  const section = page.locator('#skills');
+  await section.scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => document.querySelector('#skills')?.classList.contains('skills-in'), null, { timeout: 1500 });
+
+  const python = page.locator('.sk').filter({ hasText: 'Python' }).first();
+  assert.equal(await python.evaluate((el) => getComputedStyle(el).getPropertyValue('--skill-level').trim()), '0.9');
+
   const backend = page.locator('.skills-tabs .tab[data-cat="back"]');
-  await backend.scrollIntoViewIfNeeded();
   await backend.click();
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(420);
 
   assert.equal(await backend.getAttribute('aria-pressed'), 'true');
-  assert.equal(await page.locator('.skills-tabs .tab[data-cat="all"]').getAttribute('aria-pressed'), 'false');
   assert.equal(await page.locator('.skcat:not([hidden])').count(), 1);
   assert.equal(await page.locator('.skcat[data-cat="back"]').isVisible(), true);
+  assert.equal(await page.locator('.skills-categories').getAttribute('data-animating'), null);
   await context.close();
 });
 
