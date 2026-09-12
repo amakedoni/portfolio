@@ -35,7 +35,11 @@
         themeButtons.forEach(button => {
             if (!initializedButtons.has(button)) {
                 initializedButtons.add(button);
-                button.addEventListener('click', () => {
+                button.addEventListener('click', (event) => {
+                    const x = event.clientX || window.innerWidth / 2;
+                    const y = event.clientY || window.innerHeight / 2;
+                    document.documentElement.style.setProperty('--theme-x', `${x}px`);
+                    document.documentElement.style.setProperty('--theme-y', `${y}px`);
                     const commitTheme = () => {
                         const isDark = document.body.classList.toggle(DARK_THEME_CLASS);
                         localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');

@@ -102,6 +102,11 @@ body.dark-theme{
   --graph-ink:#f5f5f5;
 }
 ::view-transition-old(root),::view-transition-new(root){animation-duration:var(--motion-theme);animation-timing-function:ease-in-out}
+::view-transition-new(root){animation:themeReveal var(--motion-theme) var(--ease-out)}
+@keyframes themeReveal{
+  from{clip-path:circle(0 at var(--theme-x,50%) var(--theme-y,50%))}
+  to{clip-path:circle(150vmax at var(--theme-x,50%) var(--theme-y,50%))}
+}
 
 .wrap{width:90%;max-width:1280px;margin:0 auto;padding:0 20px}
 .skip-link{
@@ -652,10 +657,12 @@ section:not(#hero)::after{
   width:100%;background:var(--bg);
   border:1.5px solid var(--line);border-radius:var(--r-md);
   padding:.85rem 1rem;color:var(--ink);font-family:var(--sans);font-size:.95rem;
-  transition:border-color var(--motion-fast) ease,box-shadow var(--motion-ui) var(--ease-out),background-color var(--motion-fast) ease,color var(--motion-fast) ease;
+  transition:border-color var(--motion-fast) ease,box-shadow var(--motion-ui) var(--ease-out),background-color var(--motion-fast) ease,color var(--motion-fast) ease,transform var(--motion-fast) var(--ease-out);
 }
-.cform input:focus,.cform textarea:focus{outline:none;border-color:var(--ink);box-shadow:3px 3px 0 1px var(--ink)}
+.cform input:focus,.cform textarea:focus{outline:none;border-color:var(--ink);box-shadow:4px 4px 0 1px var(--ink);transform:translate(-2px,-2px)}
 .cform textarea{resize:vertical;min-height:120px}
+.field-label{transition:color var(--motion-fast) ease,transform var(--motion-fast) ease}
+.field-label:has(+ input:focus),.field-label:has(+ textarea:focus){color:var(--ink);transform:translateX(4px)}
 .cform button{
   margin-top:.5rem;padding:1rem 1.5rem;border:2px solid var(--ink);border-radius:var(--r-md);
   background:var(--ink);color:var(--bg);font-family:var(--sans);font-weight:600;font-size:1rem;
@@ -663,6 +670,11 @@ section:not(#hero)::after{
   box-shadow:var(--shadow-md);transition:transform var(--motion-ui) var(--ease-out),box-shadow var(--motion-ui) var(--ease-out),background-color var(--motion-fast) ease,color var(--motion-fast) ease;
 }
 .cform button:hover{transform:translate(-4px,-4px);box-shadow:6px 6px 0 2px var(--ink-2)}
+.cform[data-submitting="true"] button{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+[data-magnetic]{--magnetic-x:0px;--magnetic-y:0px}
+.has-fine-pointer [data-magnetic]:not(:hover),
+.has-fine-pointer [data-magnetic]:hover{translate:var(--magnetic-x) var(--magnetic-y)}
 
 /* ====== FOOTER ====== */
 footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-2);margin-top:4rem}
@@ -731,6 +743,14 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   display:block;width:100%;height:100%;
   image-rendering:pixelated;image-rendering:crisp-edges;
 }
+.cursor-context-label{
+  position:fixed;z-index:260;left:0;top:0;padding:4px 6px;
+  border:1px solid var(--ink);background:var(--bg-2);color:var(--ink);
+  font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;
+  opacity:0;transform:translate3d(-100px,-100px,0);
+  transition:opacity var(--motion-fast) ease;pointer-events:none
+}
+.cursor-context-label.visible{opacity:1}
 @media (pointer:coarse){
   .cursor-pixel-overlay{display:none}
 }
@@ -940,7 +960,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
           <div class="rstage" id="rotator"><span class="in">Full-Stack Engineer</span></div>
         </div>
         <div class="cta-row" data-motion="hero-detail">
-          <a href="#projects" class="btn primary">View work <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a href="#projects" class="btn primary" data-cursor="VIEW" data-magnetic>View work <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           <a href="#contact" class="btn">Get in touch <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </div>
@@ -1023,8 +1043,8 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
             <span class="chip">TypeScript</span><span class="chip">React 18</span><span class="chip">TensorFlow.js</span><span class="chip">Zustand</span><span class="chip">Dexie.js</span><span class="chip">Tailwind</span><span class="chip">Radix UI</span><span class="chip">Vite · PWA</span>
           </div>
           <div class="pf-actions">
-            <a class="btn primary" href="https://finly-ruby.vercel.app" target="_blank" rel="noopener">Open the app <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            <a class="btn" href="https://github.com/Shadovv-Government/Finly" target="_blank" rel="noopener">Source <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a class="btn primary" href="https://finly-ruby.vercel.app" target="_blank" rel="noopener" data-cursor="OPEN" data-magnetic>Open the app <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a class="btn" href="https://github.com/Shadovv-Government/Finly" target="_blank" rel="noopener" data-cursor="OPEN">Source <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
         <div class="pf-mock" data-pointer="device">
@@ -1100,12 +1120,12 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
 
     <div class="skills-wrap reveal">
       <div class="skills-tabs">
-        <button class="tab active" type="button" data-cat="all" aria-pressed="true">All</button>
-        <button class="tab" type="button" data-cat="lang" aria-pressed="false">Languages</button>
-        <button class="tab" type="button" data-cat="back" aria-pressed="false">Backend</button>
-        <button class="tab" type="button" data-cat="ops" aria-pressed="false">DevOps</button>
-        <button class="tab" type="button" data-cat="ml" aria-pressed="false">ML & Data</button>
-        <button class="tab" type="button" data-cat="fe" aria-pressed="false">Frontend &amp; PWA</button>
+        <button class="tab active" type="button" data-cat="all" data-cursor="FILTER" aria-pressed="true">All</button>
+        <button class="tab" type="button" data-cat="lang" data-cursor="FILTER" aria-pressed="false">Languages</button>
+        <button class="tab" type="button" data-cat="back" data-cursor="FILTER" aria-pressed="false">Backend</button>
+        <button class="tab" type="button" data-cat="ops" data-cursor="FILTER" aria-pressed="false">DevOps</button>
+        <button class="tab" type="button" data-cat="ml" data-cursor="FILTER" aria-pressed="false">ML & Data</button>
+        <button class="tab" type="button" data-cat="fe" data-cursor="FILTER" aria-pressed="false">Frontend &amp; PWA</button>
       </div>
 
       <div class="skills-categories">
@@ -1214,7 +1234,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
             <span class="l">Streak</span>
           </div>
         </div>
-        <a class="btn git-view-btn" href="https://github.com/amakedoni" target="_blank" rel="noopener">
+        <a class="btn git-view-btn" href="https://github.com/amakedoni" target="_blank" rel="noopener" data-cursor="OPEN">
           View profile
           <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -1288,10 +1308,10 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
         <h3>Got a project in mind?</h3>
         <p>Open to interesting work in product engineering, ML tooling, and offline-first PWAs. Drop a line via the form, or pick your favourite channel below.</p>
         <div class="channels">
-          <a class="ch" href="mailto:aleximlord@gmail.com"><span class="ch-l">Email</span><span class="ch-v">aleximlord@gmail.com</span><span class="ch-a">↗</span></a>
-          <a class="ch" href="tel:+79255053027"><span class="ch-l">Phone</span><span class="ch-v">+7 925 505 30 27</span><span class="ch-a">↗</span></a>
-          <a class="ch" href="https://t.me/makedoni0" target="_blank" rel="noopener"><span class="ch-l">Telegram</span><span class="ch-v">@makedoni0</span><span class="ch-a">↗</span></a>
-          <a class="ch" href="https://github.com/amakedoni" target="_blank" rel="noopener"><span class="ch-l">GitHub</span><span class="ch-v">amakedoni</span><span class="ch-a">↗</span></a>
+          <a class="ch" href="mailto:aleximlord@gmail.com" data-cursor="OPEN"><span class="ch-l">Email</span><span class="ch-v">aleximlord@gmail.com</span><span class="ch-a">↗</span></a>
+          <a class="ch" href="tel:+79255053027" data-cursor="OPEN"><span class="ch-l">Phone</span><span class="ch-v">+7 925 505 30 27</span><span class="ch-a">↗</span></a>
+          <a class="ch" href="https://t.me/makedoni0" target="_blank" rel="noopener" data-cursor="OPEN"><span class="ch-l">Telegram</span><span class="ch-v">@makedoni0</span><span class="ch-a">↗</span></a>
+          <a class="ch" href="https://github.com/amakedoni" target="_blank" rel="noopener" data-cursor="OPEN"><span class="ch-l">GitHub</span><span class="ch-v">amakedoni</span><span class="ch-a">↗</span></a>
         </div>
       </div>
 
@@ -1303,7 +1323,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
         <input id="contact-email" type="email" name="email" autocomplete="email" placeholder="Your email" required />
         <label class="field-label" for="contact-message">Tell me about your project</label>
         <textarea id="contact-message" name="message" placeholder="Tell me about your project — what are you building, when do you need it, and what does success look like?" required></textarea>
-        <button type="submit">Send message <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="submit" data-cursor="SEND" data-magnetic aria-live="polite">Send message <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </form>
     </div>
   </div>
@@ -1317,13 +1337,13 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
 </button>
 
 <footer>
-  <div class="wrap foot">
+  <div class="wrap foot reveal">
     <div class="foot-brand">© 2026 — A. Makedonskiy</div>
     <div class="foot-links">
-      <a href="https://github.com/amakedoni" target="_blank" rel="noopener">GH</a>
-      <a href="https://t.me/makedoni0" target="_blank" rel="noopener">TG</a>
-      <a href="https://m.vk.com/amakedoni" target="_blank" rel="noopener">VK</a>
-      <a href="mailto:aleximlord@gmail.com">✉</a>
+      <a href="https://github.com/amakedoni" target="_blank" rel="noopener" data-cursor="OPEN">GH</a>
+      <a href="https://t.me/makedoni0" target="_blank" rel="noopener" data-cursor="OPEN">TG</a>
+      <a href="https://m.vk.com/amakedoni" target="_blank" rel="noopener" data-cursor="OPEN">VK</a>
+      <a href="mailto:aleximlord@gmail.com" data-cursor="OPEN">✉</a>
     </div>
     <div class="foot-meta">Crafted in Moscow · v2026.1</div>
   </div>
@@ -1646,25 +1666,6 @@ if (langToggleBtns.length) {
   }));
 }
 
-const themeToggleBtns = document.querySelectorAll('.theme-toggle');
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-  document.body.classList.add('dark-theme');
-}
-function commitThemeToggle() {
-  const isDark = document.body.classList.toggle('dark-theme');
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
-}
-if (themeToggleBtns.length) {
-  themeToggleBtns.forEach((btn) => btn.addEventListener('click', () => {
-    if (!reducedMotionMedia.matches && document.startViewTransition) {
-      document.startViewTransition(commitThemeToggle);
-    } else {
-      commitThemeToggle();
-    }
-  }));
-}
-
 const resumeToggle = document.querySelector('.resume-toggle');
 const resumeDropdown = document.querySelector('.resume-dropdown');
 function closeResumeMenu(restoreFocus = false) {
@@ -1766,10 +1767,14 @@ if (contactForm) {
       ? `Имя: ${name}\nEmail: ${email}\n\nСообщение:\n${message}`
       : `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
 
+    contactForm.dataset.submitting = 'true';
     updateButtonTextWithIcon(button, t.contactSubmitDone);
     window.location.href = `mailto:aleximlord@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-    setTimeout(() => updateButtonTextWithIcon(button, t.contactSubmit), 1600);
+    setTimeout(() => {
+      updateButtonTextWithIcon(button, t.contactSubmit);
+      delete contactForm.dataset.submitting;
+    }, 1600);
   });
 }
 
@@ -1929,6 +1934,7 @@ document.querySelectorAll('.lang-toggle').forEach(btn => {
 
 initGitHubGrid();
 </script>
+<script src="js/theme.js" defer></script>
 <script src="js/motion.js" defer></script>
 <script src="js/cursor.js" defer></script>
 </body>

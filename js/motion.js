@@ -468,6 +468,33 @@
     }
   }
 
+  function initContextualPointer(pointer) {
+    if (!preferences.finePointer || preferences.reducedMotion) return;
+    pointer.subscribe((x, y) => window.PortfolioPixelCursor?.moveLabel(x, y));
+
+    document.addEventListener('pointerover', (event) => {
+      const target = event.target.closest('[data-cursor]');
+      window.PortfolioPixelCursor?.showLabel(target?.dataset.cursor || '');
+    });
+    document.addEventListener('pointerout', (event) => {
+      const leaving = event.target.closest('[data-cursor]');
+      const entering = event.relatedTarget?.closest?.('[data-cursor]');
+      if (leaving && leaving !== entering) window.PortfolioPixelCursor?.showLabel('');
+    });
+
+    document.querySelectorAll('[data-magnetic]').forEach((element) => {
+      pointer.register(element, (target, x, y) => {
+        if (!target.matches(':hover')) return;
+        target.style.setProperty('--magnetic-x', `${(x * 4).toFixed(2)}px`);
+        target.style.setProperty('--magnetic-y', `${(y * 4).toFixed(2)}px`);
+      });
+      element.addEventListener('pointerleave', () => {
+        element.style.setProperty('--magnetic-x', '0px');
+        element.style.setProperty('--magnetic-y', '0px');
+      });
+    });
+  }
+
   function refresh() {
     syncCapabilityClasses();
     initReveals();
@@ -496,6 +523,7 @@
     safeInit('skills', initSkills);
     safeInit('education', initEducation);
     safeInit('github', initGitHubGridInteractions);
+    safeInit('context-pointer', () => initContextualPointer(pointerController));
     refresh();
     requestAnimationFrame(() => root.classList.add('motion-ready'));
   }

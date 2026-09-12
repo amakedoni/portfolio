@@ -26,6 +26,11 @@
   canvas.className = 'cursor-pixel-canvas';
   canvas.setAttribute('aria-hidden', 'true');
   wrapper.appendChild(canvas);
+
+  var contextLabel = document.createElement('div');
+  contextLabel.className = 'cursor-context-label';
+  contextLabel.setAttribute('aria-hidden', 'true');
+  wrapper.appendChild(contextLabel);
   document.body.prepend(wrapper);
 
   var ctx = canvas.getContext('2d');
@@ -327,6 +332,7 @@
     window.removeEventListener('resize', resize);
     document.removeEventListener('visibilitychange', onVisibilityChange);
     if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    contextLabel.classList.remove('visible');
   }
 
   /* ---- Init ------------------------------------------------------------- */
@@ -334,6 +340,16 @@
     if (pointerMedia.matches && !reducedMotionMedia.matches) start();
     else stop();
   }
+
+  window.PortfolioPixelCursor = {
+    showLabel: function (text) {
+      contextLabel.textContent = text;
+      contextLabel.classList.toggle('visible', Boolean(text));
+    },
+    moveLabel: function (x, y) {
+      contextLabel.style.transform = 'translate3d(' + (x + 16) + 'px,' + (y + 16) + 'px,0)';
+    }
+  };
 
   syncPreference();
   pointerMedia.addEventListener('change', syncPreference);

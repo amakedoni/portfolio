@@ -340,6 +340,32 @@ test('education timeline and GitHub grid expose their completed scenes', async (
   await context.close();
 });
 
+test('fine-pointer interactions expose contextual labels and magnetic offsets', async () => {
+  const { context, page } = await openPage();
+  const button = page.locator('#hero .btn.primary');
+  const box = await button.boundingBox();
+  await page.mouse.move(box.x + box.width * 0.8, box.y + box.height * 0.2);
+  await page.waitForTimeout(80);
+  assert.equal(await page.locator('.cursor-context-label').textContent({ timeout: 1500 }), 'VIEW');
+  const magneticX = await button.evaluate((el) => getComputedStyle(el).getPropertyValue('--magnetic-x').trim());
+  assert.notEqual(Number.parseFloat(magneticX), 0);
+  await context.close();
+});
+
+test('theme transition records its origin and contact submit has a state', async () => {
+  const { context, page } = await openPage();
+  await page.locator('.controls .theme-toggle').click({ position: { x: 10, y: 10 } });
+  assert.match(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--theme-x').trim()), /px$/);
+
+  const form = page.locator('#contact-form');
+  await form.locator('input[name="name"]').fill('Test');
+  await form.locator('input[name="email"]').fill('test@example.com');
+  await form.locator('textarea').fill('Portfolio test');
+  await form.evaluate((el) => el.dispatchEvent(new SubmitEvent('submit', { bubbles: true, cancelable: true })));
+  assert.equal(await form.getAttribute('data-submitting'), 'true');
+  await context.close();
+});
+
 test('secondary project cards share the same hover lift without link affordances', async () => {
   const { context, page } = await openPage();
   const cards = page.locator('.pcard');
