@@ -38,10 +38,12 @@ async function openPage(options = {}) {
     viewport: options.viewport || { width: 1280, height: 900 },
     reducedMotion: options.reducedMotion || 'no-preference',
     colorScheme: 'light',
+    javaScriptEnabled: options.javaScriptEnabled !== false,
+    hasTouch: options.hasTouch || false,
   });
   const page = await context.newPage();
   await page.goto(`${origin}${options.path || '/'}`, { waitUntil: 'domcontentloaded' });
-  if (!options.keepLoader) {
+  if (!options.keepLoader && options.javaScriptEnabled !== false) {
     await page.addStyleTag({ content: '.loading-screen{display:none!important}' });
   }
   return { context, page };
@@ -97,6 +99,22 @@ test('the loader releases the page without an artificial delay', { timeout: 1000
   const started = Date.now();
   await page.locator('.loading-screen').waitFor({ state: 'hidden', timeout: 1000 });
   assert.ok(Date.now() - started < 1000, 'The loading screen should disappear within one second of DOM readiness');
+  await context.close();
+});
+
+test('essential content stays visible without JavaScript', async () => {
+  const { context, page } = await openPage({ javaScriptEnabled: false, keepLoader: true });
+  assert.equal(await page.locator('.loading-screen').evaluate((el) => getComputedStyle(el).display), 'none');
+  assert.equal(await page.locator('#hero h1').isVisible(), true);
+  assert.equal(await page.locator('#contact-form').isVisible(), true);
+  await context.close();
+});
+
+test('motion bootstrap publishes a capability profile without hiding content', async () => {
+  const { context, page } = await openPage();
+  await page.waitForFunction(() => document.documentElement.classList.contains('motion-ready'));
+  assert.equal(await page.evaluate(() => Boolean(window.PortfolioMotion?.preferences)), true);
+  assert.equal(await page.locator('#hero h1').isVisible(), true);
   await context.close();
 });
 
