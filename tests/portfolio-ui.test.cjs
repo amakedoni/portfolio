@@ -292,6 +292,29 @@ test('contact fields have persistent accessible labels', async () => {
   await context.close();
 });
 
+test('featured project draws its graph and uses shallow device depth', async () => {
+  const { context, page } = await openPage();
+  const project = page.locator('.proj-feat');
+  await project.scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => document.querySelector('#projects')?.classList.contains('projects-in'), null, { timeout: 1500 });
+
+  const line = page.locator('.app-graph .graph-line');
+  assert.equal(await line.count(), 1);
+  await page.waitForFunction(() => {
+    const graphLine = document.querySelector('.app-graph .graph-line');
+    return graphLine && Math.abs(Number.parseFloat(getComputedStyle(graphLine).strokeDashoffset)) < 1;
+  }, null, { timeout: 2500 });
+
+  const mock = page.locator('.pf-mock');
+  const box = await mock.boundingBox();
+  const before = await page.locator('.device').evaluate((el) => getComputedStyle(el).transform);
+  await page.mouse.move(box.x + box.width * 0.85, box.y + box.height * 0.2);
+  await page.waitForTimeout(100);
+  const after = await page.locator('.device').evaluate((el) => getComputedStyle(el).transform);
+  assert.notEqual(after, before);
+  await context.close();
+});
+
 test('secondary project cards share the same hover lift without link affordances', async () => {
   const { context, page } = await openPage();
   const cards = page.locator('.pcard');

@@ -454,9 +454,22 @@ section:not(#hero)::after{
   position:relative;width:100%;max-width:340px;aspect-ratio:9/16;
   background:var(--ink);border-radius:36px;padding:10px;
   box-shadow:6px 6px 0 2px var(--ink);
-  transform:rotate(-3deg);transition:transform .8s cubic-bezier(.2,.7,.3,1);
+  transform:
+    perspective(900px)
+    rotateX(calc(var(--device-y,0) * -1.2deg))
+    rotateY(calc(var(--device-x,0) * 1.6deg))
+    rotateZ(calc(-3deg + var(--device-x,0) * .35deg))
+    translate3d(calc(var(--device-x,0) * 4px),calc(var(--device-y,0) * 4px),0);
+  transition:transform .8s cubic-bezier(.2,.7,.3,1);
 }
-.proj-feat:hover .device{transform:rotate(0deg)}
+.proj-feat:hover .device{
+  transform:
+    perspective(900px)
+    rotateX(calc(var(--device-y,0) * -1.2deg))
+    rotateY(calc(var(--device-x,0) * 1.6deg))
+    rotateZ(calc(var(--device-x,0) * .35deg))
+    translate3d(calc(var(--device-x,0) * 4px),calc(var(--device-y,0) * 4px),0)
+}
 .dscreen{
   width:100%;height:100%;border-radius:26px;background:var(--bg-2);overflow:hidden;
   position:relative;border:1px solid var(--ink);
@@ -469,6 +482,19 @@ section:not(#hero)::after{
 .app-sub{font-family:var(--mono);font-size:.55rem;color:var(--ink-3);letter-spacing:.15em;text-transform:uppercase}
 .app-graph{height:60px;background:var(--bg-3);border:1px solid var(--line);border-radius:6px;position:relative;overflow:hidden}
 .app-graph svg{position:absolute;inset:0;width:100%;height:100%}
+.projects-in .graph-line{
+  stroke-dasharray:340;stroke-dashoffset:0;
+  transition:stroke-dashoffset 900ms var(--ease-out) 160ms
+}
+.motion-ready #projects:not(.projects-in) .graph-line{stroke-dashoffset:340}
+.motion-ready #projects:not(.projects-in) .app-bal,
+.motion-ready #projects:not(.projects-in) .tx{opacity:0;transform:translateY(12px)}
+.projects-in .app-bal,
+.projects-in .tx{
+  opacity:1;transform:none;
+  transition:opacity 420ms ease,transform 520ms var(--ease-out);
+  transition-delay:calc(240ms + var(--item-index,0) * 85ms)
+}
 .app-tx{display:flex;flex-direction:column;gap:6px;margin-top:4px}
 .tx{display:flex;align-items:center;gap:8px;padding:7px 9px;background:var(--bg);border:1px solid var(--line);border-radius:6px;font-size:.65rem}
 .tx-i{width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);font-family:var(--mono);font-weight:700;font-size:.6rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -493,6 +519,10 @@ section:not(#hero)::after{
 .pc-role{font-family:var(--mono);font-size:.72rem;color:var(--ink-2);letter-spacing:.06em}
 .pc-desc{font-size:.95rem;color:var(--ink-2);line-height:1.65;flex:1}
 .pc-stack{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);padding-top:.75rem;border-top:1px dashed var(--line)}
+.pcard .pc-num,
+.pcard .pc-stack{transition:transform var(--motion-ui) var(--ease-out),color var(--motion-fast) ease}
+.pcard:hover .pc-num{transform:translate(3px,-3px)}
+.pcard:hover .pc-stack{transform:translateX(4px);color:var(--ink-2)}
 
 /* achievements */
 .ach{
@@ -508,6 +538,12 @@ section:not(#hero)::after{
 .ach-item{display:grid;grid-template-columns:auto 1fr;gap:1.25rem;align-items:center;padding:.85rem 0;border-bottom:1px solid var(--line-soft);font-size:.95rem;color:var(--ink-2)}
 .ach-item:last-child{border:none}
 .ach-tag{font-family:var(--mono);font-size:.68rem;color:var(--ink);letter-spacing:.15em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--ink);border-radius:var(--r-sm);min-width:120px;text-align:center}
+.motion-ready .ach:not(.in) .ach-item{opacity:0;transform:translateX(18px)}
+.ach.in .ach-item{
+  opacity:1;transform:none;
+  transition:opacity 360ms ease,transform 460ms var(--ease-out);
+  transition-delay:calc(var(--item-index,0) * 80ms)
+}
 
 /* ====== SKILLS ====== */
 .skills-wrap{
@@ -959,7 +995,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
             <a class="btn" href="https://github.com/Shadovv-Government/Finly" target="_blank" rel="noopener">Source <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
-        <div class="pf-mock">
+        <div class="pf-mock" data-pointer="device">
           <div class="device">
             <div class="dscreen">
               <div class="dnotch"></div>
@@ -972,13 +1008,13 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
                 <div class="app-graph">
                   <svg viewBox="0 0 300 60" preserveAspectRatio="none">
                     <path d="M0,48 L25,40 L55,44 L80,28 L110,32 L140,18 L170,24 L200,12 L230,20 L260,14 L300,4 L300,60 L0,60 Z" fill="var(--graph-ink)" opacity=".15"/>
-                    <path d="M0,48 L25,40 L55,44 L80,28 L110,32 L140,18 L170,24 L200,12 L230,20 L260,14 L300,4" fill="none" stroke="var(--graph-ink)" stroke-width="1.5"/>
+                    <path class="graph-line" d="M0,48 L25,40 L55,44 L80,28 L110,32 L140,18 L170,24 L200,12 L230,20 L260,14 L300,4" fill="none" stroke="var(--graph-ink)" stroke-width="1.5"/>
                   </svg>
                 </div>
                 <div class="app-tx">
-                  <div class="tx"><div class="tx-i">G</div><div class="tx-m"><span class="t">Groceries</span><span class="c">today</span></div><div class="tx-a">−1,840</div></div>
-                  <div class="tx"><div class="tx-i">S</div><div class="tx-m"><span class="t">Salary</span><span class="c">monthly</span></div><div class="tx-a">+120,000</div></div>
-                  <div class="tx"><div class="tx-i">T</div><div class="tx-m"><span class="t">Transport</span><span class="c">weekly</span></div><div class="tx-a">−890</div></div>
+                  <div class="tx" style="--item-index:0"><div class="tx-i">G</div><div class="tx-m"><span class="t">Groceries</span><span class="c">today</span></div><div class="tx-a">−1,840</div></div>
+                  <div class="tx" style="--item-index:1"><div class="tx-i">S</div><div class="tx-m"><span class="t">Salary</span><span class="c">monthly</span></div><div class="tx-a">+120,000</div></div>
+                  <div class="tx" style="--item-index:2"><div class="tx-i">T</div><div class="tx-m"><span class="t">Transport</span><span class="c">weekly</span></div><div class="tx-a">−890</div></div>
                 </div>
               </div>
             </div>
@@ -1013,9 +1049,9 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
         <div class="ach-t">Recognition.<span class="ach-y">2022 — 2025 · Olympiads</span></div>
       </div>
       <div class="ach-list">
-        <div class="ach-item"><span class="ach-tag">ITMO · Final</span><span>Finalist, ITMO Olympiad in Computer Science (2024–2025)</span></div>
-        <div class="ach-item"><span class="ach-tag">Rosatom · Final</span><span>Finalist, Rosatom Olympiad — CS & Mathematics (2022–2024)</span></div>
-        <div class="ach-item"><span class="ach-tag">Aerospace</span><span>Moscow Pre-professional Olympiad — Aerospace track finalist</span></div>
+        <div class="ach-item" style="--item-index:0"><span class="ach-tag">ITMO · Final</span><span>Finalist, ITMO Olympiad in Computer Science (2024–2025)</span></div>
+        <div class="ach-item" style="--item-index:1"><span class="ach-tag">Rosatom · Final</span><span>Finalist, Rosatom Olympiad — CS & Mathematics (2022–2024)</span></div>
+        <div class="ach-item" style="--item-index:2"><span class="ach-tag">Aerospace</span><span>Moscow Pre-professional Olympiad — Aerospace track finalist</span></div>
       </div>
     </div>
   </div>

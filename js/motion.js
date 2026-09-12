@@ -270,6 +270,39 @@
     });
   }
 
+  function initProjects(pointer) {
+    const section = document.querySelector('#projects');
+    const mock = document.querySelector('.pf-mock');
+    if (!section) return;
+
+    if (mock) {
+      const device = mock.querySelector('.device');
+      device?.style.setProperty('--device-x', '0');
+      device?.style.setProperty('--device-y', '0');
+    }
+
+    if (preferences.reducedMotion) {
+      section.classList.add('projects-in');
+      return;
+    }
+
+    if (mock) {
+      pointer.register(mock, (element, x, y) => {
+        const device = element.querySelector('.device');
+        if (!device) return;
+        device.style.setProperty('--device-x', x.toFixed(3));
+        device.style.setProperty('--device-y', y.toFixed(3));
+      });
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      section.classList.add('projects-in');
+      observer.disconnect();
+    }, { threshold: 0.14 });
+    observer.observe(section);
+  }
+
   function refresh() {
     syncCapabilityClasses();
     initReveals();
@@ -294,6 +327,7 @@
     safeInit('hero', () => initHero(pointerController));
     safeInit('about', () => initAbout(pointerController, scheduler));
     safeInit('marquee', () => initMarquee(scheduler));
+    safeInit('projects', () => initProjects(pointerController));
     refresh();
     requestAnimationFrame(() => root.classList.add('motion-ready'));
   }
