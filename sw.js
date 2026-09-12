@@ -1,5 +1,5 @@
 // Service Worker для базового офлайн-режима
-const CACHE_NAME = 'portfolio-v1.4.0';
+const CACHE_NAME = 'portfolio-v1.6.0';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -10,6 +10,7 @@ const urlsToCache = [
   '/assets/icons.svg',
   '/assets/images/photo-alt.jpg',
   '/js/cursor.js',
+  '/js/motion.js',
   '/js/translations.js',
   '/js/lang.js',
   '/js/theme.js',

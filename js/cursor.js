@@ -26,6 +26,11 @@
   canvas.className = 'cursor-pixel-canvas';
   canvas.setAttribute('aria-hidden', 'true');
   wrapper.appendChild(canvas);
+
+  var contextLabel = document.createElement('div');
+  contextLabel.className = 'cursor-context-label';
+  contextLabel.setAttribute('aria-hidden', 'true');
+  wrapper.appendChild(contextLabel);
   document.body.prepend(wrapper);
 
   var ctx = canvas.getContext('2d');
@@ -39,8 +44,11 @@
   var trailTimer = null;
   var spawnTimer = null;
   var enabled = true;
+  var started = false;
   var gridW = 0;
   var gridH = 0;
+  var pointerMedia = window.matchMedia('(pointer: fine)');
+  var reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   /* ---- Helpers ---------------------------------------------------------- */
   function cellKey(col, row) {
@@ -297,12 +305,9 @@
 
   /* ---- Lifecycle -------------------------------------------------------- */
   function start() {
-    var hasFinePointer = window.matchMedia('(pointer: fine)').matches;
-    if (!hasFinePointer) {
-      enabled = false;
-      wrapper.style.display = 'none';
-      return;
-    }
+    if (!pointerMedia.matches || reducedMotionMedia.matches) return stop();
+    if (started) return;
+    started = true;
     enabled = true;
     wrapper.style.display = '';
     resize();
@@ -316,6 +321,8 @@
 
   function stop() {
     enabled = false;
+    started = false;
+    wrapper.style.display = 'none';
     cells.clear();
     trails = [];
     if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
@@ -325,13 +332,26 @@
     window.removeEventListener('resize', resize);
     document.removeEventListener('visibilitychange', onVisibilityChange);
     if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    contextLabel.classList.remove('visible');
   }
 
   /* ---- Init ------------------------------------------------------------- */
-  start();
+  function syncPreference() {
+    if (pointerMedia.matches && !reducedMotionMedia.matches) start();
+    else stop();
+  }
 
-  // Re-evaluate on pointer type change
-  window.matchMedia('(pointer: fine)').addEventListener('change', function (e) {
-    if (e.matches) { start(); } else { stop(); }
-  });
+  window.PortfolioPixelCursor = {
+    showLabel: function (text) {
+      contextLabel.textContent = text;
+      contextLabel.classList.toggle('visible', Boolean(text));
+    },
+    moveLabel: function (x, y) {
+      contextLabel.style.transform = 'translate3d(' + (x + 16) + 'px,' + (y + 16) + 'px,0)';
+    }
+  };
+
+  syncPreference();
+  pointerMedia.addEventListener('change', syncPreference);
+  reducedMotionMedia.addEventListener('change', syncPreference);
 })();

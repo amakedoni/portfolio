@@ -9,6 +9,7 @@
     const STORAGE_KEY = 'theme';
     const DARK_THEME_CLASS = 'dark-theme';
     const MEDIA_QUERY = '(prefers-color-scheme: dark)';
+    const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     // Track which buttons already have listeners
     const initializedButtons = new WeakSet();
@@ -34,9 +35,21 @@
         themeButtons.forEach(button => {
             if (!initializedButtons.has(button)) {
                 initializedButtons.add(button);
-                button.addEventListener('click', () => {
-                    const isDark = document.body.classList.toggle(DARK_THEME_CLASS);
-                    localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
+                button.addEventListener('click', (event) => {
+                    const x = event.clientX || window.innerWidth / 2;
+                    const y = event.clientY || window.innerHeight / 2;
+                    document.documentElement.style.setProperty('--theme-x', `${x}px`);
+                    document.documentElement.style.setProperty('--theme-y', `${y}px`);
+                    const commitTheme = () => {
+                        const isDark = document.body.classList.toggle(DARK_THEME_CLASS);
+                        localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
+                    };
+
+                    if (!reducedMotionMedia.matches && document.startViewTransition) {
+                        document.startViewTransition(commitTheme);
+                    } else {
+                        commitTheme();
+                    }
                 });
             }
         });
