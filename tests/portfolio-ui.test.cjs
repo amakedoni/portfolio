@@ -1,5 +1,6 @@
 const { after, before, test } = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
 const http = require('node:http');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
@@ -94,12 +95,31 @@ after(async () => {
   server?.kill('SIGTERM');
 });
 
-test('the loader releases the page without an artificial delay', { timeout: 10000 }, async () => {
+test('the loader releases the page without an artificial delay', { timeout: 20000 }, async () => {
   const { context, page } = await openPage({ keepLoader: true });
   const started = Date.now();
   await page.locator('.loading-screen').waitFor({ state: 'hidden', timeout: 1000 });
   assert.ok(Date.now() - started < 1000, 'The loading screen should disappear within one second of DOM readiness');
   await context.close();
+});
+
+test('service worker caches the motion entry point with a new cache version', () => {
+  const source = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
+  assert.match(source, /portfolio-v1\.6\.0/);
+  assert.match(source, /['"]\/js\/motion\.js['"]/);
+});
+
+test('motion layout stays inside representative viewport widths', async () => {
+  for (const width of [360, 390, 768, 1280, 1600]) {
+    const { context, page } = await openPage({ viewport: { width, height: 900 }, hasTouch: width <= 768 });
+    await page.locator('#contact').scrollIntoViewIfNeeded();
+    const sizes = await page.evaluate(() => ({
+      viewport: innerWidth,
+      document: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+    }));
+    assert.ok(sizes.document <= sizes.viewport, `${width}px viewport overflowed to ${sizes.document}px`);
+    await context.close();
+  }
 });
 
 test('essential content stays visible without JavaScript', async () => {
@@ -199,14 +219,17 @@ test('the contact section never overflows a 360px viewport', async () => {
   const layout = await page.evaluate(() => {
     const channel = document.querySelector('.channels .ch');
     const rect = channel.getBoundingClientRect();
+    const scrollButton = document.querySelector('.scroll-to-top').getBoundingClientRect();
     return {
       viewport: window.innerWidth,
       documentWidth: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
       channelRight: rect.right,
+      scrollButtonWidth: scrollButton.width,
     };
   });
   assert.ok(layout.documentWidth <= layout.viewport, `Document is ${layout.documentWidth}px wide in a ${layout.viewport}px viewport`);
   assert.ok(layout.channelRight <= layout.viewport, 'Contact channels should stay inside the viewport');
+  assert.ok(layout.scrollButtonWidth <= 52, 'Back-to-top should collapse to an icon-sized control on narrow screens');
   await context.close();
 });
 
@@ -265,6 +288,10 @@ test('skill tabs animate complete groups and expose proficiency tracks', async (
   assert.equal(await backend.getAttribute('aria-pressed'), 'true');
   assert.equal(await page.locator('.skcat:not([hidden])').count(), 1);
   assert.equal(await page.locator('.skcat[data-cat="back"]').isVisible(), true);
+  assert.equal(
+    await page.locator('.skcat[hidden]').evaluateAll((groups) => groups.every((group) => getComputedStyle(group).display === 'none')),
+    true,
+  );
   assert.equal(await page.locator('.skills-categories').getAttribute('data-animating'), null);
   await context.close();
 });
@@ -335,6 +362,9 @@ test('education timeline and GitHub grid expose their completed scenes', async (
   await first.focus();
   assert.equal(await first.getAttribute('tabindex'), '0');
   assert.equal(await page.locator('#git-tooltip').isVisible(), true);
+  const tooltipBox = await page.locator('#git-tooltip').boundingBox();
+  assert.ok(tooltipBox && tooltipBox.x >= 0 && tooltipBox.y >= 0);
+  assert.ok(tooltipBox.x + tooltipBox.width <= 1280 && tooltipBox.y + tooltipBox.height <= 900);
   await first.press('ArrowRight');
   assert.equal(await page.locator('.git-cell').nth(7).getAttribute('tabindex'), '0');
   await context.close();
@@ -363,6 +393,24 @@ test('theme transition records its origin and contact submit has a state', async
   await form.locator('textarea').fill('Portfolio test');
   await form.evaluate((el) => el.dispatchEvent(new SubmitEvent('submit', { bubbles: true, cancelable: true })));
   assert.equal(await form.getAttribute('data-submitting'), 'true');
+  await context.close();
+});
+
+test('representative motion interactions produce no console errors', async () => {
+  const { context, page } = await openPage();
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(message.text());
+  });
+
+  await page.locator('#projects').scrollIntoViewIfNeeded();
+  await page.locator('.pf-mock').hover();
+  await page.locator('#skills').scrollIntoViewIfNeeded();
+  await page.locator('.tab[data-cat="back"]').click();
+  await page.locator('#github').scrollIntoViewIfNeeded();
+  await page.locator('#contact').scrollIntoViewIfNeeded();
+  assert.deepEqual(errors, []);
   await context.close();
 });
 

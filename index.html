@@ -573,6 +573,7 @@ section:not(#hero)::after{
 .skills-categories[data-animating="true"]{pointer-events:none}
 .skills-categories.filtered .skcat:not([hidden]){border:none;padding-bottom:0}
 .skcat{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start;padding-bottom:1.75rem;border-bottom:1px dashed var(--line);transition:transform 360ms var(--ease-out),opacity 220ms ease}
+.skcat[hidden]{display:none}
 .skcat:last-child{border:none;padding-bottom:0}
 .skcat-l{
   font-family:var(--display);font-size:1.5rem;color:var(--ink);
@@ -731,7 +732,16 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
-  .reveal{opacity:1;transform:none}
+  .motion-ready [data-motion],
+  .motion-ready .reveal,
+  .motion-ready .app-bal,
+  .motion-ready .tx,
+  .motion-ready .ach-item{opacity:1!important;transform:none!important;transition:none!important}
+  .mtrack{transform:none!important}
+  .device,.profile picture{transform:none!important}
+  .cursor-context-label{display:none!important}
+  .edu-grid::before{transform:none!important}
+  .git-cell{transform:scale(1)!important;animation:none!important}
   .cursor-pixel-overlay{display:none}
 }
 
@@ -753,6 +763,11 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
 .cursor-context-label.visible{opacity:1}
 @media (pointer:coarse){
   .cursor-pixel-overlay{display:none}
+}
+@media (hover:none),(pointer:coarse){
+  [data-magnetic]{--magnetic-x:0px!important;--magnetic-y:0px!important}
+  .device,.profile picture{transform:none}
+  .cursor-context-label{display:none}
 }
 
 /* responsive */
@@ -783,6 +798,9 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   .logo-compact{display:inline}
   .mobile-menu-toggle{display:flex}
   .controls{display:none}
+  .section-status{display:none}
+  .scroll-progress{height:1px}
+  .git-tooltip{display:none}
   .nav-links{
     display:flex;position:absolute;left:0;right:0;top:calc(100% + 8px);
     background:var(--bg);border:2px solid var(--line);border-radius:var(--r-md);
@@ -813,6 +831,8 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
   .ch .ch-l{min-width:64px}
   .ch .ch-v{font-size:clamp(1.05rem,5vw,1.3rem)}
   .cform{padding:2rem 1.25rem}
+  .scroll-to-top{width:46px;height:46px;padding:0;justify-content:center;gap:0}
+  .scroll-to-top span{display:none}
 }
 
 /* ====== GITHUB ACTIVITY ====== */
@@ -1270,7 +1290,6 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
               <div class="git-cells" id="git-cells">
                 <!-- Will be dynamically populated via JS for smooth wave animation -->
               </div>
-              <div class="git-tooltip" id="git-tooltip" role="tooltip" hidden></div>
             </div>
           </div>
         </div>
@@ -1291,6 +1310,7 @@ footer{padding:3rem 0 2rem;border-top:2px solid var(--line);background:var(--bg-
         </div>
       </div>
     </div>
+    <div class="git-tooltip" id="git-tooltip" role="tooltip" hidden></div>
   </div>
 </section>
 
