@@ -40,7 +40,7 @@
         entry.target.classList.add('in');
         revealObserver.unobserve(entry.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -48px' });
+    }, { threshold: 0.12, rootMargin: '0px' });
 
     document.querySelectorAll('.reveal:not(.in)').forEach((element, index) => {
       if (!element.style.getPropertyValue('--reveal-delay')) {
