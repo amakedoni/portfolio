@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#929fd2">
+  <meta name="description" content="Игровой остров Александра Македонского. Full-Stack, машинное обучение и инженерные проекты.">
+  <title>Александр Македонский — инженерный остров</title>
+  <link rel="icon" href="../assets/images/favicon.webp" type="image/webp">
+  <link rel="preload" href="./assets/pixelify-sans.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="./assets/roboto-condensed.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="./world.css?v=20261102-archipelago">
+  <script type="importmap">{"imports":{"three":"./vendor/three/three.module.js"}}</script>
+  <script type="module" src="./js/main.js?v=20261102-archipelago"></script>
+</head>
+<body>
+  <a class="skip-link" href="../index.html">Открыть обычную версию портфолио</a>
+  <main id="world" aria-label="Инженерный остров Александра Македонского">
+    <canvas id="island-canvas" aria-describedby="scene-description" aria-label="Мультяшный архипелаг: пять островов портфолио, шесть мостов и интерактивные площадки."></canvas>
+    <p class="sr-only" id="scene-description">Пять парящих островов соединены шестью подвесными мостами. Главный остров содержит портфолио и сад с прудом. На полигоне запускается заезд синего ровера. Обсерватория включает телескоп и модель планет. Остров энергии позволяет включать ветряки и заряжать накопитель. В игротеке стрелки выбирают направление броска, кнопка бросает шар и затем сбрасывает шесть кеглей. Таблички с названиями островов приближают соответствующую площадку; Вся карта показывает архипелаг целиком. Мышью можно вращать сцену и приближать колесом. Ручное управление главным ровером появится на следующем этапе.</p>
+    <button class="skip-link" data-region="main">Приблизить портфолио</button>
+    <button class="skip-link" data-region="lab">Приблизить полигон</button>
+    <button class="skip-link" data-region="map">Показать всю карту</button>
+    <button class="skip-link" data-region="observatory">Приблизить обсерваторию</button>
+    <button class="skip-link" data-region="playground">Приблизить игротеку</button>
+    <button class="skip-link" data-region="energy">Приблизить остров энергии</button>
+    <button class="skip-link" id="lab-toggle" aria-pressed="false">Запустить или остановить тест ровера</button>
+    <p class="sr-only" id="lab-status" role="status" aria-live="polite"></p>
+    <button class="skip-link" id="sonar-pulse" aria-pressed="false">Послать сигнал с буя</button>
+    <p class="sr-only" id="water-status" role="status" aria-live="polite"></p>
+    <button class="skip-link" data-activity="observatory">Начать или остановить наблюдение</button>
+    <p class="sr-only" id="observatory-status" role="status" aria-live="polite"></p>
+    <button class="skip-link" data-activity="energy">Включить или выключить электростанцию</button>
+    <p class="sr-only" id="energy-status" role="status" aria-live="polite"></p>
+    <button class="skip-link" data-aim="left">Направить шар левее</button>
+    <button class="skip-link" data-aim="right">Направить шар правее</button>
+    <button class="skip-link" data-activity="playground">Бросить шар или сбросить кегли</button>
+    <p class="sr-only" id="playground-status" role="status" aria-live="polite"></p>
+    <button class="skip-link" id="motion-toggle" aria-pressed="false">Уменьшить движение</button>
+    <nav class="sr-only" aria-label="Разделы портфолио">
+      <a href="../index.html#about">Обо мне</a>
+      <a href="../index.html#projects">Проекты</a>
+      <a href="../index.html#skills">Навыки</a>
+      <a href="../index.html#contact">Контакты</a>
+      <a href="../resume.pdf">Резюме PDF</a>
+    </nav>
+    <section class="fallback" id="fallback" hidden>
+      <h1>Александр Македонский</h1>
+      <p>Чтобы открыть трёхмерный остров, браузеру нужна поддержка WebGL.</p>
+      <a href="../index.html">Открыть портфолио</a>
+    </section>
+  </main>
+  <noscript><div class="fallback"><h1>Александр Македонский</h1><p>Для игрового острова нужен JavaScript.</p><a href="../index.html">Открыть портфолио</a></div></noscript>
+</body>
+</html>

@@ -1,0 +1,39 @@
+@font-face {
+  font-family: Pixelify;
+  src: url('./assets/pixelify-sans.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: Signage;
+  src: url('./assets/roboto-condensed.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+:root { color-scheme: light; font-family: Pixelify, monospace; background: #c4e5f3; color: #302b29; }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body {
+  background-color: #c4e5f3;
+  background-image: linear-gradient(155deg, #929fd2, #c0d8df 65%, #e6c7bb);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+#world { position: relative; width: 100%; height: 100%; height: 100svh; }
+#island-canvas { display: block; width: 100%; height: 100%; outline: none; touch-action: none; }
+#island-canvas { opacity: 0; transition: opacity 650ms ease-out; }
+html[data-scene="ready"] #island-canvas { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { #island-canvas { transition: none; } }
+#island-canvas[hidden] { display: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.skip-link { position: fixed; top: 12px; left: 12px; z-index: 20; padding: 12px 18px; background: #fff2d6; color: #302b29; border: 3px solid #77624d; transform: translateY(-180%); font: 600 17px Pixelify, monospace; text-decoration: none; }
+.skip-link:focus { transform: translateY(0); outline: 3px solid #e49122; outline-offset: 3px; }
+.fallback { position: fixed; inset: 0; display: grid; place-content: center; gap: 18px; padding: 28px; background: #f9efd9; text-align: center; }
+.fallback[hidden] { display: none; }
+.fallback h1 { margin: 0; font-size: clamp(26px, 5vw, 52px); }
+.fallback p { margin: 0; font: 17px/1.6 system-ui, sans-serif; max-width: 440px; }
+.fallback a { justify-self: center; padding: 14px 22px; background: #34343c; color: #fff3d9; text-decoration: none; font-size: 20px; }
+.fallback a:focus-visible { outline: 3px solid #df8915; outline-offset: 4px; }
