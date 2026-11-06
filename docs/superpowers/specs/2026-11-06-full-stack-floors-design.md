@@ -22,7 +22,7 @@ Values were read from the reference's code rather than estimated.
 | Menu panel | Height over 0.5s `expo.inOut` (`cubic-bezier(.87,0,.13,1)`) |
 | Menu rows | Rise 24px and fade, 0.5s `expo.out`, 30ms stagger, starting at 0.3s. Rows flip 90 degrees onto a colour face on hover. Bars: 0.3s `back.inOut`, 45 degrees, `scaleX(.8)` |
 | Accordions | One open at a time; items rise 16px, 0.5s, 60ms stagger after 0.12s |
-| Reel | 125lvh tall with a fixed `ellipse(100% 100% at 50% 100%)` clip; scenes cut on a timer |
+| Reel | A muted looping video generated with Gemini, shown whole at 16:9 with its own baked-in arch and no re-encode, crop or zoom, at the owner's request. The bottom half fades into the page, and the crest sits on the dark end of that fade. The crest's ribbons are separate from its body: they slide out from behind the columns with scroll and shake in 0.5° steps every 0.3s, using the reference's values |
 | Floors | One sticky stage, one scroll step per floor. On each change the background tweens for 0.75s, the outgoing pieces blink off over 0.3s, the incoming pieces blink on from 0.21s, and the image travels `viewport + image` height. Images tilt up to 12 degrees toward the pointer |
 | Quote | Letters from 20% to full opacity, random order, scrubbed by scroll |
 | Footer word | Letters appear in random order over 0.8s and reverse when scrolling away |
@@ -30,7 +30,7 @@ Values were read from the reference's code rather than estimated.
 
 ## Type
 
-Display: Anton, with Oswald 700 for Cyrillic. Labels and buttons: Days One. Wordmark and footer: Forum. Body: Inter Tight with tight tracking. Each role was chosen by rendering candidates beside the reference.
+The reference's fonts (Founders Grotesk X-Condensed Bold, Founders Grotesk, Founders Grotesk Medium, PP Gosha Sans Bold and Parabole) are commercial and were not copied. Its five roles are kept, each with an open-licensed stand-in sized and tracked from the font files' real metrics: Roboto Flex at wdth 60, wght 700, opsz 144 for headings; Libre Franklin 400 for body; Libre Franklin 600 for event titles; Archivo 700 for labels and buttons; Bruno Ace, narrowed to 72% and renamed, for swapped letters, which are real letters swapped in as the reference does; Forum for the wordmark and footer word, where the reference draws a serif logotype.
 
 ## Illustration
 
@@ -46,3 +46,7 @@ Display: Anton, with Oswald 700 for Cyrillic. Labels and buttons: Days One. Word
 ## Known gaps
 
 - MAI Tablets and CubeSat use illustrations until real photos are available. Replace `.fp-media` and `.case-media` contents to use them.
+
+## Illustrations
+
+Every illustration is drawn in code, section by section in `scripts/sticker-art/`, from the copy beside it. Hero stickers show at 100-200px and keep bold detail. Floor scenes and cards show at 300-530px and carry the fine work. Real product screenshots and the owner's photo stay photographic. No product logos are reproduced.
