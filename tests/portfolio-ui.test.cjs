@@ -41,13 +41,28 @@ async function openPage(options = {}) {
     colorScheme: 'light',
     javaScriptEnabled: options.javaScriptEnabled !== false,
     hasTouch: options.hasTouch || false,
+    serviceWorkers: 'block',
   });
+  if (options.init) await context.addInitScript(options.init);
   const page = await context.newPage();
-  await page.goto(`${origin}${options.path || '/'}`, { waitUntil: 'domcontentloaded' });
-  if (!options.keepLoader && options.javaScriptEnabled !== false) {
-    await page.addStyleTag({ content: '.loading-screen{display:none!important}' });
+  await page.goto(`${origin}${options.path || '/'}`, { waitUntil: 'load' });
+  if (options.javaScriptEnabled !== false && options.reducedMotion !== 'reduce' && !options.path) {
+    await page.waitForFunction(() => document.documentElement.classList.contains('motion-ready'));
   }
   return { context, page };
+}
+
+// Jumps without smoothing, then lets one paint pass run so scroll-driven state is current.
+async function jumpTo(page, y) {
+  await page.evaluate((target) => {
+    if (window.lenis) window.lenis.scrollTo(target, { immediate: true, force: true });
+    else window.scrollTo(0, target);
+    return new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  }, y);
+}
+
+function docTop(page, selector) {
+  return page.evaluate((sel) => Math.round(document.querySelector(sel).getBoundingClientRect().top + window.scrollY), selector);
 }
 
 function parseColor(value) {
@@ -74,13 +89,6 @@ function contrast(a, b) {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-function translation(transform) {
-  if (!transform || transform === 'none') return { x: 0, y: 0 };
-  const values = transform.match(/matrix(?:3d)?\(([^)]+)\)/)?.[1].split(',').map(Number);
-  if (!values) throw new Error(`Unexpected transform: ${transform}`);
-  return values.length === 6 ? { x: values[4], y: values[5] } : { x: values[12], y: values[13] };
-}
-
 before(async () => {
   server = spawn('python3', ['-m', 'http.server', String(port), '--bind', '127.0.0.1'], {
     cwd: root,
@@ -95,398 +103,436 @@ after(async () => {
   server?.kill('SIGTERM');
 });
 
-test('the loader releases the page without an artificial delay', { timeout: 20000 }, async () => {
-  const { context, page } = await openPage({ keepLoader: true });
-  const started = Date.now();
-  await page.locator('.loading-screen').waitFor({ state: 'hidden', timeout: 1000 });
-  assert.ok(Date.now() - started < 1000, 'The loading screen should disappear within one second of DOM readiness');
+test('every file the service worker precaches exists, under a new cache version', () => {
+  const source = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
+  assert.match(source, /portfolio-v2\./);
+  const list = source.match(/urlsToCache = \[([\s\S]*?)\]/)[1].match(/'\/[^']*'/g).map((entry) => entry.slice(1, -1));
+  for (const required of ['/css/site.css', '/js/ui.js', '/js/motion.js', '/js/vendor/lenis.js']) {
+    assert.ok(list.includes(required), `${required} should be precached`);
+  }
+  for (const file of list.filter((entry) => entry !== '/')) {
+    assert.ok(fs.existsSync(path.join(root, file)), `Precached file is missing: ${file}`);
+  }
+});
+
+test('fonts are self-hosted and every declared file exists', () => {
+  for (const page of ['index.html', '404.html']) {
+    const html = fs.readFileSync(path.join(root, page), 'utf8');
+    assert.doesNotMatch(html, /fonts\.(googleapis|gstatic)\.com/, `${page} should not depend on a font CDN`);
+  }
+  const css = fs.readFileSync(path.join(root, 'css', 'site.css'), 'utf8');
+  const files = [...css.matchAll(/url\('\/(assets\/fonts\/[^']+)'\)/g)].map((match) => match[1]);
+  assert.ok(files.length > 10);
+  for (const file of files) assert.ok(fs.existsSync(path.join(root, file)), `Missing font file: ${file}`);
+});
+
+test('the page does not wait on any third-party host', { timeout: 15000 }, async () => {
+  const context = await browser.newContext({ serviceWorkers: 'block' });
+  const page = await context.newPage();
+  const external = [];
+  page.on('request', (request) => {
+    if (!request.url().startsWith(origin) && !request.url().startsWith('data:')) external.push(request.url());
+  });
+  await page.goto(`${origin}/`, { waitUntil: 'load' });
+  assert.deepEqual(external, []);
   await context.close();
 });
 
-test('service worker caches the motion entry point with a new cache version', () => {
-  const source = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
-  assert.match(source, /portfolio-v1\.6\.1/);
-  assert.match(source, /['"]\/js\/motion\.js['"]/);
-});
-
-test('reveal observer keeps the viewport bottom inside its root', () => {
-  const source = fs.readFileSync(path.join(root, 'js', 'motion.js'), 'utf8');
-  assert.match(source, /rootMargin:\s*'0px'/);
-});
-
-test('motion layout stays inside representative viewport widths', async () => {
+test('layout stays inside representative viewport widths in both languages', { timeout: 60000 }, async () => {
   for (const width of [360, 390, 768, 1280, 1600]) {
-    const { context, page } = await openPage({ viewport: { width, height: 900 }, hasTouch: width <= 768 });
-    await page.locator('#contact').scrollIntoViewIfNeeded();
-    const sizes = await page.evaluate(() => ({
-      viewport: innerWidth,
-      document: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
-    }));
-    assert.ok(sizes.document <= sizes.viewport, `${width}px viewport overflowed to ${sizes.document}px`);
-    await context.close();
+    for (const lang of ['en', 'ru']) {
+      const { context, page } = await openPage({
+        viewport: { width, height: 800 },
+        hasTouch: width <= 768,
+        init: `localStorage.setItem('language', '${lang}')`,
+      });
+      const height = await page.evaluate(() => document.documentElement.scrollHeight);
+      for (const fraction of [0, 0.35, 0.7, 1]) {
+        await jumpTo(page, height * fraction);
+        const sizes = await page.evaluate(() => ({
+          viewport: document.documentElement.clientWidth,
+          document: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+        }));
+        assert.ok(sizes.document <= sizes.viewport, `${width}px ${lang} overflowed to ${sizes.document}px at ${fraction}`);
+      }
+      await context.close();
+    }
   }
 });
 
 test('essential content stays visible without JavaScript', async () => {
-  const { context, page } = await openPage({ javaScriptEnabled: false, keepLoader: true });
-  assert.equal(await page.locator('.loading-screen').evaluate((el) => getComputedStyle(el).display), 'none');
-  assert.equal(await page.locator('#hero h1').isVisible(), true);
-  assert.equal(await page.locator('#contact-form').isVisible(), true);
+  const { context, page } = await openPage({ javaScriptEnabled: false });
+  for (const selector of ['h1', '#about .scrub', '.fp-title', '.case', '.ticket', '.edu', '#contact-form', '.foot-word']) {
+    assert.ok(await page.locator(selector).first().isVisible(), `${selector} should be visible`);
+  }
+  assert.match(await page.locator('h1').innerText(), /ENGINEERING/i);
   await context.close();
 });
 
-test('motion bootstrap publishes a capability profile without hiding content', async () => {
+test('a failure in the motion script leaves content visible', async () => {
+  const context = await browser.newContext({ serviceWorkers: 'block' });
+  const page = await context.newPage();
+  await page.route('**/js/motion.js', (route) => route.abort());
+  await page.goto(`${origin}/`, { waitUntil: 'load' });
+  assert.equal(await page.evaluate(() => document.documentElement.classList.contains('motion-ready')), false);
+  assert.ok(await page.locator('h1').isVisible());
+  const opacity = await page.locator('h1 .line').first().evaluate((el) => getComputedStyle(el).opacity);
+  assert.equal(opacity, '1');
+  await context.close();
+});
+
+test('hero and floor titles keep their real text for assistive technology', async () => {
   const { context, page } = await openPage();
-  await page.waitForFunction(() => document.documentElement.classList.contains('motion-ready'));
-  assert.equal(await page.evaluate(() => Boolean(window.PortfolioMotion?.preferences)), true);
-  assert.equal(await page.locator('#hero h1').isVisible(), true);
+  const spoken = await page.locator('h1 .sr-only').allTextContents();
+  assert.deepEqual(spoken.map((text) => text.trim()), ['Engineering', "tomorrow's", 'interfaces.']);
+  assert.equal(await page.locator('h1 .line-vis').first().getAttribute('aria-hidden'), 'true');
   await context.close();
 });
 
-test('footer content reveals at the end of the document', async () => {
-  const { context, page } = await openPage({ viewport: { width: 1280, height: 720 } });
-  await page.waitForFunction(() => document.querySelectorAll('.git-cell').length > 0);
-  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
-  await page.waitForTimeout(100);
-  await page.evaluate(() => {
-    document.querySelector('.foot').classList.remove('in');
-    window.PortfolioMotion.refresh();
+test('swapping letter faces never changes the width of a line', { timeout: 15000 }, async () => {
+  const { context, page } = await openPage();
+  const widths = () => page.evaluate(() => [...document.querySelectorAll('.hero-title .line-vis')]
+    .map((line) => Math.round([...line.children].reduce((sum, cell) => sum + cell.getBoundingClientRect().width, 0))));
+  await page.waitForFunction(() => document.querySelectorAll('.hero-title .ltr.is-alt').length > 0);
+  const during = await widths();
+  await page.evaluate(() => document.querySelectorAll('.ltr.is-alt').forEach((cell) => cell.classList.remove('is-alt')));
+  assert.deepEqual(during, await widths());
+  await context.close();
+});
+
+test('the footer word finishes revealing at the end of the document', async () => {
+  for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
+    const { context, page } = await openPage({ viewport });
+    await jumpTo(page, await page.evaluate(() => document.documentElement.scrollHeight));
+    await page.waitForFunction(() => {
+      const all = document.querySelectorAll('.foot-word .ch-s');
+      return all.length > 0 && document.querySelectorAll('.foot-word .ch-s.on').length === all.length;
+    }, null, { timeout: 2000 });
+    await context.close();
+  }
+});
+
+test('the dock starts at the bottom and parks under the navigation', async () => {
+  const { context, page } = await openPage();
+  const reelTop = await docTop(page, '[data-reel]');
+  await jumpTo(page, 0);
+  await page.waitForFunction(() => document.querySelector('.dock').getBoundingClientRect().bottom > window.innerHeight - 20);
+  await jumpTo(page, reelTop);
+  await page.waitForFunction(() => Math.abs(document.querySelector('.dock').getBoundingClientRect().top - 64) < 2);
+  await context.close();
+});
+
+test('floors share one pinned stage: colour and content swap as each image crosses', async () => {
+  const { context, page } = await openPage();
+  const floors = await page.evaluate(() => {
+    const el = document.querySelector('[data-floors]');
+    return { top: el.getBoundingClientRect().top + window.scrollY, height: el.offsetHeight, vh: window.innerHeight };
   });
-  await page.waitForTimeout(500);
-
-  const footer = page.locator('.foot');
-  assert.equal(await footer.evaluate((element) => element.classList.contains('in')), true);
-  assert.equal(await footer.evaluate((element) => getComputedStyle(element).opacity), '1');
+  const step = (floors.height - floors.vh) / 4;
+  const seen = [];
+  for (let index = 0; index < 4; index += 1) {
+    await jumpTo(page, floors.top + step * (index + 0.5));
+    await page.waitForTimeout(650);
+    seen.push(await page.evaluate(() => {
+      const sticky = document.querySelector('[data-floors-sticky]');
+      const active = document.querySelectorAll('.fp.is-active');
+      const media = active[0].querySelector('[data-panel-media]').getBoundingClientRect();
+      return {
+        pinned: Math.abs(sticky.getBoundingClientRect().top) < 1,
+        activeCount: active.length,
+        live: document.querySelectorAll('.fp.is-live').length,
+        title: active[0].querySelector('.fp-title .sr-only').textContent.trim(),
+        shown: active[0].querySelectorAll('.fp-piece.show').length === active[0].querySelectorAll('.fp-piece').length,
+        colour: getComputedStyle(sticky).backgroundColor,
+        mediaInView: media.top < window.innerHeight && media.bottom > 0,
+      };
+    }));
+  }
+  assert.deepEqual(seen.map((item) => item.title), ['Finly', 'MAI', 'CubeSat', 'Recognition']);
+  for (const item of seen) {
+    assert.ok(item.pinned && item.activeCount === 1 && item.live === 1 && item.shown && item.mediaInView, JSON.stringify(item));
+  }
+  assert.equal(new Set(seen.map((item) => item.colour)).size, 4, 'Each floor has its own colour');
+  // Scrolling back returns to the earlier floor.
+  await jumpTo(page, floors.top + step * 0.5);
+  await page.waitForTimeout(650);
+  assert.equal((await page.locator('.fp.is-active .fp-title .sr-only').first().textContent()).trim(), 'Finly');
   await context.close();
 });
 
-test('contact section uses one closing spacing interval before the footer', async () => {
-  const { context, page } = await openPage({ viewport: { width: 1280, height: 720 } });
-  await page.locator('#contact').scrollIntoViewIfNeeded();
-  await page.waitForTimeout(1000);
-
-  const gap = await page.evaluate(() => {
-    const contactGrid = document.querySelector('.contact-grid').getBoundingClientRect();
-    const footer = document.querySelector('footer').getBoundingClientRect();
-    return footer.top - contactGrid.bottom;
+test('the image travels from below the stage to above it within its floor', async () => {
+  const { context, page } = await openPage();
+  const floors = await page.evaluate(() => {
+    const el = document.querySelector('[data-floors]');
+    return { top: el.getBoundingClientRect().top + window.scrollY, height: el.offsetHeight, vh: window.innerHeight };
   });
-
-  assert.ok(gap <= 128, `Contact-to-footer gap should be one spacing interval, received ${gap}px`);
+  const step = (floors.height - floors.vh) / 4;
+  const media = page.locator('.fp--finly [data-panel-media]');
+  await jumpTo(page, floors.top + 1);
+  const start = await media.boundingBox();
+  await jumpTo(page, floors.top + step * 0.995);
+  const end = await media.boundingBox();
+  assert.ok(start.y >= floors.vh * 0.95, `Should start below the stage, was at ${start.y}`);
+  assert.ok(end.y + end.height <= 12, `Should finish above the stage, ended at ${end.y + end.height}`);
   await context.close();
 });
 
-test('scroll progress and active navigation follow the visible section', async () => {
+test('cut letters stay put, sit on eligible letters, and never under a sticker', { timeout: 15000 }, async () => {
   const { context, page } = await openPage();
-  await page.locator('#projects').scrollIntoViewIfNeeded();
-  await page.waitForFunction(
-    () => document.querySelector('a[href="#projects"]')?.getAttribute('aria-current') === 'location',
-    null,
-    { timeout: 1500 },
-  );
-
-  const state = await page.evaluate(() => ({
-    progress: Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scroll-progress')),
-    section: document.querySelector('[data-section-current]')?.textContent,
-  }));
-
-  assert.ok(state.progress > 0.1 && state.progress < 0.9);
-  assert.equal(state.section, '02');
-  await context.close();
-});
-
-test('hero and about scenes settle into their final state', async () => {
-  const { context, page } = await openPage();
-  await page.waitForFunction(() => document.documentElement.classList.contains('hero-in'), null, { timeout: 1500 });
-  assert.equal(await page.locator('#hero h1 .row').first().evaluate((el) => getComputedStyle(el).opacity), '1');
-
-  await page.locator('#about').scrollIntoViewIfNeeded();
-  await page.waitForFunction(() => document.querySelector('#about')?.classList.contains('about-in'), null, { timeout: 1500 });
-  await page.waitForFunction(() => {
-    const values = [...document.querySelectorAll('[data-count]')]
-      .map((item) => item.childNodes[0]?.textContent.trim());
-    return JSON.stringify(values) === JSON.stringify(['5', '5', '4', '3']);
-  }, null, { timeout: 2500 });
-  assert.deepEqual(await page.locator('[data-count]').evaluateAll((items) => items.map((item) => item.childNodes[0].textContent.trim())), ['5', '5', '4', '3']);
-  await context.close();
-});
-
-test('portrait parallax only responds to a fine pointer', async () => {
-  const desktop = await openPage();
-  await desktop.page.locator('.profile').scrollIntoViewIfNeeded();
-  const box = await desktop.page.locator('.profile').boundingBox();
-  await desktop.page.mouse.move(box.x + box.width * 0.8, box.y + box.height * 0.2);
-  await desktop.page.waitForTimeout(80);
-  assert.notEqual(await desktop.page.locator('.profile').evaluate((el) => getComputedStyle(el).getPropertyValue('--portrait-x').trim()), '');
-  await desktop.context.close();
-
-  const touch = await openPage({ hasTouch: true, viewport: { width: 390, height: 844 } });
-  assert.equal(await touch.page.evaluate(() => document.documentElement.classList.contains('has-fine-pointer')), false);
-  await touch.context.close();
-});
-
-test('dark theme keeps hero and graph accents readable during the switch', async () => {
-  const { context, page } = await openPage();
-  await page.locator('.controls .theme-toggle').click();
-  await page.waitForTimeout(30);
-
-  const switchingColors = await page.evaluate(() => ({
-    body: getComputedStyle(document.body).backgroundColor,
-    heading: getComputedStyle(document.querySelector('#hero h1')).color,
-  }));
-  assert.ok(contrast(parseColor(switchingColors.body), parseColor(switchingColors.heading)) >= 7, 'Heading contrast should remain strong while switching themes');
-
-  await page.waitForFunction(() => document.body.classList.contains('dark-theme'));
-  const colors = await page.evaluate(() => {
-    const bodyStyle = getComputedStyle(document.body);
-    const accent = getComputedStyle(document.querySelector('#hero .accent')).getPropertyValue('--hero-accent-mid').trim();
-    const screen = getComputedStyle(document.querySelector('.dscreen')).backgroundColor;
-    const graph = getComputedStyle(document.querySelector('.app-graph path[stroke]')).stroke;
-    return { body: bodyStyle.backgroundColor, accent, screen, graph };
+  await page.waitForFunction(() => document.querySelectorAll('.hero-title .ltr.is-alt').length > 0);
+  const snapshot = () => page.evaluate(() => [...document.querySelectorAll('.hero-title .ltr')].map((cell) => cell.classList.contains('is-alt')).join());
+  const first = await snapshot();
+  await page.waitForTimeout(1600);
+  assert.equal(await snapshot(), first, 'Letters must not cycle on a timer');
+  const state = await page.evaluate(() => {
+    const lines = [...document.querySelectorAll('.hero-title .line-vis')].map((line) => line.querySelectorAll('.ltr.is-alt').length);
+    const chars = [...document.querySelectorAll('.hero-title .ltr.is-alt')].map((cell) => cell.dataset.char);
+    return { lines, chars, under: document.querySelectorAll('.ltr.is-alt.ltr-over').length };
   });
-
-  assert.ok(colors.accent, 'Hero accent should be driven by a theme token');
-  assert.ok(contrast(parseColor(colors.body), parseColor(colors.accent)) >= 3, 'Dark-theme hero accent should remain visible');
-  assert.ok(contrast(parseColor(colors.screen), parseColor(colors.graph)) >= 3, 'The Finly graph should remain visible in dark mode');
+  assert.ok(state.lines.every((count) => count <= 1), `One cut per line, got ${state.lines}`);
+  assert.equal(state.under, 0);
+  for (const char of state.chars) assert.match(char, /[BDEHNRUCGOQS]/, `${char} should not be cut`);
   await context.close();
 });
 
-test('the contact section never overflows a 360px viewport', async () => {
-  const { context, page } = await openPage({ viewport: { width: 360, height: 800 } });
-  await page.locator('#contact').scrollIntoViewIfNeeded();
-  const layout = await page.evaluate(() => {
-    const channel = document.querySelector('.channels .ch');
-    const rect = channel.getBoundingClientRect();
-    const scrollButton = document.querySelector('.scroll-to-top').getBoundingClientRect();
-    return {
-      viewport: window.innerWidth,
-      documentWidth: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
-      channelRight: rect.right,
-      scrollButtonWidth: scrollButton.width,
-    };
-  });
-  assert.ok(layout.documentWidth <= layout.viewport, `Document is ${layout.documentWidth}px wide in a ${layout.viewport}px viewport`);
-  assert.ok(layout.channelRight <= layout.viewport, 'Contact channels should stay inside the viewport');
-  assert.ok(layout.scrollButtonWidth <= 52, 'Back-to-top should collapse to an icon-sized control on narrow screens');
-  await context.close();
-});
-
-test('desktop and mobile menus animate, close on Escape, and restore focus', async () => {
-  const desktop = await openPage();
-  const resumeButton = desktop.page.locator('.resume-toggle');
-  await resumeButton.click();
-  assert.equal(await resumeButton.getAttribute('aria-expanded'), 'true');
-  assert.notEqual(await desktop.page.locator('.resume-menu').evaluate((el) => getComputedStyle(el).transitionDuration), '0s');
-  await desktop.page.keyboard.press('Escape');
-  await desktop.page.waitForTimeout(350);
-  assert.equal(await resumeButton.getAttribute('aria-expanded'), 'false');
-  assert.equal(await desktop.page.evaluate(() => document.activeElement?.classList.contains('resume-toggle')), true);
-  await desktop.context.close();
-
-  const mobile = await openPage({ viewport: { width: 390, height: 844 } });
-  const menuButton = mobile.page.locator('.mobile-menu-toggle');
-  await menuButton.click();
-  assert.equal(await menuButton.getAttribute('aria-expanded'), 'true');
-  await mobile.page.keyboard.press('Escape');
-  await mobile.page.waitForTimeout(350);
-  assert.equal(await menuButton.getAttribute('aria-expanded'), 'false');
-  assert.equal(await mobile.page.evaluate(() => document.activeElement?.classList.contains('mobile-menu-toggle')), true);
-  await mobile.context.close();
-});
-
-test('reduced motion disables decorative JavaScript animation', { timeout: 10000 }, async () => {
-  const { context, page } = await openPage({ reducedMotion: 'reduce' });
-  const cursorDisplay = await page.locator('.cursor-pixel-overlay').evaluate((el) => getComputedStyle(el).display);
-  const firstRole = await page.locator('#rotator').textContent();
-  await page.waitForTimeout(2600);
-  const laterRole = await page.locator('#rotator').textContent();
-
-  assert.equal(cursorDisplay, 'none', 'Pixel cursor should be disabled for reduced motion');
-  assert.equal(laterRole, firstRole, 'Role text should not rotate for reduced motion');
-
-  await page.locator('#about').scrollIntoViewIfNeeded();
-  await page.waitForTimeout(50);
-  assert.equal(await page.locator('[data-count="5"]').first().textContent(), '5');
-  await context.close();
-});
-
-test('skill tabs animate complete groups and expose proficiency tracks', async () => {
+test('anchor links land with the heading clear of the fixed navigation', async () => {
   const { context, page } = await openPage();
-  const section = page.locator('#skills');
-  await section.scrollIntoViewIfNeeded();
-  await page.waitForFunction(() => document.querySelector('#skills')?.classList.contains('skills-in'), null, { timeout: 1500 });
-
-  const python = page.locator('.sk').filter({ hasText: 'Python' }).first();
-  assert.equal(await python.evaluate((el) => getComputedStyle(el).getPropertyValue('--skill-level').trim()), '0.9');
-
-  const backend = page.locator('.skills-tabs .tab[data-cat="back"]');
-  await backend.click();
-  await page.waitForTimeout(420);
-
-  assert.equal(await backend.getAttribute('aria-pressed'), 'true');
-  assert.equal(await page.locator('.skcat:not([hidden])').count(), 1);
-  assert.equal(await page.locator('.skcat[data-cat="back"]').isVisible(), true);
-  assert.equal(
-    await page.locator('.skcat[hidden]').evaluateAll((groups) => groups.every((group) => getComputedStyle(group).display === 'none')),
-    true,
-  );
-  assert.equal(await page.locator('.skills-categories').getAttribute('data-animating'), null);
-  await context.close();
-});
-
-test('Russian mode fully localizes prominent portfolio copy', async () => {
-  const { context, page } = await openPage();
-  await page.locator('.controls .lang-toggle').click();
-
-  const copy = await page.evaluate(() => ({
-    hero: document.querySelector('#hero h1').textContent,
-    titles: [...document.querySelectorAll('.s-title')].map((el) => el.textContent),
-    project: document.querySelector('.proj-grid .pc-title').textContent,
-    education: document.querySelector('.ecard .edegree').textContent,
-    contact: document.querySelector('.cleft h3').textContent,
-  }));
-  const combined = [copy.hero, ...copy.titles, copy.project, copy.education, copy.contact].join(' ');
-  assert.match(copy.hero, /[А-Яа-яЁё]/);
-  assert.doesNotMatch(combined, /Engineering|builder|Flagship|Tools of the trade|Recognition|Applied Mathematics|Got a project/i);
-  await context.close();
-});
-
-test('contact fields have persistent accessible labels', async () => {
-  const { context, page } = await openPage();
-  const labelCounts = await page.locator('#contact-form input, #contact-form textarea').evaluateAll((fields) => fields.map((field) => field.labels?.length || 0));
-  assert.deepEqual(labelCounts, [1, 1, 1]);
-  const labelVisibility = await page.locator('#contact-form label').evaluateAll((labels) => labels.map((label) => {
-    const style = getComputedStyle(label);
-    return style.display !== 'none' && style.visibility !== 'hidden' && label.getBoundingClientRect().height > 1;
-  }));
-  assert.deepEqual(labelVisibility, [true, true, true]);
-  await context.close();
-});
-
-test('featured project draws its graph and uses shallow device depth', async () => {
-  const { context, page } = await openPage();
-  const project = page.locator('.proj-feat');
-  await project.scrollIntoViewIfNeeded();
-  await page.waitForFunction(() => document.querySelector('#projects')?.classList.contains('projects-in'), null, { timeout: 1500 });
-
-  const line = page.locator('.app-graph .graph-line');
-  assert.equal(await line.count(), 1);
-  await page.waitForFunction(() => {
-    const graphLine = document.querySelector('.app-graph .graph-line');
-    return graphLine && Math.abs(Number.parseFloat(getComputedStyle(graphLine).strokeDashoffset)) < 1;
-  }, null, { timeout: 2500 });
-
-  const mock = page.locator('.pf-mock');
-  const box = await mock.boundingBox();
-  const before = await page.locator('.device').evaluate((el) => getComputedStyle(el).transform);
-  await page.mouse.move(box.x + box.width * 0.85, box.y + box.height * 0.2);
-  await page.waitForTimeout(100);
-  const after = await page.locator('.device').evaluate((el) => getComputedStyle(el).transform);
-  assert.notEqual(after, before);
-  await context.close();
-});
-
-test('education timeline and GitHub grid expose their completed scenes', async () => {
-  const { context, page } = await openPage();
-  await page.locator('#education').scrollIntoViewIfNeeded();
-  await page.waitForFunction(() => document.querySelector('#education')?.classList.contains('education-in'), null, { timeout: 1500 });
-  assert.equal(await page.locator('#education').evaluate((el) => getComputedStyle(el).getPropertyValue('--timeline-progress').trim()), '1');
-
-  await page.locator('#github').scrollIntoViewIfNeeded();
-  await page.waitForFunction(() => document.querySelector('#github')?.classList.contains('github-in'), null, { timeout: 1500 });
-  assert.equal(await page.locator('#git-cells').getAttribute('role'), 'grid');
-
-  const first = page.locator('.git-cell').first();
-  await first.focus();
-  assert.equal(await first.getAttribute('tabindex'), '0');
-  assert.equal(await page.locator('#git-tooltip').isVisible(), true);
-  const tooltipBox = await page.locator('#git-tooltip').boundingBox();
-  assert.ok(tooltipBox && tooltipBox.x >= 0 && tooltipBox.y >= 0);
-  assert.ok(tooltipBox.x + tooltipBox.width <= 1280 && tooltipBox.y + tooltipBox.height <= 900);
-  await first.press('ArrowRight');
-  assert.equal(await page.locator('.git-cell').nth(7).getAttribute('tabindex'), '0');
-  await context.close();
-});
-
-test('fine-pointer interactions expose contextual labels and magnetic offsets', async () => {
-  const { context, page } = await openPage();
-  const button = page.locator('#hero .btn.primary');
-  const box = await button.boundingBox();
-  await page.mouse.move(box.x + box.width * 0.8, box.y + box.height * 0.2);
-  await page.waitForTimeout(80);
-  assert.equal(await page.locator('.cursor-context-label').textContent({ timeout: 1500 }), 'VIEW');
-  const magneticX = await button.evaluate((el) => getComputedStyle(el).getPropertyValue('--magnetic-x').trim());
-  assert.notEqual(Number.parseFloat(magneticX), 0);
-  await context.close();
-});
-
-test('theme transition records its origin and contact submit has a state', async () => {
-  const { context, page } = await openPage();
-  await page.locator('.controls .theme-toggle').click({ position: { x: 10, y: 10 } });
-  assert.match(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--theme-x').trim()), /px$/);
-
-  const form = page.locator('#contact-form');
-  await form.locator('input[name="name"]').fill('Test');
-  await form.locator('input[name="email"]').fill('test@example.com');
-  await form.locator('textarea').fill('Portfolio test');
-  await form.evaluate((el) => el.dispatchEvent(new SubmitEvent('submit', { bubbles: true, cancelable: true })));
-  assert.equal(await form.getAttribute('data-submitting'), 'true');
-  await context.close();
-});
-
-test('representative motion interactions produce no console errors', async () => {
-  const { context, page } = await openPage();
-  const errors = [];
-  page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
-  });
-
-  await page.locator('#projects').scrollIntoViewIfNeeded();
-  await page.locator('.pf-mock').hover();
-  await page.locator('#skills').scrollIntoViewIfNeeded();
-  await page.locator('.tab[data-cat="back"]').click();
-  await page.locator('#github').scrollIntoViewIfNeeded();
-  await page.locator('#contact').scrollIntoViewIfNeeded();
-  assert.deepEqual(errors, []);
-  await context.close();
-});
-
-test('secondary project cards share the same hover lift without link affordances', async () => {
-  const { context, page } = await openPage();
-  const cards = page.locator('.pcard');
-  await cards.first().scrollIntoViewIfNeeded();
-  await page.waitForTimeout(1000);
-  assert.equal(await page.locator('.pc-arrow').count(), 0);
-
-  for (let index = 0; index < await cards.count(); index += 1) {
-    const card = cards.nth(index);
-    await card.hover();
-    await page.waitForTimeout(350);
-    const cardMotion = translation(await card.evaluate((el) => getComputedStyle(el).transform));
-    assert.deepEqual(
-      { x: Math.round(cardMotion.x), y: Math.round(cardMotion.y) },
-      { x: -4, y: -4 },
-      `Project card ${index + 1} should lift upward on hover`,
-    );
-    assert.notEqual(await card.evaluate((el) => getComputedStyle(el).transitionDuration), '0s');
+  for (const [link, heading] of [['.dock a[href="#projects"]', '.fp--finly .fp-kicker'], ['.dock a[href="#contact"]', '#contact .panel-title']]) {
+    await page.locator(link).click();
+    await page.waitForFunction((selector) => {
+      const top = document.querySelector(selector).getBoundingClientRect().top;
+      const dock = document.querySelector('.dock').getBoundingClientRect().bottom;
+      return top >= dock && top < window.innerHeight;
+    }, heading, { timeout: 5000 });
+    await page.mouse.move(0, 400);
   }
   await context.close();
 });
 
-test('button hover motion follows one upward lift direction on every page', async () => {
-  const main = await openPage();
-  const mainButton = main.page.locator('#hero .btn.primary');
-  await mainButton.hover();
-  await main.page.waitForTimeout(350);
-  const mainMotion = translation(await mainButton.evaluate((el) => getComputedStyle(el).transform));
-  assert.ok(mainMotion.y < 0, `Main-page button moved down by ${mainMotion.y}px`);
-  await main.context.close();
+test('floor text meets contrast minimums on its own colour', async () => {
+  const { context, page } = await openPage({ reducedMotion: 'reduce' });
+  const pairs = await page.evaluate(() => [...document.querySelectorAll('.fp')].map((floor) => {
+    const styles = getComputedStyle(floor);
+    return { bg: styles.backgroundColor, text: styles.color, ink: getComputedStyle(floor.querySelector('.fp-kicker')).color };
+  }));
+  assert.equal(pairs.length, 4);
+  for (const { bg, text, ink } of pairs) {
+    assert.ok(contrast(parseColor(text), parseColor(bg)) >= 4.5, `Body ${text} on ${bg}`);
+    assert.ok(contrast(parseColor(ink), parseColor(bg)) >= 4.5, `Kicker ${ink} on ${bg}`);
+  }
+  await context.close();
+});
 
-  const notFound = await openPage({ path: '/404.html' });
-  const notFoundButton = notFound.page.locator('.btn.primary');
-  await notFoundButton.hover();
-  await notFound.page.waitForTimeout(350);
-  const notFoundMotion = translation(await notFoundButton.evaluate((el) => getComputedStyle(el).transform));
-  assert.ok(notFoundMotion.y < 0, `404 button moved down by ${notFoundMotion.y}px`);
-  await notFound.context.close();
+test('menu opens in stages, is keyboard-hidden when closed, closes on Escape and restores focus', async () => {
+  for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
+    const { context, page } = await openPage({ viewport });
+    const toggle = page.locator('.menu-toggle');
+    const firstLink = page.locator('.bar-panel a').first();
+    assert.equal(await firstLink.evaluate((el) => getComputedStyle(el).visibility), 'hidden');
+    await toggle.click();
+    assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
+    // Rows wait for the panel, then arrive one after another.
+    const early = await page.evaluate(() => getComputedStyle(document.querySelector('.mi')).opacity);
+    assert.ok(Number(early) < 0.5, `Rows should still be hidden just after opening, opacity was ${early}`);
+    await page.waitForFunction(() => {
+      const rows = [...document.querySelectorAll('.mi')];
+      return rows.every((row) => getComputedStyle(row).opacity === '1');
+    }, null, { timeout: 2500 });
+    assert.equal(await page.evaluate(() => document.querySelector('.bar-panel').style.height), 'auto');
+    await page.keyboard.press('Escape');
+    assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
+    assert.equal(await page.evaluate(() => document.activeElement?.classList.contains('menu-toggle')), true);
+    await context.close();
+  }
+});
+
+test('menu rows flip on hover and sections open as a one-at-a-time accordion', async () => {
+  const { context, page } = await openPage();
+  await page.locator('.menu-toggle').click();
+  await page.waitForFunction(() => document.querySelector('.bar-panel').style.height === 'auto');
+  const row = page.locator('.mi-row[aria-controls="m-work"]');
+  await page.locator('a.mi-row[href="#about"]').hover();
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('a.mi-row[href="#about"] .mi-box')).transform !== 'none'
+    && Math.abs(new DOMMatrix(getComputedStyle(document.querySelector('a.mi-row[href="#about"] .mi-box')).transform).m22) < 0.1);
+  await row.click();
+  assert.equal(await row.getAttribute('aria-expanded'), 'true');
+  await page.waitForFunction(() => document.getElementById('m-work').getBoundingClientRect().height > 60);
+  const resume = page.locator('.mi-row[aria-controls="m-resume"]');
+  await resume.click();
+  assert.equal(await row.getAttribute('aria-expanded'), 'false', 'Opening one section closes the other');
+  assert.equal(await resume.getAttribute('aria-expanded'), 'true');
+  await page.locator('#m-resume a').first().waitFor({ state: 'visible' });
+  assert.equal(await page.locator('#m-resume a').first().getAttribute('href'), 'resume.pdf');
+  await context.close();
+});
+
+test('reduced motion gets final states with nothing animating', { timeout: 10000 }, async () => {
+  const { context, page } = await openPage({ reducedMotion: 'reduce' });
+  await page.waitForFunction(() => window.PortfolioMotion);
+  const state = await page.evaluate(() => ({
+    ready: document.documentElement.classList.contains('motion-ready'),
+    lenis: Boolean(window.lenis),
+    running: document.getAnimations().filter((animation) => animation.playState === 'running').length,
+    letters: document.querySelectorAll('h1 .ltr').length,
+    media: getComputedStyle(document.querySelector('.fp-media')).position,
+  }));
+  assert.equal(state.ready, false);
+  assert.equal(state.lenis, false);
+  assert.equal(state.running, 0);
+  assert.ok(state.letters > 0, 'Stickers still sit on the type');
+  assert.equal(state.media, 'relative');
+  const visible = await page.locator('.ltr-sticker').first().evaluate((el) => getComputedStyle(el).visibility);
+  assert.equal(visible, 'visible');
+  await context.close();
+});
+
+test('skill tabs filter tickets and report their pressed state', async () => {
+  const { context, page } = await openPage();
+  const shown = () => page.locator('.ticket:visible').count();
+  assert.equal(await shown(), 5);
+  await page.locator('.tab[data-cat="ml"]').click();
+  assert.equal(await page.locator('.tab[data-cat="ml"]').getAttribute('aria-pressed'), 'true');
+  assert.equal(await page.locator('.tab[data-cat="all"]').getAttribute('aria-pressed'), 'false');
+  assert.equal(await shown(), 1);
+  assert.equal(await page.locator('.ticket:visible').getAttribute('data-cat'), 'ml');
+  await page.locator('.tab[data-cat="all"]').click();
+  assert.equal(await shown(), 5);
+  const meters = await page.locator('.ticket meter').count();
+  assert.equal(meters, 15);
+  await context.close();
+});
+
+test('education cards fill with colour and bring in their marquee on hover', async () => {
+  const { context, page } = await openPage();
+  const card = page.locator('.edu').first();
+  const poster = card.locator('.edu-poster');
+  await jumpTo(page, await docTop(page, '#education'));
+  const before = await poster.evaluate((el) => getComputedStyle(el).backgroundColor);
+  await poster.hover();
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('.edu .mq')).opacity === '1');
+  const background = await poster.evaluate((el) => getComputedStyle(el).backgroundColor);
+  assert.notEqual(background, before);
+  assert.equal(parseColor(background).join(), parseColor('#ff3d8b').join());
+  await context.close();
+});
+
+test('Russian mode localizes prominent copy and survives switching back', async () => {
+  const { context, page } = await openPage();
+  await page.locator('.lang-toggle').click();
+  assert.equal(await page.evaluate(() => document.documentElement.lang), 'ru');
+  const spoken = (await page.locator('h1 .sr-only').allTextContents()).map((text) => text.trim());
+  assert.deepEqual(spoken, ['Проектирую', 'интерфейсы', 'будущего.']);
+  assert.equal(await page.locator('.fp-kicker .sr-only').first().textContent(), 'Верхний этаж: интерфейс');
+  assert.match(await page.locator('#about .scrub .sr-only').textContent(), /Сильные технические решения/);
+  assert.match(await page.locator('#contact .panel-title').textContent(), /Создадим/);
+  assert.match(await page.locator('.ticket .mq-track').first().textContent(), /Языки/);
+  assert.match(await page.locator('[data-reel-text]').first().textContent(), /разработчик/);
+  assert.match(await page.locator('#contact-message').getAttribute('placeholder'), /Расскажите о проекте/);
+  // Titles with no translation rebuild from their source text, not from duplicated letters.
+  assert.equal((await page.locator('.fp--finly .fp-title .sr-only').textContent()).trim(), 'Finly');
+  await page.locator('.lang-toggle').click();
+  assert.deepEqual((await page.locator('h1 .sr-only').allTextContents()).map((text) => text.trim()), ['Engineering', "tomorrow's", 'interfaces.']);
+  assert.equal(await page.locator('.fp--finly .fp-title .ltr').count(), 5);
+  await context.close();
+});
+
+test('contact fields have persistent labels and submitting shows a state', async () => {
+  const { context, page } = await openPage();
+  for (const id of ['contact-name', 'contact-email', 'contact-message']) {
+    assert.equal(await page.locator(`label[for="${id}"]`).count(), 1, `${id} needs a label`);
+  }
+  await page.locator('#contact-name').fill('Test');
+  await page.locator('#contact-email').fill('test@example.com');
+  await page.locator('#contact-message').fill('Hello');
+  await page.evaluate(() => document.getElementById('contact-form').requestSubmit());
+  assert.equal(await page.locator('#contact-form').getAttribute('data-submitting'), 'true');
+  assert.equal(await page.locator('#contact-form [data-submit-label]').first().textContent(), 'Opening email...');
+  await context.close();
+});
+
+test('the site opens black whatever the OS prefers, and a light choice persists', async () => {
+  const { context, page } = await openPage();
+  await page.waitForFunction(() => document.body.classList.contains('dark-theme'));
+  assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), 'rgb(11, 11, 11)');
+  await page.evaluate(() => { document.querySelector('.theme-toggle').click(); });
+  await page.waitForFunction(() => !document.body.classList.contains('dark-theme'));
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForFunction(() => document.documentElement.classList.contains('motion-ready'));
+  assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), 'rgb(255, 255, 255)');
+  const ink = await page.evaluate(() => getComputedStyle(document.querySelector('.hero-title')).color);
+  assert.ok(contrast(parseColor(ink), [255, 255, 255]) >= 7);
+  await context.close();
+});
+
+test('buttons flip toward the visitor on hover and keyboard focus, on every page', async () => {
+  for (const [pathName, selector] of [['/', '.dock .flip'], ['/404.html', '.lost-actions .flip']]) {
+    const { context, page } = await openPage({ path: pathName === '/' ? undefined : pathName });
+    const flip = page.locator(selector).first();
+    const on = () => flip.evaluate((el) => getComputedStyle(el).getPropertyValue('--on').trim());
+    assert.equal(await on(), '');
+    await flip.hover();
+    assert.equal(await on(), '1');
+    await page.mouse.move(0, 0);
+    assert.equal(await on(), '');
+    // Tab to a flip button: :focus-visible only matches keyboard focus.
+    let focused = false;
+    for (let press = 0; press < 12 && !focused; press += 1) {
+      await page.keyboard.press('Tab');
+      focused = await page.evaluate(() => document.activeElement?.classList.contains('flip') ?? false);
+    }
+    assert.ok(focused, 'A flip button should be reachable by keyboard');
+    assert.equal(await page.evaluate(() => getComputedStyle(document.activeElement).getPropertyValue('--on').trim()), '1');
+    await context.close();
+  }
+});
+
+test('the 404 page keeps its language toggle and links home', async () => {
+  const { context, page } = await openPage({ path: '/404.html' });
+  assert.equal(await page.locator('.lost-actions a').getAttribute('href'), '/');
+  await page.evaluate(() => localStorage.setItem('language', 'ru'));
+  await page.reload({ waitUntil: 'load' });
+  await page.locator('.lang-toggle').click();
+  assert.equal(await page.locator('h1').textContent(), 'Page Not Found');
+  await context.close();
+});
+
+test('the GitHub panel shows the generated data, not invented numbers', async () => {
+  const data = JSON.parse(fs.readFileSync(path.join(root, 'assets', 'data', 'github.json'), 'utf8'));
+  const { context, page } = await openPage();
+  await page.waitForFunction(() => document.querySelectorAll('.git-cell').length > 0);
+  for (const key of ['publicRepos', 'commitsThisYear', 'activeDaysPastYear', 'longestStreakPastYear']) {
+    assert.equal(await page.locator(`[data-git="${key}"]`).textContent(), String(data[key]), key);
+  }
+  const days = data.weeks.flat();
+  assert.equal(await page.locator('.git-cell').count(), days.length);
+  assert.equal(days.filter((day) => day.count > 0).length, data.activeDaysPastYear);
+  assert.match(await page.locator('.git-info').textContent(), /GitHub API/);
+  assert.doesNotMatch(await page.locator('#github').textContent(), /Illustrative|Randomized/i);
+  assert.equal(await page.locator('#git-langs li').count(), 4);
+  assert.equal(await page.locator('#git-cells').evaluate((el) => el.classList.contains('in')), false);
+  await jumpTo(page, await docTop(page, '#github'));
+  await page.waitForFunction(() => document.getElementById('git-cells').classList.contains('in'));
+  await context.close();
+});
+
+test('a tour of the page produces no script errors', { timeout: 20000 }, async () => {
+  const errors = [];
+  const { context, page } = await openPage();
+  page.on('pageerror', (error) => errors.push(error.message));
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(message.text());
+  });
+  const height = await page.evaluate(() => document.documentElement.scrollHeight);
+  for (let y = 0; y < height; y += 900) {
+    await jumpTo(page, y);
+    await page.waitForTimeout(60);
+  }
+  await page.locator('.lang-toggle').click();
+  await page.locator('.lang-toggle').click();
+  await page.locator('.menu-toggle').click();
+  await page.keyboard.press('Escape');
+  await page.locator('.tab[data-cat="ops"]').click();
+  await page.waitForTimeout(800);
+  assert.deepEqual(errors, []);
+  await context.close();
 });

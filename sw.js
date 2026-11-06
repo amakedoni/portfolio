@@ -1,5 +1,5 @@
 // Service Worker для базового офлайн-режима
-const CACHE_NAME = 'portfolio-v1.6.1';
+const CACHE_NAME = 'portfolio-v2.1.0';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -9,8 +9,22 @@ const urlsToCache = [
   '/manifest.json',
   '/assets/icons.svg',
   '/assets/images/photo-alt.jpg',
-  '/js/cursor.js',
+  '/css/site.css',
+  '/js/ui.js',
   '/js/motion.js',
+  '/js/vendor/lenis.js',
+  '/assets/images/finly-showcase.jpg',
+  '/assets/stickers.svg',
+  '/assets/data/github.json',
+  '/js/alt-glyphs.js',
+  '/assets/fonts/anton-latin-400-normal.woff2',
+  '/assets/fonts/oswald-cyrillic-700-normal.woff2',
+  '/assets/fonts/days-one-latin-400-normal.woff2',
+  '/assets/fonts/days-one-cyrillic-400-normal.woff2',
+  '/assets/fonts/forum-latin-400-normal.woff2',
+  '/assets/fonts/forum-cyrillic-400-normal.woff2',
+  '/assets/fonts/inter-tight-latin-400-normal.woff2',
+  '/assets/fonts/inter-tight-cyrillic-400-normal.woff2',
   '/js/translations.js',
   '/js/lang.js',
   '/js/theme.js',

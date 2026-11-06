@@ -8,22 +8,17 @@
 
     const STORAGE_KEY = 'theme';
     const DARK_THEME_CLASS = 'dark-theme';
-    const MEDIA_QUERY = '(prefers-color-scheme: dark)';
     const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     // Track which buttons already have listeners
     const initializedButtons = new WeakSet();
 
     /**
-     * Initialize theme based on localStorage or OS preference
+     * Initialize theme based on localStorage
      */
     function initTheme() {
-        const savedTheme = localStorage.getItem(STORAGE_KEY);
-        const prefersDark = window.matchMedia(MEDIA_QUERY).matches;
-
-        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-            document.body.classList.add(DARK_THEME_CLASS);
-        }
+        // Black is the site's default look; light is an explicit choice.
+        document.body.classList.toggle(DARK_THEME_CLASS, localStorage.getItem(STORAGE_KEY) !== 'light');
     }
 
     /**
