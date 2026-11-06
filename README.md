@@ -6,12 +6,13 @@ Static personal portfolio for [amakedoni.com](https://amakedoni.com/). The site 
 
 - `index.html` - one-page portfolio markup.
 - `css/site.css` - all styles, including the self-hosted `@font-face` rules. `404.html` shares it.
-- `js/ui.js` - translations, menu, contact form, skills filter, GitHub panel.
+- `js/ui.js` - menu, contact form, skills filter, GitHub panel.
 - `js/motion.js` - scroll scenes, letter-built titles and stickers. Everything it hides or pins is keyed on `.motion-ready`, so content is complete without it.
-- `js/alt-glyphs.js` - generated display-font outlines used for the cut letters.
 - `js/vendor/lenis.js` - vendored [Lenis](https://github.com/darkroomengineering/lenis) smooth scrolling (MIT). Named without `.min` because `.gitignore` excludes `*.min.js`.
-- `js/theme.js`, `js/lang.js`, `js/translations.js` - theme persistence, and the language layer used by the 404 page.
-- `assets/stickers.svg` - generated illustration sprite.
+- `js/theme.js` - theme persistence.
+- `assets/stickers.svg` - generated illustration sprite. The crest is in `scripts/build-stickers.cjs`; every other drawing is in `scripts/sticker-art/`, one file per site section.
+- `assets/videos/reel.mp4` - the reel, generated with Gemini. The video stream is the untouched original (`-c:v copy -an -movflags +faststart`): do not re-encode it. `assets/images/reel-poster.jpg` is its still.
+- `assets/logo.svg` - the helmet mark.
 - `assets/data/github.json` - generated GitHub statistics.
 - `assets/` also holds icons, images and `fonts/` (SIL OFL, see `assets/fonts/LICENSES.txt`).
 - `scripts/` - generators for the three files above.
@@ -48,8 +49,7 @@ Set `PORTFOLIO_CHROME_PATH` if Chrome is not at the default macOS location.
 node scripts/update-github-stats.mjs   # needs GITHUB_TOKEN or a logged-in gh CLI
 
 # The next two need opentype.js and the @fontsource WOFF files, outside this repo:
-NODE_PATH=<dir>/node_modules node scripts/build-stickers.cjs <anton-latin-400-normal.woff>
-NODE_PATH=<dir>/node_modules node scripts/build-alt-glyphs.cjs <anton-latin-400-normal.woff> <oswald-cyrillic-700-normal.woff>
+NODE_PATH=<dir>/node_modules node scripts/build-stickers.cjs <roboto-flex-instance.ttf>
 ```
 
 ## Maintenance Notes

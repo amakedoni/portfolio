@@ -122,7 +122,7 @@ test('fonts are self-hosted and every declared file exists', () => {
   }
   const css = fs.readFileSync(path.join(root, 'css', 'site.css'), 'utf8');
   const files = [...css.matchAll(/url\('\/(assets\/fonts\/[^']+)'\)/g)].map((match) => match[1]);
-  assert.ok(files.length > 10);
+  assert.ok(files.length >= 4);
   for (const file of files) assert.ok(fs.existsSync(path.join(root, file)), `Missing font file: ${file}`);
 });
 
@@ -138,25 +138,30 @@ test('the page does not wait on any third-party host', { timeout: 15000 }, async
   await context.close();
 });
 
-test('layout stays inside representative viewport widths in both languages', { timeout: 60000 }, async () => {
-  for (const width of [360, 390, 768, 1280, 1600]) {
-    for (const lang of ['en', 'ru']) {
-      const { context, page } = await openPage({
-        viewport: { width, height: 800 },
-        hasTouch: width <= 768,
-        init: `localStorage.setItem('language', '${lang}')`,
-      });
-      const height = await page.evaluate(() => document.documentElement.scrollHeight);
-      for (const fraction of [0, 0.35, 0.7, 1]) {
-        await jumpTo(page, height * fraction);
-        const sizes = await page.evaluate(() => ({
-          viewport: document.documentElement.clientWidth,
-          document: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
-        }));
-        assert.ok(sizes.document <= sizes.viewport, `${width}px ${lang} overflowed to ${sizes.document}px at ${fraction}`);
-      }
-      await context.close();
+test('layout stays inside representative viewport widths', { timeout: 60000 }, async () => {
+  for (const width of [360, 390, 768, 1280, 1600, 2560]) {
+    const { context, page } = await openPage({ viewport: { width, height: 800 }, hasTouch: width <= 768 });
+    const height = await page.evaluate(() => document.documentElement.scrollHeight);
+    for (const fraction of [0, 0.35, 0.7, 1]) {
+      await jumpTo(page, height * fraction);
+      const sizes = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+      }));
+      assert.ok(sizes.document <= sizes.viewport, `${width}px overflowed to ${sizes.document}px at ${fraction}`);
     }
+    await context.close();
+  }
+});
+
+test('the interface scales with the screen like the reference', async () => {
+  for (const [width, height, pillH, image] of [[1440, 900, 50, 480], [1920, 1080, 60, 640], [2560, 1440, 80, 853]]) {
+    const { context, page } = await openPage({ viewport: { width, height } });
+    const pill = await page.locator('.bar-row').boundingBox();
+    const media = await page.locator('.fp-media--finly').boundingBox();
+    assert.ok(Math.abs(pill.height - pillH) <= 1, `${width}px pill was ${pill.height}`);
+    assert.ok(Math.abs(media.width - image) <= 1, `${width}px image was ${media.width}`);
+    await context.close();
   }
 });
 
@@ -189,14 +194,16 @@ test('hero and floor titles keep their real text for assistive technology', asyn
   await context.close();
 });
 
-test('swapping letter faces never changes the width of a line', { timeout: 15000 }, async () => {
+test('swapped letters never spill past their own cell', { timeout: 15000 }, async () => {
   const { context, page } = await openPage();
-  const widths = () => page.evaluate(() => [...document.querySelectorAll('.hero-title .line-vis')]
-    .map((line) => Math.round([...line.children].reduce((sum, cell) => sum + cell.getBoundingClientRect().width, 0))));
   await page.waitForFunction(() => document.querySelectorAll('.hero-title .ltr.is-alt').length > 0);
-  const during = await widths();
-  await page.evaluate(() => document.querySelectorAll('.ltr.is-alt').forEach((cell) => cell.classList.remove('is-alt')));
-  assert.deepEqual(during, await widths());
+  await page.evaluate(() => document.fonts.ready);
+  const overlaps = await page.evaluate(() => [...document.querySelectorAll('.hero-title .ltr.is-alt')].map((cell) => {
+    const box = cell.getBoundingClientRect();
+    const glyph = cell.querySelector('.ltr-base').getBoundingClientRect();
+    return Math.round(Math.max(box.left - glyph.left, glyph.right - box.right));
+  }));
+  for (const overlap of overlaps) assert.ok(overlap <= 0, `Swapped letter spills ${overlap}px past its cell`);
   await context.close();
 });
 
@@ -218,7 +225,7 @@ test('the dock starts at the bottom and parks under the navigation', async () =>
   await jumpTo(page, 0);
   await page.waitForFunction(() => document.querySelector('.dock').getBoundingClientRect().bottom > window.innerHeight - 20);
   await jumpTo(page, reelTop);
-  await page.waitForFunction(() => Math.abs(document.querySelector('.dock').getBoundingClientRect().top - 64) < 2);
+  await page.waitForFunction(() => Math.abs(document.querySelector('.dock').getBoundingClientRect().top - document.querySelector('.bar-row').getBoundingClientRect().bottom) < 2);
   await context.close();
 });
 
@@ -277,7 +284,7 @@ test('the image travels from below the stage to above it within its floor', asyn
   await context.close();
 });
 
-test('cut letters stay put, sit on eligible letters, and never under a sticker', { timeout: 15000 }, async () => {
+test('swapped letters stay put, sit on eligible letters, and never under a sticker', { timeout: 15000 }, async () => {
   const { context, page } = await openPage();
   await page.waitForFunction(() => document.querySelectorAll('.hero-title .ltr.is-alt').length > 0);
   const snapshot = () => page.evaluate(() => [...document.querySelectorAll('.hero-title .ltr')].map((cell) => cell.classList.contains('is-alt')).join());
@@ -289,9 +296,9 @@ test('cut letters stay put, sit on eligible letters, and never under a sticker',
     const chars = [...document.querySelectorAll('.hero-title .ltr.is-alt')].map((cell) => cell.dataset.char);
     return { lines, chars, under: document.querySelectorAll('.ltr.is-alt.ltr-over').length };
   });
-  assert.ok(state.lines.every((count) => count <= 1), `One cut per line, got ${state.lines}`);
+  assert.ok(state.lines.every((count) => count <= 1), `One swap per line, got ${state.lines}`);
   assert.equal(state.under, 0);
-  for (const char of state.chars) assert.match(char, /[BDEHNRUCGOQS]/, `${char} should not be cut`);
+  for (const char of state.chars) assert.match(char, /[A-HKLN-VX-Z]/, `${char} should not be swapped`);
   await context.close();
 });
 
@@ -416,23 +423,127 @@ test('education cards fill with colour and bring in their marquee on hover', asy
   await context.close();
 });
 
-test('Russian mode localizes prominent copy and survives switching back', async () => {
+test('every slot on the page has its own illustration', async () => {
   const { context, page } = await openPage();
-  await page.locator('.lang-toggle').click();
-  assert.equal(await page.evaluate(() => document.documentElement.lang), 'ru');
-  const spoken = (await page.locator('h1 .sr-only').allTextContents()).map((text) => text.trim());
-  assert.deepEqual(spoken, ['Проектирую', 'интерфейсы', 'будущего.']);
-  assert.equal(await page.locator('.fp-kicker .sr-only').first().textContent(), 'Верхний этаж: интерфейс');
-  assert.match(await page.locator('#about .scrub .sr-only').textContent(), /Сильные технические решения/);
-  assert.match(await page.locator('#contact .panel-title').textContent(), /Создадим/);
-  assert.match(await page.locator('.ticket .mq-track').first().textContent(), /Языки/);
-  assert.match(await page.locator('[data-reel-text]').first().textContent(), /разработчик/);
-  assert.match(await page.locator('#contact-message').getAttribute('placeholder'), /Расскажите о проекте/);
-  // Titles with no translation rebuild from their source text, not from duplicated letters.
-  assert.equal((await page.locator('.fp--finly .fp-title .sr-only').textContent()).trim(), 'Finly');
-  await page.locator('.lang-toggle').click();
-  assert.deepEqual((await page.locator('h1 .sr-only').allTextContents()).map((text) => text.trim()), ['Engineering', "tomorrow's", 'interfaces.']);
-  assert.equal(await page.locator('.fp--finly .fp-title .ltr').count(), 5);
+  const ids = await page.evaluate(() => [...document.querySelectorAll('main use[href*="stickers.svg"], footer use[href*="stickers.svg"]')]
+    .map((use) => use.getAttribute('href').split('#')[1]));
+  // Laurels are a mirrored pair; everything else appears once.
+  const counts = {};
+  ids.filter((id) => id !== 's-laurel').forEach((id) => { counts[id] = (counts[id] || 0) + 1; });
+  const repeated = Object.entries(counts).filter(([, n]) => n > 1);
+  assert.deepEqual(repeated, [], `Repeated stickers: ${JSON.stringify(repeated)}`);
+  assert.ok(ids.length >= 26, `Expected at least 26 placed illustrations, found ${ids.length}`);
+  await context.close();
+});
+
+test('the reel video is muted, loops, waits until it is near, and stays still for reduced motion', { timeout: 20000 }, async () => {
+  const file = path.join(root, 'assets', 'videos', 'reel.mp4');
+  assert.ok(fs.existsSync(file));
+  assert.ok(fs.existsSync(path.join(root, 'assets', 'images', 'reel-poster.jpg')));
+
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const state = () => page.locator('[data-reel-video]').evaluate((v) => ({ muted: v.muted, loop: v.loop, inline: v.playsInline, paused: v.paused, time: v.currentTime, audio: v.mozHasAudio ?? v.webkitAudioDecodedByteCount ?? 0 }));
+  const atTop = await state();
+  assert.ok(atTop.muted && atTop.loop && atTop.inline);
+  await jumpTo(page, await docTop(page, '[data-reel]') - 200);
+  await page.waitForFunction(() => { const v = document.querySelector('[data-reel-video]'); return !v.paused && v.currentTime > 0.2; }, null, { timeout: 8000 });
+  assert.equal((await state()).audio, 0, 'The encoded reel should have no audio');
+  await jumpTo(page, await docTop(page, '#skills'));
+  await page.waitForFunction(() => document.querySelector('[data-reel-video]').paused, null, { timeout: 3000 });
+  await context.close();
+
+  const reduced = await openPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+  await reduced.page.locator('[data-reel-video]').scrollIntoViewIfNeeded();
+  await reduced.page.waitForTimeout(500);
+  assert.equal(await reduced.page.locator('[data-reel-video]').evaluate((v) => v.paused && v.readyState === 0), true);
+  await reduced.context.close();
+});
+
+test('the crest ribbons slide out with scroll and shake, while its body stays still', { timeout: 15000 }, async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const ribbons = () => page.evaluate(() => [...document.querySelectorAll('[data-crest-ribbon]')].map((el) => ({
+    x: Math.abs(parseFloat(el.firstElementChild.getAttribute('transform')?.match(/translate\(([-\d.]+)/)?.[1])),
+    rotate: el.getAttribute('transform'),
+  })));
+  await page.waitForFunction(() => document.querySelector('[data-crest-ribbon] g')?.getAttribute('transform'));
+  const start = await ribbons();
+  assert.ok(start.every(({ x }) => x > 600), `Ribbons should start tucked in, got ${start.map(({ x }) => x)}`);
+
+  const top = await page.evaluate(() => document.querySelector('.crest').getBoundingClientRect().top + scrollY);
+  await page.evaluate((y) => window.scrollTo(0, y), top - 200);
+  await page.waitForFunction(() => {
+    const x = parseFloat(document.querySelector('[data-crest-ribbon] g').getAttribute('transform').match(/translate\(([-\d.]+)/)[1]);
+    return x < 300;
+  });
+
+  const angles = new Set();
+  for (let i = 0; i < 12; i += 1) {
+    for (const { rotate } of await ribbons()) if (rotate) angles.add(rotate.match(/rotate\(([-\d.]+)/)[1]);
+    await page.waitForTimeout(120);
+  }
+  assert.ok(angles.size > 1, 'Ribbons should shake');
+  for (const angle of angles) assert.ok(['-0.5', '0', '0.5'].includes(angle), `Unexpected angle ${angle}`);
+
+  const body = await page.locator('.crest > use').getAttribute('transform');
+  assert.equal(body, null, 'The body must not move with the ribbons');
+  await context.close();
+});
+
+test('a parked button flips in front of the top bar', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  await page.evaluate(() => window.scrollTo(0, 1600));
+  await page.waitForFunction(() => {
+    const bar = document.querySelector('.bar-row').getBoundingClientRect();
+    return document.querySelector('.dock').getBoundingClientRect().top - bar.bottom < 2;
+  });
+  const order = () => page.evaluate(() => [getComputedStyle(document.querySelector('.dock')).zIndex, getComputedStyle(document.querySelector('.bar')).zIndex].map(Number));
+  await page.locator('.dock .flip').first().hover();
+  const [dock, bar] = await order();
+  assert.ok(dock > bar, `Dock ${dock} should sit above bar ${bar} while a button flips`);
+  await page.mouse.move(5, 500);
+  const [restDock, restBar] = await order();
+  assert.ok(restDock < restBar, 'The open menu must still cover the dock at rest');
+  await context.close();
+});
+
+test('the whole video frame is shown, fading into the page, with the crest only on the fade', async () => {
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 1920, height: 1080 }, { width: 390, height: 844 }]) {
+    const { context, page } = await openPage({ viewport });
+    const layout = await page.evaluate(() => {
+      const box = (s) => document.querySelector(s).getBoundingClientRect();
+      const reel = box('.reel');
+      const fade = getComputedStyle(document.querySelector('.reel'), '::after');
+      const video = getComputedStyle(document.querySelector('[data-reel-video]'));
+      return { reelBottom: reel.bottom, reelH: reel.height, aboutTop: box('.about').top, crestTop: box('.crest').top, w: box('[data-reel-video]').width, h: box('[data-reel-video]').height, scale: video.scale, fadeH: parseFloat(fade.height), fadeImg: fade.backgroundImage };
+    });
+    assert.ok(Math.abs(layout.w / layout.h - 16 / 9) < 0.01, `Frame was ${layout.w}x${layout.h}`);
+    assert.equal(layout.w, viewport.width, 'The video should span the full width');
+    assert.equal(layout.scale, 'none', 'The video should not be zoomed');
+    assert.ok(Math.abs(layout.aboutTop - layout.reelBottom) < 1, 'The next section should start below the video');
+    assert.ok(Math.abs(layout.fadeH / layout.reelH - 0.5) < 0.01, 'The fade should cover the bottom half');
+    assert.match(layout.fadeImg, /linear-gradient/);
+    const overlap = (layout.reelBottom - layout.crestTop) / layout.reelH;
+    assert.ok(overlap > 0 && overlap < 0.25, `The crest should sit only on the dark end of the fade, overlap was ${overlap}`);
+    await context.close();
+  }
+});
+
+test('the site is English only, with a logo where the language button was', async () => {
+  const { context, page } = await openPage();
+  assert.equal(await page.evaluate(() => document.documentElement.lang), 'en');
+  assert.equal(await page.locator('.lang-toggle').count(), 0);
+  assert.equal(await page.locator('[data-i18n]').count(), 0);
+  const logo = page.locator('.bar-row .bar-logo svg');
+  assert.ok(await logo.isVisible());
+  const box = await logo.boundingBox();
+  assert.ok(box.width > 15 && box.height > 15, 'The logo should render at a visible size');
+  // Only the schema.org alternate spelling of the name may contain Cyrillic.
+  for (const file of ['index.html', '404.html', 'js/ui.js', 'js/motion.js', 'manifest.json']) {
+    const source = fs.readFileSync(path.join(root, file), 'utf8').replace('"alternateName":"Александр Македонский"', '');
+    assert.doesNotMatch(source, /[\u0400-\u04FF]/, `${file} still has Cyrillic text`);
+  }
+  assert.ok(!fs.existsSync(path.join(root, 'js', 'translations.js')));
+  assert.ok(!fs.existsSync(path.join(root, 'js', 'lang.js')));
   await context.close();
 });
 
@@ -486,13 +597,11 @@ test('buttons flip toward the visitor on hover and keyboard focus, on every page
   }
 });
 
-test('the 404 page keeps its language toggle and links home', async () => {
+test('the 404 page is in English and links home', async () => {
   const { context, page } = await openPage({ path: '/404.html' });
   assert.equal(await page.locator('.lost-actions a').getAttribute('href'), '/');
-  await page.evaluate(() => localStorage.setItem('language', 'ru'));
-  await page.reload({ waitUntil: 'load' });
-  await page.locator('.lang-toggle').click();
   assert.equal(await page.locator('h1').textContent(), 'Page Not Found');
+  assert.equal(await page.locator('.lang-toggle').count(), 0);
   await context.close();
 });
 
@@ -527,8 +636,6 @@ test('a tour of the page produces no script errors', { timeout: 20000 }, async (
     await jumpTo(page, y);
     await page.waitForTimeout(60);
   }
-  await page.locator('.lang-toggle').click();
-  await page.locator('.lang-toggle').click();
   await page.locator('.menu-toggle').click();
   await page.keyboard.press('Escape');
   await page.locator('.tab[data-cat="ops"]').click();

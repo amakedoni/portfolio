@@ -22,24 +22,24 @@
   // the line length; x, y, w and h are in em; `over` sits the sticker on top of the letter.
   const STICKERS = {
     hero: [
-      { line: 0, at: 0.92, id: 's-helmet', x: 0.02, y: -0.5, w: 0.62, h: 0.6 },
-      { line: 1, at: 0, id: 's-capsule', x: -0.62, y: -0.1, w: 0.62, h: 0.84, delay: -0.3 },
-      { line: 1, at: 0.32, id: 's-sun', x: -0.14, y: 0.1, w: 0.76, h: 0.76, over: true, delay: -0.1 },
-      { line: 1, at: 0.99, id: 's-fist', x: 0.42, y: 0.02, w: 1.14, h: 0.79, delay: -0.8 },
-      { line: 2, at: 0.6, id: 's-cubesat', x: -0.34, y: -0.22, w: 1, h: 0.71, over: true, delay: -0.45 },
-      { line: 2, at: 0, id: 's-receipt', x: -0.5, y: 0.04, w: 0.5, h: 0.77, delay: -0.6 },
+      { line: 0, at: 0.92, id: 's-helmet', x: 0.04, y: -0.5, w: 0.58, h: 0.55 },
+      { line: 1, at: 0, id: 's-gearhead', x: -0.9, y: -0.44, w: 0.9, h: 1.2, delay: -0.3 },
+      { line: 1, at: 0.32, id: 's-sun', x: -0.26, y: -0.04, w: 1, h: 1, over: true, delay: -0.1 },
+      { line: 1, at: 0.99, id: 's-bezier', x: 0.38, y: -0.12, w: 1.3, h: 0.89, delay: -0.8 },
+      { line: 2, at: 0.6, id: 's-cubesat', x: -0.28, y: -0.14, w: 0.86, h: 0.6, over: true, delay: -0.45 },
+      { line: 2, at: 0, id: 's-window', x: -0.5, y: 0.14, w: 0.48, h: 0.72, delay: -0.6 },
     ],
     finly: [
-      { line: 0, at: 0, id: 's-receipt', x: -0.56, y: -0.08, w: 0.56, h: 0.86 },
-      { line: 0, at: 0.99, id: 's-plane', x: 0.42, y: -0.22, w: 0.8, h: 0.53, delay: -0.5 },
+      { line: 0, at: 0, id: 's-piggy', x: -1.18, y: -0.1, w: 1.14, h: 0.9 },
+      { line: 0, at: 0.99, id: 's-coin', x: 0.42, y: 0.02, w: 0.44, h: 0.54, delay: -0.5 },
     ],
     tablets: [
-      { line: 0, at: 0.99, id: 's-capsule', x: 0.36, y: -0.08, w: 0.76, h: 1.03, delay: -0.3 },
-      { line: 1, at: 0, id: 's-bug', x: -0.62, y: 0.1, w: 0.6, h: 0.6, delay: -0.6 },
+      { line: 0, at: 0.99, id: 's-alarm', x: 0.4, y: -0.3, w: 1.06, h: 1.22, delay: -0.3 },
+      { line: 1, at: 0, id: 's-bottle', x: -0.46, y: 0.16, w: 0.4, h: 0.58, delay: -0.6 },
     ],
     cubesat: [
-      { line: 0, at: 0, id: 's-sun', x: -0.74, y: -0.12, w: 0.68, h: 0.68, delay: -0.2 },
-      { line: 0, at: 0.99, id: 's-cubesat', x: 0.42, y: -0.18, w: 0.9, h: 0.64, delay: -0.7 },
+      { line: 0, at: 0, id: 's-rocket', x: -0.74, y: -0.34, w: 0.72, h: 1.16, delay: -0.2 },
+      { line: 0, at: 0.99, id: 's-comet', x: 0.42, y: 0.0, w: 0.66, h: 0.44, delay: -0.7 },
     ],
     recognition: [
       { line: 0, at: 0, id: 's-laurel', x: -0.5, y: -0.02, w: 0.46, h: 0.96 },
@@ -91,6 +91,9 @@
     return { letters, next: n };
   }
 
+  // Sticker specs were drawn against capitals 0.859em tall; the heading face's are 0.711em.
+  const STICKER_EM = 0.8465;
+
   function createSticker(spec, n) {
     const svg = document.createElementNS(SVG_NS, 'svg');
     svg.setAttribute('class', `sticker ltr-sticker ltr-sticker--${spec.id}${spec.over ? ' ltr-sticker--over' : ''}`);
@@ -98,67 +101,25 @@
     const use = document.createElementNS(SVG_NS, 'use');
     use.setAttribute('href', `${STICKER_FILE}#${spec.id}`);
     svg.appendChild(use);
-    svg.style.cssText = `left:${spec.x}em;top:${spec.y}em;width:${spec.w}em;height:${spec.h}em;`
+    svg.style.cssText = `left:${spec.x * STICKER_EM}em;top:${spec.y * STICKER_EM}em;width:${spec.w * STICKER_EM}em;height:${spec.h * STICKER_EM}em;`
       + `--delay:${spec.delay || 0}s;--n:${n};${spec.flip ? 'scale:-1 1;' : ''}`;
     return svg;
   }
 
-  // ---- Cut letters: the base outline with shapes taken out by even-odd fill ----
-  const ROUND = new Set([...'CGOQSСОЭЗЮФ']);
-  // Bites only work where the corners are solid: over empty space even-odd adds stray ink,
-  // and on diagonals they read as glitches.
-  const STEMMED = new Set([...'BDEHNRUБВЕНПЦШЩЫ']);
-  function cutFor(char, glyph, cap) {
-    const w = glyph.w;
-    if (ROUND.has(char)) {
-      const rx = w * 0.56;
-      const ry = cap * 0.55;
-      const cx = w / 2;
-      const cy = -cap / 2;
-      return `M${cx - rx} ${cy}A${rx} ${ry} 0 1 1 ${cx + rx} ${cy}A${rx} ${ry} 0 1 1 ${cx - rx} ${cy}Z`;
-    }
-    // Opposite-corner bites keep the letter heavy and readable.
-    const bite = (x0, inward) => `M${x0} ${-cap}C${x0 + inward * w * 0.46} ${-cap * 0.92} ${x0 + inward * w * 0.46} ${-cap * 0.58} ${x0} ${-cap * 0.5}Z`;
-    const low = (x0, inward) => `M${x0} 0C${x0 + inward * w * 0.46} ${-cap * 0.08} ${x0 + inward * w * 0.46} ${-cap * 0.42} ${x0} ${-cap * 0.5}Z`;
-    return Math.random() > 0.5 ? `${bite(-w * 0.04, 1)}${low(w * 1.04, -1)}` : `${bite(w * 1.04, -1)}${low(-w * 0.04, 1)}`;
-  }
-
-  function cutLetter(cell) {
-    const data = window.ALT_GLYPHS;
-    const char = cell.dataset.char;
-    const glyph = data?.glyphs?.[char];
-    // Narrow letters have nothing to cut into; they just look broken.
-    if (!glyph || glyph.w < 380 || (!ROUND.has(char) && !STEMMED.has(char))) return false;
-    const cap = /[A-Z]/.test(char) ? data.capLatin : data.capCyrillic;
-    const lift = cell.querySelector('.ltr-in');
-    const anchor = document.createElement('span');
-    anchor.className = 'ltr-anchor';
-    const svg = document.createElementNS(SVG_NS, 'svg');
-    const pad = 100;
-    svg.setAttribute('viewBox', `${-pad} -1200 ${glyph.w + pad * 2} 1400`);
-    svg.style.width = `${(glyph.w + pad * 2) / 1000}em`;
-    svg.style.left = `${-(glyph.w + pad) / 1000}em`;
-    const path = document.createElementNS(SVG_NS, 'path');
-    path.setAttribute('fill-rule', 'evenodd');
-    path.setAttribute('d', `${glyph.d}${cutFor(char, glyph, cap)}`);
-    svg.appendChild(path);
-    anchor.appendChild(svg);
-    lift.appendChild(anchor);
-    cell.classList.add('is-alt');
-    return true;
-  }
+  // ---- Swapped letters: the reference sets a few letters of each title in its special face ----
+  // I and J are too narrow to read as a swap; M and W come out too wide.
+  const SWAPPABLE = /^[A-HKLN-VX-Z]$/;
+  const SPECIAL_SIZE = 1.02;
 
   // One letter per line, never one under a sticker, chosen once per render: they do not flicker.
-  function chooseCuts(lines, max) {
+  function chooseSwaps(lines, max) {
     let made = 0;
     for (const letters of shuffle(lines)) {
       if (made >= max) break;
-      for (const cell of shuffle(letters)) {
-        if (cell.classList.contains('ltr-over')) continue;
-        if (cutLetter(cell)) {
-          made += 1;
-          break;
-        }
+      const cell = shuffle(letters).find((item) => SWAPPABLE.test(item.dataset.char) && !item.classList.contains('ltr-over'));
+      if (cell) {
+        cell.classList.add('is-alt');
+        made += 1;
       }
     }
   }
@@ -168,7 +129,9 @@
   function fitTitle(title) {
     let widest = 0;
     title.querySelectorAll('.line-vis').forEach((line) => {
-      widest = Math.max(widest, [...line.children].reduce((sum, cell) => sum + advance(cell.dataset.char, 'Display'), 0));
+      widest = Math.max(widest, [...line.children].reduce((sum, cell) => sum + (cell.classList.contains('is-alt')
+        ? advance(cell.dataset.char, 'Special') * SPECIAL_SIZE
+        : advance(cell.dataset.char, 'Display')), 0));
     });
     if (widest > 0) title.style.setProperty('--fit', widest.toFixed(3));
   }
@@ -184,7 +147,6 @@
       record.letters.push(...letters);
       byLine.push(letters);
     });
-    fitTitle(title);
     const specs = STICKERS[title.dataset.stickerSet] || [];
     specs.forEach((spec) => {
       const line = lines[spec.line];
@@ -196,17 +158,10 @@
       cell.appendChild(createSticker(spec, n));
       if (spec.over) cell.classList.add('ltr-over');
     });
-    chooseCuts(byLine, title.closest('.hero') ? 3 : 1);
+    chooseSwaps(byLine, title.closest('.hero') ? 3 : 1);
+    fitTitle(title);
     titles.push(record);
     return record;
-  }
-
-  function resetTitle(title) {
-    title.querySelectorAll('.line').forEach((line) => {
-      if (line.dataset.source != null && line.querySelector('.line-vis') && !line.hasAttribute('data-i18n')) {
-        line.textContent = line.dataset.source;
-      }
-    });
   }
 
   // ---- Text split for scrubbing: every letter its own span, words kept whole ----
@@ -244,23 +199,6 @@
       if (on !== item.on) {
         item.on = on;
         item.span.classList.toggle('on', on);
-      }
-    });
-  }
-
-  // ---- Reel copy ----
-  function fillReel() {
-    const roles = window.PortfolioUI?.roles?.() || [];
-    if (!roles.length) return;
-    document.querySelectorAll('[data-reel-text]').forEach((track, index) => {
-      const rotated = roles.slice(index % roles.length).concat(roles.slice(0, index % roles.length));
-      const rowText = `${rotated.join(' ✺ ')} ✺ `.repeat(2);
-      track.textContent = '';
-      for (let copy = 0; copy < 2; copy += 1) {
-        const span = document.createElement('span');
-        span.style.whiteSpace = 'pre';
-        span.textContent = rowText;
-        track.appendChild(span);
       }
     });
   }
@@ -381,8 +319,30 @@
     });
   }
 
+  // The ribbons shake on their own, in steps, as the reference's do: half a degree either way every 0.3s.
+  function shakeCrestRibbons() {
+    if (!crestRibbons.length) return;
+    let inView = true;
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => { inView = entries[0].isIntersecting; }).observe(crest);
+    }
+    crestRibbons.forEach(({ el, pivot }) => {
+      setTimeout(() => {
+        setInterval(() => {
+          if (inView) el.setAttribute('transform', `rotate(${[-0.5, 0, 0.5][Math.floor(Math.random() * 3)]} ${pivot} 230)`);
+        }, 300);
+      }, Math.random() * 500);
+    });
+  }
+
   // ---- Boot ----
   const crest = document.querySelector('[data-crest]');
+  const crestRibbons = crest ? [...crest.querySelectorAll('[data-crest-ribbon]')].map((el) => ({
+    el,
+    slide: el.firstElementChild,
+    offset: Number(el.dataset.crestRibbon),
+    pivot: el.dataset.crestPivot,
+  })) : [];
   const dock = document.querySelector('[data-dock]');
   const scrubEl = document.querySelector('[data-scrub]');
   const footWord = document.querySelector('[data-foot-word]');
@@ -398,9 +358,12 @@
   let floorsHeight = 1;
   let scrubTop = 0;
   let scrubHeight = 1;
+  let crestTop = 0;
   let footTop = 0;
   let footHeight = 1;
   let dockH = 52;
+  let dockParked = 66;
+  let unit = 16;
   let lastY = -1;
   let tickerAnim = null;
   let tickerRate = 1;
@@ -422,11 +385,14 @@
       scrubTop = docTop(scrubEl);
       scrubHeight = scrubEl.offsetHeight;
     }
+    if (crest) crestTop = docTop(crest);
     if (footWord) {
       footTop = docTop(footWord);
       footHeight = footWord.offsetHeight || 1;
     }
     if (dock) dockH = dock.offsetHeight || 52;
+    unit = parseFloat(getComputedStyle(document.body).fontSize) || 16;
+    dockParked = (document.querySelector('.bar-row')?.getBoundingClientRect().bottom ?? 66);
     // Lenis caches the page height; keep it honest whenever the layout changes.
     lenis?.resize();
     lastY = -1;
@@ -450,7 +416,7 @@
     lastY = y;
 
     if (dock && vw > 640) {
-      dock.style.setProperty('--dock-y', `${Math.max(64, vh - dockH - 12 - y)}px`);
+      dock.style.setProperty('--dock-y', `${Math.max(dockParked, vh - dockH - unit - y)}px`);
     }
     if (floorsEl && panels.length) {
       const progress = clamp((y - floorsTop) / Math.max(1, floorsHeight - vh));
@@ -460,6 +426,12 @@
       goToFloor(index);
       const panel = panels[index];
       if (panel.media) panel.media.style.setProperty('--y', String(-(vh + panel.height) * within));
+    }
+    if (crestRibbons.length) {
+      // Tucked in by their own width when the crest enters the view, power2.out from there. The reference runs on until
+      // its crest has left; these ribbons carry the name, so they finish as the crest reaches the top and stay readable.
+      const eased = 1 - (1 - clamp((y + vh - crestTop) / vh)) ** 2;
+      crestRibbons.forEach(({ slide, offset }) => slide.setAttribute('transform', `translate(${(offset * (1 - eased)).toFixed(1)} 0)`));
     }
     if (scrubItems.length) {
       // From the text's top entering 15% up the view to its bottom clearing 10% up the view.
@@ -505,6 +477,15 @@
       [...el.children].forEach((child, index) => child.style.setProperty('--i', String(index)));
     });
 
+    // Only fetch and play the reel near the viewport.
+    const video = document.querySelector('[data-reel-video]');
+    if (video) {
+      new IntersectionObserver((entries) => {
+        if (entries[entries.length - 1].isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      }, { rootMargin: '30% 0px' }).observe(video);
+    }
+
     const cells = document.getElementById('git-cells');
     if (cells) {
       new IntersectionObserver((entries, observer) => {
@@ -516,48 +497,14 @@
     }
   }
 
-  function startCuts() {
-    const stage = document.querySelector('[data-reel-stage]');
-    const reel = document.querySelector('[data-reel]');
-    if (!stage) return;
-    let cut = 0;
-    setInterval(() => {
-      if (document.hidden || reel?.classList.contains('is-off')) return;
-      cut = (cut + 1) % 4;
-      stage.dataset.cut = String(cut);
-    }, 900);
-  }
-
   function indexMenuRows() {
     document.querySelectorAll('.bar-list > .mi').forEach((item, index) => item.style.setProperty('--i', String(index)));
   }
 
-  function rebuildForLanguage() {
-    fillReel();
-    titles.length = 0;
-    document.querySelectorAll('[data-kinetic-title]').forEach((title) => {
-      resetTitle(title);
-      setupTitle(title);
-      title.classList.add('revealed');
-    });
-    if (!reduced) {
-      if (scrubEl) scrubItems = buildChars(scrubEl);
-      panels.forEach(collectPiecesAfterLanguage);
-    }
-    measure();
-  }
-
-  function collectPiecesAfterLanguage(panel, index) {
-    collectPieces(panel);
-    panel.pieces.forEach((piece) => piece.classList.toggle('show', index === activeFloor));
-  }
-
   function boot() {
     indexMenuRows();
-    fillReel();
     document.querySelectorAll('[data-kinetic-title]').forEach((title) => setupTitle(title));
     if (footWord) fitFootWord(footWord, footWord.textContent);
-    document.addEventListener('portfolio:language', rebuildForLanguage);
 
     if (reduced) {
       document.querySelectorAll('[data-kinetic-title]').forEach((title) => title.classList.add('revealed'));
@@ -567,8 +514,6 @@
 
     scrubItems = scrubEl ? buildChars(scrubEl) : [];
     footItems = footWord ? buildChars(footWord).map((item) => ({ span: item.span })) : [];
-    const stage = document.querySelector('[data-reel-stage]');
-    if (stage) stage.dataset.cut = '0';
     setupFloors();
     root.classList.add('motion-ready');
     measure();
@@ -590,8 +535,8 @@
     };
 
     observeScenes();
-    startCuts();
     bindTilt();
+    shakeCrestRibbons();
 
     window.addEventListener('resize', measure);
     if ('ResizeObserver' in window) new ResizeObserver(measure).observe(document.body);
@@ -601,7 +546,8 @@
   // Wait briefly for the display face so first measurements are right, but never hold the page for it.
   const baseFont = document.fonts?.load
     ? Promise.all([
-      document.fonts.load('400 100px "Display"', 'AБ'),
+      document.fonts.load('400 100px "Display"', 'A'),
+      document.fonts.load('400 100px "Special"', 'A'),
       document.fonts.load('400 40px "Forum"', 'A'),
     ]).catch(() => null)
     : Promise.resolve();

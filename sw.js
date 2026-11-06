@@ -1,5 +1,5 @@
 // Service Worker для базового офлайн-режима
-const CACHE_NAME = 'portfolio-v2.1.0';
+const CACHE_NAME = 'portfolio-v2.9.1';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -14,19 +14,16 @@ const urlsToCache = [
   '/js/motion.js',
   '/js/vendor/lenis.js',
   '/assets/images/finly-showcase.jpg',
-  '/assets/stickers.svg',
-  '/assets/data/github.json',
-  '/js/alt-glyphs.js',
-  '/assets/fonts/anton-latin-400-normal.woff2',
-  '/assets/fonts/oswald-cyrillic-700-normal.woff2',
-  '/assets/fonts/days-one-latin-400-normal.woff2',
-  '/assets/fonts/days-one-cyrillic-400-normal.woff2',
+  '/assets/images/finly-goals.jpg',
+  '/assets/images/reel-poster.jpg',
+  '/assets/fonts/roboto-flex-extra-condensed-700.woff2',
+  '/assets/fonts/archivo-latin-700-normal.woff2',
+  '/assets/fonts/makedonskiy-special-400.woff2',
   '/assets/fonts/forum-latin-400-normal.woff2',
-  '/assets/fonts/forum-cyrillic-400-normal.woff2',
-  '/assets/fonts/inter-tight-latin-400-normal.woff2',
-  '/assets/fonts/inter-tight-cyrillic-400-normal.woff2',
-  '/js/translations.js',
-  '/js/lang.js',
+  '/assets/fonts/libre-franklin-latin-400-normal.woff2',
+  '/assets/stickers.svg',
+  '/assets/logo.svg',
+  '/assets/data/github.json',
   '/js/theme.js',
   '/resume.pdf',
   '/resume.docx'
