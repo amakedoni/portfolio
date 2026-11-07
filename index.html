@@ -126,22 +126,28 @@
     <h2 class="kicker">A builder with a curious mind.</h2>
     <blockquote class="scrub" data-scrub>"Strong technical solutions live at the intersection of fundamentals and creative thinking."</blockquote>
   </div>
-  <div class="about-grid" data-stagger>
-    <figure class="about-photo">
-      <picture><source srcset="/assets/images/photo.webp" type="image/webp"><img src="/assets/images/photo-alt.jpg" alt="Alexander Makedonskiy portrait" loading="lazy" decoding="async" width="827" height="1024"></picture>
+  <div class="bio">
+    <figure class="bio-bust" data-bust>
+      <div class="bio-print"><img src="/assets/images/bust.webp" alt="Alexander Makedonskiy, printed as a halftone bust wearing a laurel wreath" loading="lazy" decoding="async" width="1330" height="1581"><svg class="sticker bio-wreath" aria-hidden="true"><use href="/assets/stickers.svg#s-wreath"></use></svg></div>
+      <svg class="sticker bio-plinth" aria-hidden="true"><use href="/assets/stickers.svg#s-plinth"></use></svg>
     </figure>
-    <div class="about-prose">
-      <h3 class="about-name">Alexander · Moscow</h3>
+    <h3 class="bio-title" data-kinetic-title data-swap="X" aria-label="Alexander, Moscow"><span class="line">Alex</span><span class="line">ander</span></h3>
+    <svg class="sticker bio-tag bio-tag--phone" aria-hidden="true"><use href="/assets/stickers.svg#s-lowend"></use></svg>
+    <svg class="sticker bio-tag bio-tag--guitar" aria-hidden="true"><use href="/assets/stickers.svg#s-guitar"></use></svg>
+    <svg class="sticker bio-tag bio-tag--paper" aria-hidden="true"><use href="/assets/stickers.svg#s-paper"></use></svg>
+    <div class="bio-col bio-col--study">
       <p>I study <strong>Applied Mathematics & Computer Science</strong> at NRU MAI, with a deep focus on the boundary between strong engineering practice and modern machine learning. I care about systems that hold up under real conditions — offline, sluggish networks, low-end devices.</p>
+    </div>
+    <div class="bio-col bio-col--work">
       <p>My work spans <strong>backend services</strong> in Python/FastAPI, <strong>cross-platform mobile apps</strong> in React Native, and <strong>data-driven tools</strong> built with the PyData stack. Outside of code I play guitar, compete in olympiads, and lose evenings to ML papers.</p>
       <p>English: <strong>B2 (Upper-Intermediate)</strong>. Open to remote, hybrid, and Moscow-based teams.</p>
-      <dl class="stats">
-        <div><dd>5</dd><dt>Projects shipped</dt></div>
-        <div><dd>5×</dd><dt>Olympiad finals</dt></div>
-        <div><dd>4+</dd><dt>Years coding</dt></div>
-        <div><dd>3×</dd><dt>Hackathon teams</dt></div>
-      </dl>
     </div>
+    <dl class="stats">
+      <div><dd>5</dd><dt>Projects shipped</dt></div>
+      <div><dd>5×</dd><dt>Olympiad finals</dt></div>
+      <div><dd>4+</dd><dt>Years coding</dt></div>
+      <div><dd>3×</dd><dt>Hackathon teams</dt></div>
+    </dl>
   </div>
 </section>
 
@@ -189,45 +195,106 @@
   </div>
 
   <div class="cases">
-    <article class="case" id="case-finly" data-fade>
-      <div class="case-media"><img src="/assets/images/finly-goals.jpg" alt="Finly savings goals and budgets screens on two phones" loading="lazy" decoding="async" width="1800" height="1800"></div>
-      <div class="case-body">
-        <h3 class="case-title">Finly</h3>
-        <p class="case-role"><span>Featured · 2026 · Team Lead</span><br><span>Tech-lead &amp; Full-Stack · T1 (Innotech) × NRU MAI</span></p>
-        <p>A fully offline PWA for personal finance (IndexedDB + Service Worker via Workbox). On-device ML transaction classification with TensorFlow.js, AI financial chat via OpenRouter, receipt scanning (QR/OCR/Gemini Vision), biometric auth (WebAuthn), voice input, and deep analytics — budgets, goals, recurring operations, anomaly detection, notifications, and JSON/CSV export.</p>
-        <p class="case-small">CI/CD: GitHub Actions (3 workflows) · 345+ tests · Lighthouse CI · Quality Gates</p>
+    <article class="case" id="case-finly" data-fade style="--c:var(--mint);--on-c:#00150c">
+      <aside class="case-spec">
+        <p class="case-floor">Top floor</p>
+        <dl class="case-fields">
+        <div><dt>Year</dt><dd>2026 · Featured</dd></div>
+        <div><dt>Role</dt><dd>Team Lead, Tech-lead &amp; Full-Stack</dd></div>
+        <div><dt>Built with</dt><dd>T1 (Innotech) × NRU MAI</dd></div>
+        <div class="case-nums"><div><dd>345+</dd><dt>Tests</dt></div><div><dd>3</dd><dt>GitHub Actions workflows</dt></div></div>
+        <div><dt>Quality</dt><dd>Lighthouse CI · Quality Gates</dd></div>
+        </dl>
         <ul class="chips"><li>TypeScript</li><li>React 18</li><li>TensorFlow.js</li><li>Zustand</li><li>Dexie.js</li><li>Tailwind</li><li>Radix UI</li><li>Vite · PWA</li></ul>
-        <div class="case-actions">
-          <a class="flip" href="https://finly-ruby.vercel.app" target="_blank" rel="noopener" style="--flip:var(--gold);--dir:1"><span class="flip-box"><span class="flip-face">Open the app</span><span class="flip-face flip-face--alt" aria-hidden="true">Open the app</span></span></a>
-          <a class="flip" href="https://github.com/Shadovv-Government/Finly" target="_blank" rel="noopener" style="--flip:var(--pink);--dir:-1"><span class="flip-box"><span class="flip-face">Source</span><span class="flip-face flip-face--alt" aria-hidden="true">Source</span></span></a>
+        <div class="case-actions"><a class="flip" href="https://finly-ruby.vercel.app" target="_blank" rel="noopener" style="--flip:var(--gold);--dir:1"><span class="flip-box"><span class="flip-face">Open the app</span><span class="flip-face flip-face--alt" aria-hidden="true">Open the app</span></span></a><a class="flip" href="https://github.com/Shadovv-Government/Finly" target="_blank" rel="noopener" style="--flip:var(--pink);--dir:-1"><span class="flip-box"><span class="flip-face">Source</span><span class="flip-face flip-face--alt" aria-hidden="true">Source</span></span></a></div>
+      </aside>
+      <div class="case-file">
+        <div class="case-top">
+          <div class="case-media"><img src="/assets/images/finly-goals.jpg" alt="Finly savings goals and budgets screens on two phones" loading="lazy" decoding="async" width="1800" height="1800"></div>
+          <div>
+            <h3 class="case-title" data-kinetic-title data-swap="N"><span class="line">Finly</span></h3>
+            <p class="case-lead">A fully offline PWA for personal finance.</p>
+          </div>
         </div>
+        <ul class="feats">
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-offline"></use></svg></span><h4>Fully offline</h4><p>IndexedDB + Service Worker via Workbox.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-ml"></use></svg></span><h4>On-device ML</h4><p>Transaction classification with TensorFlow.js.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-chat"></use></svg></span><h4>AI financial chat</h4><p>Via OpenRouter.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-receipt"></use></svg></span><h4>Receipt scanning</h4><p>QR, OCR and Gemini Vision.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-fingerprint"></use></svg></span><h4>Biometric auth</h4><p>WebAuthn.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-voice"></use></svg></span><h4>Voice input</h4><p>Speak instead of typing.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-analytics"></use></svg></span><h4>Deep analytics</h4><p>Budgets, goals, recurring operations, anomaly detection, notifications.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-export"></use></svg></span><h4>Export</h4><p>JSON and CSV.</p></li>
+        </ul>
       </div>
     </article>
-    <article class="case" id="case-tablets" data-fade>
-      <div class="case-media case-media--art" style="--art:var(--tangerine)"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-pillpack"></use></svg></div>
-      <div class="case-body">
-        <h3 class="case-title">MAI Tablets</h3>
-        <p class="case-role"><span>2025 · Full-Stack</span><br><span>Backend &amp; React Native client</span></p>
-        <p>Client-server system for tracking medication intake, with offline-first sync, time-bound QR pairing for trusted "med-friends", configurable push reminders, and strict privacy guarantees.</p>
+    <article class="case" id="case-tablets" data-fade style="--c:var(--tangerine);--on-c:#1f0b00">
+      <aside class="case-spec">
+        <p class="case-floor">Middle floor</p>
+        <dl class="case-fields">
+        <div><dt>Year</dt><dd>2025</dd></div>
+        <div><dt>Role</dt><dd>Full-Stack</dd></div>
+        <div><dt>Built</dt><dd>Backend &amp; React Native client</dd></div>
+        </dl>
         <ul class="chips"><li>FastAPI</li><li>PostgreSQL</li><li>Docker</li><li>Expo</li></ul>
+        <div class="case-actions"><a class="flip" href="https://github.com/programx-dev/MAI-tablets" target="_blank" rel="noopener" style="--flip:var(--gold);--dir:1"><span class="flip-box"><span class="flip-face">Backend source</span><span class="flip-face flip-face--alt" aria-hidden="true">Backend source</span></span></a><a class="flip" href="https://github.com/programx-dev/MAI-tablets-client" target="_blank" rel="noopener" style="--flip:var(--pink);--dir:-1"><span class="flip-box"><span class="flip-face">Client source</span><span class="flip-face flip-face--alt" aria-hidden="true">Client source</span></span></a></div>
+      </aside>
+      <div class="case-file">
+        <div class="case-top">
+          <div class="case-media case-media--art" style="--art:var(--tangerine)"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-pillpack"></use></svg></div>
+          <div>
+            <h3 class="case-title" data-kinetic-title data-swap="B"><span class="line">MAI Tablets</span></h3>
+            <p class="case-lead">Client-server system for tracking medication intake.</p>
+          </div>
+        </div>
+        <ul class="feats">
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-sync"></use></svg></span><h4>Sync</h4><p>Offline-first.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-pair"></use></svg></span><h4>QR pairing</h4><p>Time-bound, for trusted "med-friends".</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-push"></use></svg></span><h4>Reminders</h4><p>Configurable push reminders.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-privacy"></use></svg></span><h4>Privacy</h4><p>Strict privacy guarantees.</p></li>
+        </ul>
       </div>
     </article>
-    <article class="case" id="case-cubesat" data-fade>
-      <div class="case-media case-media--art" style="--art:var(--ultra)"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-dish"></use></svg></div>
-      <div class="case-body">
-        <h3 class="case-title">CubeSat</h3>
-        <p class="case-role"><span>2024 · CubeSat</span><br><span>Pre-professional Olympiad Final</span></p>
-        <p>Built a working CubeSat prototype for the Moscow Aerospace track — onboard logic for receiving, decoding and relaying telemetry messages. Engineered the firmware-side encoding pipeline.</p>
+    <article class="case" id="case-cubesat" data-fade style="--c:var(--ultra);--on-c:#fff">
+      <aside class="case-spec">
+        <p class="case-floor">Ground floor</p>
+        <dl class="case-fields">
+        <div><dt>Year</dt><dd>2024</dd></div>
+        <div><dt>Event</dt><dd>Pre-professional Olympiad Final</dd></div>
+        <div><dt>Track</dt><dd>Moscow Aerospace</dd></div>
+        </dl>
         <ul class="chips"><li>C</li><li>Python</li><li>Embedded</li></ul>
+      </aside>
+      <div class="case-file">
+        <div class="case-top">
+          <div class="case-media case-media--art" style="--art:var(--ultra)"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-dish"></use></svg></div>
+          <div>
+            <h3 class="case-title" data-kinetic-title data-swap="S"><span class="line">CubeSat</span></h3>
+            <p class="case-lead">Built a working CubeSat prototype for the Moscow Aerospace track.</p>
+          </div>
+        </div>
+        <ul class="feats feats--flow">
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-receive"></use></svg></span><h4>Receive</h4><p>Onboard logic takes in telemetry messages.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-decode"></use></svg></span><h4>Decode</h4><p>The same logic decodes them.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-relay"></use></svg></span><h4>Relay</h4><p>Then relays them onward.</p></li>
+          <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-encode"></use></svg></span><h4>Encode</h4><p>Engineered the firmware-side encoding pipeline.</p></li>
+        </ul>
       </div>
     </article>
-    <article class="case case--trophy" id="case-recognition" data-fade>
-      <div class="case-trophy-head"><h3 class="case-title">Recognition</h3><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-medal"></use></svg></div>
-      <ul class="trophies">
-        <li><span class="trophy-name">ITMO</span><span>Finalist, ITMO Olympiad in Computer Science (2024–2025)</span></li>
-        <li><span class="trophy-name">Rosatom</span><span>Finalist, Rosatom Olympiad — CS &amp; Mathematics (2022–2024)</span></li>
-        <li><span class="trophy-name">Aerospace</span><span>Moscow Pre-professional Olympiad — Aerospace track finalist</span></li>
-      </ul>
+    <article class="case case--trophy" id="case-recognition" data-fade style="--c:var(--gold);--on-c:#241a00">
+      <aside class="case-spec">
+        <p class="case-floor">Trophy room</p>
+        <svg class="sticker case-medal" aria-hidden="true"><use href="/assets/stickers.svg#s-medal"></use></svg>
+        <dl class="case-fields"><div><dt>Years</dt><dd>2022 — 2025</dd></div><div><dt>Finals</dt><dd>Olympiads in computer science, mathematics and aerospace</dd></div></dl>
+      </aside>
+      <div class="case-file">
+        <h3 class="case-title" data-kinetic-title data-swap="G"><span class="line">Recognition</span></h3>
+        <ul class="trophies">
+          <li><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-r-itmo"></use></svg><span class="trophy-name">ITMO</span><span>Finalist, ITMO Olympiad in Computer Science (2024–2025)</span></li>
+          <li><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-r-rosatom"></use></svg><span class="trophy-name">Rosatom</span><span>Finalist, Rosatom Olympiad — CS &amp; Mathematics (2022–2024)</span></li>
+          <li><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-r-aero"></use></svg><span class="trophy-name">Aerospace</span><span>Moscow Pre-professional Olympiad — Aerospace track finalist</span></li>
+        </ul>
+      </div>
     </article>
   </div>
 </section>
