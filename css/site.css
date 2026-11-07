@@ -273,7 +273,7 @@ html.lenis,html.lenis body{height:auto}
 .reel-stage{position:absolute;inset:0}
 .reel-video{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  clip-path:ellipse(150% 100% at 50% 100%);filter:saturate(1.4) contrast(1.06);
+  clip-path:ellipse(150% 100% at 50% 100%);
 }
 @media (min-width:1024px){.reel-video{clip-path:ellipse(100% 100% at 50% 100%)}}
 /* The bottom half melts into the page. The curve is eased because a straight fade shows a hard line on bright scenes. */
