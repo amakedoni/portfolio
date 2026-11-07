@@ -264,14 +264,20 @@ html.lenis,html.lenis body{height:auto}
   .hero-title .ltr-sticker--s-helmet{left:-1.5em!important;top:-1.72em!important;width:1.75em!important;height:1.66em!important}
 }
 
-/* ------- Reel: the whole video, untouched ------- */
-.reel{position:relative;z-index:1;background:var(--base);aspect-ratio:16/9}
-.reel-stage{position:absolute;inset:0;background:var(--base)}
-/* The bottom half melts into the page, as on the reference. The curve is eased because a straight fade shows a hard line on bright scenes. */
+/* ------- Reel: stretched across the screen, as the reference does ------- */
+/* Its own markup: a block 125% of the screen tall, the video covering it, the top cut to an arch by an ellipse that
+   rises from the bottom corners (flatter on phones), the bottom half melting into the page, and the crest standing
+   on the dark end. Covering this tall a block crops the video's sides and pushes its own baked-in arch past the
+   ellipse, so none of its black corners show. The colour lift moves its pastels towards the floors' palette. */
+.reel{position:relative;z-index:1;min-height:125lvh;background:var(--base)}
+.reel-stage{position:absolute;inset:0}
+.reel-video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  clip-path:ellipse(150% 100% at 50% 100%);filter:saturate(1.4) contrast(1.06);
+}
+@media (min-width:1024px){.reel-video{clip-path:ellipse(100% 100% at 50% 100%)}}
+/* The bottom half melts into the page. The curve is eased because a straight fade shows a hard line on bright scenes. */
 .reel::after{content:'';position:absolute;inset:50% 0 0;z-index:1;background:linear-gradient(to top,color-mix(in srgb,var(--base) 100%,transparent) 0%,color-mix(in srgb,var(--base) 86%,transparent) 18%,color-mix(in srgb,var(--base) 62%,transparent) 40%,color-mix(in srgb,var(--base) 34%,transparent) 62%,color-mix(in srgb,var(--base) 12%,transparent) 82%,color-mix(in srgb,var(--base) 0%,transparent) 100%);pointer-events:none}
-/* The video's arch has black corners baked in. Lighten lets the page colour show through them without
-   cropping or scaling anything. */
-.reel-video{display:block;width:100%;height:100%;mix-blend-mode:lighten}
 
 /* ------- About ------- */
 /* flow-root stops the crest's negative margin from pulling the whole section up over the reel. */
@@ -281,9 +287,8 @@ html.lenis,html.lenis body{height:auto}
   display:block;position:relative;z-index:3;left:50%;translate:-50% 0;width:var(--crest-w);height:auto;aspect-ratio:1880/460;max-width:none;overflow:visible;
   margin-top:calc(var(--crest-w)*.2447*-.6);
 }
-/* The video is short on phones, so the crest only just touches it. */
 /* On phones the ribbons run off both edges so the shield stays readable. */
-@media (max-width:767px){.crest{--crest-w:170vw;margin-top:calc(var(--crest-w)*.2447*-.14)}}
+@media (max-width:767px){.crest{--crest-w:170vw}}
 /* The crest's second appearance, as in the reference: after the last floor, with the text under it. */
 .creed{display:flow-root;overflow-x:clip;padding-top:var(--section)}
 .creed .crest{--crest-w:80vw;margin-top:0}

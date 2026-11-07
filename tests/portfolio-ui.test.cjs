@@ -1096,24 +1096,29 @@ test('a parked button flips in front of the top bar', async () => {
   await context.close();
 });
 
-test('the whole video frame is shown, fading into the page, with the crest only on the fade', async () => {
+test('the reel is stretched like the reference: a block 125% of the screen, covered, arched, fading, with the crest on the fade', async () => {
   for (const viewport of [{ width: 1440, height: 900 }, { width: 1920, height: 1080 }, { width: 390, height: 844 }]) {
     const { context, page } = await openPage({ viewport });
     const layout = await page.evaluate(() => {
       const box = (s) => document.querySelector(s).getBoundingClientRect();
-      const reel = box('.reel');
-      const fade = getComputedStyle(document.querySelector('.reel'), '::after');
       const video = getComputedStyle(document.querySelector('[data-reel-video]'));
-      return { reelBottom: reel.bottom, reelH: reel.height, aboutTop: box('.about').top, crestTop: box('.crest').top, w: box('[data-reel-video]').width, h: box('[data-reel-video]').height, scale: video.scale, fadeH: parseFloat(fade.height), fadeImg: fade.backgroundImage };
+      const fade = getComputedStyle(document.querySelector('.reel'), '::after');
+      return {
+        reel: box('.reel'), video: box('[data-reel-video]'), crest: box('.about .crest'), aboutTop: box('.about').top,
+        fit: video.objectFit, clip: video.clipPath, fadeH: parseFloat(fade.height), fadeImg: fade.backgroundImage,
+      };
     });
-    assert.ok(Math.abs(layout.w / layout.h - 16 / 9) < 0.01, `Frame was ${layout.w}x${layout.h}`);
-    assert.equal(layout.w, viewport.width, 'The video should span the full width');
-    assert.equal(layout.scale, 'none', 'The video should not be zoomed');
-    assert.ok(Math.abs(layout.aboutTop - layout.reelBottom) < 1, 'The next section should start below the video');
-    assert.ok(Math.abs(layout.fadeH / layout.reelH - 0.5) < 0.01, 'The fade should cover the bottom half');
+    assert.ok(Math.abs(layout.reel.height - viewport.height * 1.25) < 2, `${viewport.width}: the block was ${layout.reel.height}px tall`);
+    assert.equal(layout.reel.width, viewport.width, 'Edge to edge');
+    assert.equal(layout.video.width, layout.reel.width, 'The video fills the block');
+    assert.equal(layout.video.height, layout.reel.height, 'The video fills the block');
+    assert.equal(layout.fit, 'cover', 'Stretched by covering, never squashed');
+    assert.match(layout.clip, /^ellipse\((150|100)% 100% at 50% 100%\)$/, 'The arch is an ellipse rising from the bottom');
+    assert.ok(Math.abs(layout.fadeH / layout.reel.height - 0.5) < 0.01, 'The fade covers the bottom half');
     assert.match(layout.fadeImg, /linear-gradient/);
-    const overlap = (layout.reelBottom - layout.crestTop) / layout.reelH;
-    assert.ok(overlap > 0 && overlap < 0.25, `The crest should sit only on the dark end of the fade, overlap was ${overlap}`);
+    assert.ok(Math.abs(layout.aboutTop - layout.reel.bottom) < 1, 'The next section starts below the video');
+    const overlap = (layout.reel.bottom - layout.crest.top) / layout.crest.height;
+    assert.ok(overlap > 0.5 && overlap < 0.7, `The crest should stand on the dark end, overlap was ${overlap}`);
     await context.close();
   }
 });
