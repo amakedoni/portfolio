@@ -545,6 +545,36 @@ test('MAI Tablets links to both of its repositories', async () => {
   await context.close();
 });
 
+test('the pen draws from the crest into text that appears slowly, in order', { timeout: 30000 }, async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const read = () => page.evaluate(() => ({
+    drawn: Number(document.querySelector('[data-crest-link-reveal]').getAttribute('height')),
+    kicker: document.querySelectorAll('.kicker[data-scrub] .ch-s.on').length / document.querySelectorAll('.kicker[data-scrub] .ch-s').length,
+    quote: document.querySelectorAll('[data-scrub-quote] .ch-s.on').length / document.querySelectorAll('[data-scrub-quote] .ch-s').length,
+  }));
+  const link = await page.evaluate(() => document.querySelector('.crest-link').getBoundingClientRect().top + scrollY);
+  await page.evaluate((to) => { window.lenis?.stop(); window.scrollTo(0, to); }, link - 900);
+  await page.waitForTimeout(80);
+  const first = await read();
+  assert.ok(first.drawn < 400, 'The flourish starts undrawn');
+  let quoteStarted = null;
+  let quoteDone = null;
+  for (let y = link - 900; y < link + 1800; y += 60) {
+    await page.evaluate((to) => window.scrollTo(0, to), y);
+    await page.waitForTimeout(40);
+    const state = await read();
+    if (state.quote > 0) {
+      assert.equal(state.drawn, 400, 'The flourish finishes before the quote begins');
+      assert.ok(state.kicker > 0.95, 'The kicker finishes before the quote begins');
+      if (quoteStarted === null) quoteStarted = y;
+    }
+    if (state.quote === 1 && quoteDone === null) quoteDone = y;
+  }
+  assert.ok(quoteDone !== null, 'The quote must finish appearing');
+  assert.ok(quoteDone - quoteStarted >= 900 * 0.45, `The quote took only ${quoteDone - quoteStarted}px of scroll`);
+  await context.close();
+});
+
 test('a parked button flips in front of the top bar', async () => {
   const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
   await page.evaluate(() => window.scrollTo(0, 1600));

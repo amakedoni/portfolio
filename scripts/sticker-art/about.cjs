@@ -41,6 +41,49 @@ module.exports = (stickers, kit, t) => {
     return o;
   } };
 
+  // The link from the crest to the text: a flourish grown down from the motto, and the pen that draws it.
+  stickers['crest-flourish'] = { box: [0, 0, 600, 400], draw() {
+    let o = '';
+    const { curl, crestLeaf, crestStar, spiral } = kit;
+    // A tendril leaving the stem, sweeping out and rolling into a volute.
+    const tendril = (y, dir, reach, drop, r, w) => {
+      const end = [300 + dir * reach, y + drop];
+      const coil = spiral(end[0], end[1] - r, r, 1.5, -dir, dir > 0 ? 1.571 : 1.571);
+      const path = [[300, y], [300 + dir * reach * 0.35, y + drop * 0.82], [300 + dir * reach * 0.72, y + drop * 1.04], ...coil];
+      return toWhite(line(path, w, { tipA: 0.03, tipB: 0.14, min: 0.32, steps: 2 })) + line(path, w * 0.16, { tipA: 0.2, tipB: 0.1, steps: 2 });
+    };
+    for (const dir of [1, -1]) {
+      o += tendril(40, dir, 196, 48, 25, 14);
+      o += tendril(142, dir, 132, 42, 19, 12);
+      o += tendril(226, dir, 76, 34, 13, 9);
+      const X = (x) => 300 + dir * x;
+      const a = (angle) => (dir > 0 ? angle : 3.1416 - angle);
+      o += crestLeaf([X(66), 66], a(-0.75), 44) + crestLeaf([X(120), 84], a(-0.5), 40) + crestLeaf([X(64), 82], a(0.85), 38);
+      o += crestLeaf([X(46), 162], a(-0.7), 34) + crestLeaf([X(86), 176], a(-0.45), 30) + crestLeaf([X(44), 178], a(0.9), 30);
+      o += crestLeaf([X(26), 242], a(-0.6), 24) + crestLeaf([X(26), 254], a(0.9), 22);
+      o += crestStar(X(238), 44, 8) + crestStar(X(172), 150, 6) + crestStar(X(108), 232, 5);
+      for (const [x, y, r] of [[212, 118, 3], [240, 74, 2.4], [150, 216, 2.6], [120, 276, 2.2]]) o += toWhite(dot(X(x), y, r));
+    }
+    // The stem, carrying everything, narrowing towards the nib.
+    o += toWhite(line([[300, 0], [300, 120], [300, 260], [300, 396]], 13, { tipA: 0.001, tipB: 0.5, min: 0.16, steps: 2 }));
+    // Knops on the stem where each pair of tendrils leaves it.
+    [[40, 11], [142, 9], [226, 7]].forEach(([y, r]) => { o += circle(300, y, r, C.white, 3); });
+    return o;
+  } };
+
+  stickers['crest-pen'] = { box: [0, 0, 120, 260], draw() {
+    let o = '';
+    // Holder, ferrule, then a nib with its slit and breather hole; its tip is at the bottom centre.
+    o += shape([[50, 4], [70, 4], [76, 120], [44, 120]], C.white, 3.6, { steps: 2, vary: 0.12 });
+    o += rule([60, 14], [60, 110], 2) + line([[52, 22], [50, 104]], 1.8);
+    o += box([[42, 120], [78, 120], [76, 158], [44, 158]], C.white, 3.4);
+    [128, 138, 148].forEach((y) => { o += rule([44, y], [76, y], 2); });
+    o += shape([[46, 158], [74, 158], [82, 192], [60, 258], [38, 192]], C.white, 3.6, { poly: true, vary: 0.1 });
+    o += circle(60, 186, 5.5, '--ink,#000', 1.6) + rule([60, 190], [60, 254], 2.2);
+    o += rule([46, 170], [74, 170], 1.8);
+    return o;
+  } };
+
   // A carved plinth with the sitter's name and city.
   stickers.plinth = { box: [0, 0, 760, 170], draw() {
     let o = '';

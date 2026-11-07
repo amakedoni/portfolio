@@ -348,11 +348,16 @@
     pivot: el.dataset.crestPivot,
   })) : [];
   const dock = document.querySelector('[data-dock]');
-  const scrubEl = document.querySelector('[data-scrub]');
+  const scrubQuote = document.querySelector('[data-scrub-quote]');
+  const scrubKicker = document.querySelector('[data-scrub]:not([data-scrub-quote])');
+  const crestLink = document.querySelector('[data-crest-link]');
+  const crestLinkReveal = crestLink?.querySelector('[data-crest-link-reveal]');
+  const crestLinkPen = crestLink?.querySelector('[data-crest-link-pen]');
   const footWord = document.querySelector('[data-foot-word]');
   const ticker = document.querySelector('[data-ticker] .ticker-track');
 
   let scrubItems = [];
+  let kickerItems = [];
   let footItems = [];
   let footOn = false;
   let footTimers = [];
@@ -362,6 +367,8 @@
   let floorsHeight = 1;
   let scrubTop = 0;
   let scrubHeight = 1;
+  let linkTop = 0;
+  let linkHeight = 1;
   let crestTop = 0;
   let bustTop = 0;
   let bustHeight = 1;
@@ -387,9 +394,13 @@
       floorsHeight = floorsEl.offsetHeight;
     }
     panels.forEach((panel) => { panel.height = panel.media?.offsetHeight || 1; });
-    if (scrubEl) {
-      scrubTop = docTop(scrubEl);
-      scrubHeight = scrubEl.offsetHeight;
+    if (scrubQuote) {
+      scrubTop = docTop(scrubQuote);
+      scrubHeight = scrubQuote.offsetHeight;
+    }
+    if (crestLink) {
+      linkTop = docTop(crestLink);
+      linkHeight = crestLink.getBoundingClientRect().height || 1;
     }
     if (crest) crestTop = docTop(crest);
     if (bust) {
@@ -448,10 +459,19 @@
       const risen = clamp((y + vh - bustTop) / (vh * 0.9));
       bust.style.setProperty('--bust-y', ((1 - risen) ** 3 * bustHeight * 0.55).toFixed(1));
     }
-    if (scrubItems.length) {
-      // From the text's top entering 15% up the view to its bottom clearing 10% up the view.
-      paintScrub(scrubItems, clamp((y + vh * 0.85 - scrubTop) / Math.max(1, scrubHeight - vh * 0.05)));
+    // One chain: the pen draws down from the crest, then writes the kicker, then the quote, with room to read each.
+    // The reference times its text by height alone; ours is smaller, so that would rush it.
+    const linkEnd = linkTop + linkHeight - vh * 0.6;
+    const kickerEnd = linkEnd + Math.max(140, vh * 0.16);
+    const quoteEnd = Math.max(kickerEnd + vh * 0.55, scrubTop + scrubHeight - vh * 0.3);
+    if (crestLinkPen) {
+      const linkStart = linkTop - vh * 0.85;
+      const drawn = clamp((y - linkStart) / Math.max(1, linkEnd - linkStart));
+      crestLinkReveal.setAttribute('height', (drawn * 400).toFixed(1));
+      crestLinkPen.setAttribute('transform', `translate(0 ${(drawn * 400 - 260).toFixed(1)})`);
     }
+    if (kickerItems.length) paintScrub(kickerItems, clamp((y - linkEnd) / Math.max(1, kickerEnd - linkEnd)));
+    if (scrubItems.length) paintScrub(scrubItems, clamp((y - kickerEnd) / Math.max(1, quoteEnd - kickerEnd)));
     // The word ends the document, so it must trigger within its own height or it never would.
     if (footItems.length) setFootWord(y + vh - Math.min(vh * 0.3, footHeight * 0.6) > footTop);
 
@@ -528,7 +548,8 @@
       return;
     }
 
-    scrubItems = scrubEl ? buildChars(scrubEl) : [];
+    scrubItems = scrubQuote ? buildChars(scrubQuote) : [];
+    kickerItems = scrubKicker ? buildChars(scrubKicker) : [];
     footItems = footWord ? buildChars(footWord).map((item) => ({ span: item.span })) : [];
     setupFloors();
     root.classList.add('motion-ready');
