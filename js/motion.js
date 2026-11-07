@@ -158,7 +158,10 @@
       cell.appendChild(createSticker(spec, n));
       if (spec.over) cell.classList.add('ltr-over');
     });
-    chooseSwaps(byLine, title.closest('.hero') ? 3 : 1);
+    // A title can name its letter; a chance pick is fine for the rest.
+    const pinned = byLine.flat().find((cell) => cell.dataset.char === title.dataset.swap);
+    if (pinned) pinned.classList.add('is-alt');
+    else chooseSwaps(byLine, title.closest('.hero') ? 3 : 1);
     fitTitle(title);
     titles.push(record);
     return record;
@@ -337,6 +340,7 @@
 
   // ---- Boot ----
   const crest = document.querySelector('[data-crest]');
+  const bust = document.querySelector('[data-bust]');
   const crestRibbons = crest ? [...crest.querySelectorAll('[data-crest-ribbon]')].map((el) => ({
     el,
     slide: el.firstElementChild,
@@ -359,6 +363,8 @@
   let scrubTop = 0;
   let scrubHeight = 1;
   let crestTop = 0;
+  let bustTop = 0;
+  let bustHeight = 1;
   let footTop = 0;
   let footHeight = 1;
   let dockH = 52;
@@ -386,6 +392,10 @@
       scrubHeight = scrubEl.offsetHeight;
     }
     if (crest) crestTop = docTop(crest);
+    if (bust) {
+      bustTop = docTop(bust);
+      bustHeight = bust.offsetHeight || 1;
+    }
     if (footWord) {
       footTop = docTop(footWord);
       footHeight = footWord.offsetHeight || 1;
@@ -433,6 +443,11 @@
       const eased = 1 - (1 - clamp((y + vh - crestTop) / vh)) ** 2;
       crestRibbons.forEach(({ slide, offset }) => slide.setAttribute('transform', `translate(${(offset * (1 - eased)).toFixed(1)} 0)`));
     }
+    if (bust) {
+      // The bust rises out of its plinth as it comes into view, settled by the time it nearly fills the screen.
+      const risen = clamp((y + vh - bustTop) / (vh * 0.9));
+      bust.style.setProperty('--bust-y', ((1 - risen) ** 3 * bustHeight * 0.55).toFixed(1));
+    }
     if (scrubItems.length) {
       // From the text's top entering 15% up the view to its bottom clearing 10% up the view.
       paintScrub(scrubItems, clamp((y + vh * 0.85 - scrubTop) / Math.max(1, scrubHeight - vh * 0.05)));
@@ -468,11 +483,12 @@
     const reveal = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        entry.target.classList.add('in');
+        entry.target.classList.add(entry.target.matches('[data-kinetic-title]') ? 'revealed' : 'in');
         observer.unobserve(entry.target);
       });
     }, { rootMargin: '0px 0px -10% 0px' });
     document.querySelectorAll('[data-fade], [data-stagger]').forEach((el) => reveal.observe(el));
+    document.querySelectorAll('.bio [data-kinetic-title], .case [data-kinetic-title]').forEach((el) => reveal.observe(el));
     document.querySelectorAll('[data-stagger]').forEach((el) => {
       [...el.children].forEach((child, index) => child.style.setProperty('--i', String(index)));
     });

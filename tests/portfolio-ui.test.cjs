@@ -489,6 +489,62 @@ test('the crest ribbons slide out with scroll and shake, while its body stays st
   await context.close();
 });
 
+test('the bio is a bust breaking out of its card, with the name split around it', async () => {
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+    const { context, page } = await openPage({ viewport });
+    const top = await page.evaluate(() => document.querySelector('.bio').getBoundingClientRect().top + scrollY);
+    await page.evaluate((y) => window.scrollTo(0, y), top - viewport.height * 0.3);
+    await page.waitForFunction(() => document.querySelector('.bio-title').classList.contains('revealed'));
+    await page.waitForFunction(() => document.querySelector('.bio-print img').complete);
+    const layout = await page.evaluate(() => {
+      const box = (s) => document.querySelector(s).getBoundingClientRect();
+      return {
+        bio: box('.bio').toJSON(),
+        print: box('.bio-print').toJSON(),
+        lines: [...document.querySelectorAll('.bio-title .line-vis')].map((line) => {
+          const cells = [...line.children].map((cell) => cell.getBoundingClientRect());
+          return { left: Math.min(...cells.map((c) => c.left)), right: Math.max(...cells.map((c) => c.right)) };
+        }),
+        spoken: document.querySelector('.bio-title').getAttribute('aria-label'),
+        overflow: document.documentElement.scrollWidth - innerWidth,
+      };
+    });
+    assert.ok(layout.print.top < layout.bio.top, `The bust should break out of the card at ${viewport.width}px`);
+    for (const line of layout.lines) {
+      assert.ok(line.left >= layout.bio.left && line.right <= layout.bio.right, `The name should stay inside the card at ${viewport.width}px`);
+    }
+    assert.equal(layout.spoken, 'Alexander, Moscow');
+    assert.equal(layout.overflow, 0);
+    await context.close();
+  }
+});
+
+test('the bio always swaps the X, and project files keep their spec card in view', { timeout: 15000 }, async () => {
+  for (let load = 0; load < 3; load += 1) {
+    const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+    const swapped = await page.evaluate(() => [...document.querySelectorAll('.bio-title .is-alt')].map((cell) => cell.dataset.char));
+    assert.deepEqual(swapped, ['X']);
+    await context.close();
+  }
+  const { context, page } = await openPage({ viewport: { width: 1600, height: 900 } });
+  const place = await page.evaluate(async () => {
+    const file = document.querySelector('#case-finly');
+    window.scrollTo(0, file.getBoundingClientRect().top + scrollY + 200);
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    return { spec: file.querySelector('.case-spec').getBoundingClientRect().top, panel: file.querySelector('.case-file').getBoundingClientRect().top };
+  });
+  assert.ok(place.spec > place.panel + 100, `The spec card should stay in view, got ${JSON.stringify(place)}`);
+  await context.close();
+});
+
+test('MAI Tablets links to both of its repositories', async () => {
+  const { context, page } = await openPage();
+  const links = await page.locator('#case-tablets .case-actions a').evaluateAll((items) => items.map((a) => [a.textContent.trim(), a.href, a.rel]));
+  assert.deepEqual(links.map(([, href]) => href), ['https://github.com/programx-dev/MAI-tablets', 'https://github.com/programx-dev/MAI-tablets-client']);
+  for (const [, , rel] of links) assert.match(rel, /noopener/);
+  await context.close();
+});
+
 test('a parked button flips in front of the top bar', async () => {
   const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
   await page.evaluate(() => window.scrollTo(0, 1600));
