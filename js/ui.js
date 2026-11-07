@@ -1,26 +1,6 @@
-// Navigation, contact form, skills filter and the GitHub panel.
-if (localStorage.getItem('theme') === 'light') document.body.classList.remove('dark-theme');
+// Navigation, contact form, tool drawers and the GitHub panel.
 
 const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-// Scrolling type behind the card posters.
-document.querySelectorAll('[data-repeat]').forEach((el) => {
-  const repeated = `${el.dataset.repeat} ✺ `.repeat(8);
-  for (let row = 0; row < 3; row += 1) {
-    const rowEl = document.createElement('div');
-    rowEl.className = 'mq-row';
-    const track = document.createElement('div');
-    track.className = 'mq-track';
-    for (let copy = 0; copy < 2; copy += 1) {
-      const span = document.createElement('span');
-      span.textContent = repeated;
-      span.style.whiteSpace = 'pre';
-      track.appendChild(span);
-    }
-    rowEl.appendChild(track);
-    el.appendChild(rowEl);
-  }
-});
 
 // Menu: the panel eases open, then rows rise in; closing plays it back in reverse.
 const pill = document.querySelector('.bar-pill');
@@ -101,6 +81,8 @@ contactForm?.addEventListener('submit', (event) => {
   contactForm.dataset.submitting = 'true';
   labels.forEach((el) => { el.textContent = "Opening email..."; });
   window.location.href = `mailto:aleximlord@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  contactForm.querySelector('[data-status-ready]').hidden = true;
+  contactForm.querySelector('[data-status-sent]').hidden = false;
 
   setTimeout(() => {
     labels.forEach((el) => { el.textContent = "Send message"; });
@@ -108,21 +90,38 @@ contactForm?.addEventListener('submit', (event) => {
   }, 1600);
 });
 
-// Skills filter.
-const skillTabs = document.querySelectorAll('.skills-tabs .tab');
-skillTabs.forEach((tab) => tab.addEventListener('click', () => {
-  const cat = tab.dataset.cat;
-  skillTabs.forEach((item) => {
-    const active = item === tab;
-    item.classList.toggle('active', active);
-    item.setAttribute('aria-pressed', String(active));
+// Tool drawers: one open at a time. A mouse opens them by passing over, touch and keyboard by pressing.
+const toolsEl = document.querySelector('[data-tools]');
+if (toolsEl) {
+  const stacked = window.matchMedia('(max-width: 1000px)');
+  const drawers = [...toolsEl.querySelectorAll('.tool')];
+  let lastOpened = -Infinity;
+  const openDrawer = (drawer) => {
+    toolsEl.classList.add('is-used');
+    drawers.forEach((item) => {
+      const open = item === drawer;
+      item.classList.toggle('open', open);
+      item.querySelector('.tool-spine').setAttribute('aria-expanded', String(open));
+    });
+  };
+  toolsEl.classList.add('is-live');
+  drawers.forEach((drawer) => {
+    const spine = drawer.querySelector('.tool-spine');
+    spine.addEventListener('click', () => {
+      openDrawer(drawer);
+      if (stacked.matches) spine.scrollIntoView({ block: 'nearest' });
+    });
+    // Real movement only: a resting pointer must not open whatever scrolls under it. The pause lets a sliding drawer
+    // settle, or the one that slides under the pointer would open next and set off a chain.
+    drawer.addEventListener('pointermove', (event) => {
+      if (event.pointerType !== 'mouse' || stacked.matches || drawer.classList.contains('open')) return;
+      if ((!event.movementX && !event.movementY) || toolsEl.classList.contains('is-scrubbing')) return;
+      if (event.timeStamp - lastOpened < 450) return;
+      lastOpened = event.timeStamp;
+      openDrawer(drawer);
+    });
   });
-  document.querySelectorAll('.ticket').forEach((ticket) => {
-    ticket.hidden = cat !== 'all' && ticket.dataset.cat !== cat;
-  });
-  const tickets = document.querySelector('.tickets');
-  if (tickets) tickets.scrollLeft = 0;
-}));
+}
 
 // GitHub panel: real numbers from assets/data/github.json, written by scripts/update-github-stats.mjs.
 fetch('/assets/data/github.json')
@@ -137,7 +136,7 @@ fetch('/assets/data/github.json')
     gridEl.setAttribute('role', 'img');
     gridEl.setAttribute('aria-label', `${data.contributionsPastYear} GitHub contributions in the past year`);
     const fragment = document.createDocumentFragment();
-    data.weeks.forEach((week, column) => week.forEach((day, row) => {
+    data.weeks.forEach((week, column) => week.forEach((day) => {
       const date = new Date(`${day.date}T00:00:00Z`);
       const count = day.count ? `${day.count} contribution${day.count === 1 ? '' : 's'}` : 'No contributions';
       const cell = document.createElement('div');
@@ -145,7 +144,6 @@ fetch('/assets/data/github.json')
       cell.style.gridColumn = String(column + 1);
       cell.style.gridRow = String(date.getUTCDay() + 1);
       cell.dataset.tooltip = `${count} · ${dateFormat.format(date)}`;
-      cell.style.setProperty('--delay', `${column * 12 + row * 6}ms`);
       fragment.appendChild(cell);
     }));
     gridEl.appendChild(fragment);

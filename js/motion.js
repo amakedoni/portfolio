@@ -41,6 +41,9 @@
       { line: 0, at: 0, id: 's-rocket', x: -0.74, y: -0.34, w: 0.72, h: 1.16, delay: -0.2 },
       { line: 0, at: 0.99, id: 's-comet', x: 0.42, y: 0.0, w: 0.66, h: 0.44, delay: -0.7 },
     ],
+    contact: [
+      { line: 0, at: 0.99, id: 's-plane', x: 0.3, y: -0.6, w: 2.8, h: 1.83, delay: -0.4 },
+    ],
     recognition: [
       { line: 0, at: 0, id: 's-laurel', x: -0.5, y: -0.02, w: 0.46, h: 0.96 },
       { line: 0, at: 0.99, id: 's-laurel', x: 0.44, y: -0.02, w: 0.46, h: 0.96, flip: true },
@@ -350,7 +353,6 @@
   const dock = document.querySelector('[data-dock]');
   const scrubEl = document.querySelector('[data-scrub]');
   const footWord = document.querySelector('[data-foot-word]');
-  const ticker = document.querySelector('[data-ticker] .ticker-track');
 
   let scrubItems = [];
   let footItems = [];
@@ -365,17 +367,153 @@
   let bustTop = 0;
   let bustHeight = 1;
   let footTop = 0;
-  let footHeight = 1;
   let dockH = 52;
   let dockParked = 66;
   let unit = 16;
   let lastY = -1;
-  let tickerAnim = null;
-  let tickerRate = 1;
   let lenis = null;
 
   function docTop(el) {
     return el.getBoundingClientRect().top + window.scrollY;
+  }
+
+  // ---- Entrances ----
+  // Played by scroll position, as the floors and the quote are: the page is the playhead, so they run both ways.
+  // Each has a playhead of 0 to 1000; `from` and `to` are where its top sits in the view, as fractions of its height,
+  // when that playhead starts and ends. No fill past the end, so a finished entrance leaves the page's own styles in charge.
+  // These elements move several times further than the page does, so locked to the scroll they cross the screen in a few
+  // huge jumps and look like a low frame rate. The playhead follows the scroll on a critically damped spring instead.
+  const entrances = [];
+  const SPRING = 15;
+  const EASE_SLIDE = 'cubic-bezier(.65,0,.35,1)';
+  const EASE_LAND = 'cubic-bezier(.34,1.45,.64,1)';
+  const range = (p, start, end) => clamp((p - start) / (end - start));
+  // Starts squashed flat, expands past its size, then settles: the element itself moves, rather than being uncovered at a hidden edge.
+  const stretch = (axis) => [
+    { opacity: 0, transform: `scale${axis}(.04)`, offset: 0 },
+    { opacity: 1, offset: 0.06 },
+    { transform: `scale${axis}(1.03)`, offset: 0.85 },
+    { opacity: 1, transform: 'none', offset: 1 },
+  ];
+
+  function track(el, keyframes, at, length, easing = EASE_SLIDE) {
+    const animation = el.animate(keyframes, { delay: at, duration: length, easing, fill: 'backwards' });
+    animation.pause();
+    return animation;
+  }
+
+  function addEntrance(place, tracks, onProgress) {
+    entrances.push({ place, tracks, onProgress, top: 0, from: 1, to: 0, p: -1, target: 0, x: 0, v: 0 });
+  }
+
+  function applyEntrance(entrance, p) {
+    if (p === entrance.p) return;
+    entrance.p = p;
+    entrance.tracks.forEach((animation) => { animation.currentTime = p * 1000; });
+    entrance.onProgress?.(p);
+  }
+
+  function stepEntrances(dt) {
+    entrances.forEach((entrance) => {
+      if (entrance.x === entrance.target && !entrance.v) return;
+      const offset = entrance.x - entrance.target;
+      const drift = entrance.v + SPRING * offset;
+      const decay = Math.exp(-SPRING * dt);
+      entrance.x = entrance.target + (offset + drift * dt) * decay;
+      entrance.v = (drift - SPRING * (offset + drift * dt)) * decay;
+      if (Math.abs(entrance.x - entrance.target) < 0.0005 && Math.abs(entrance.v) < 0.01) {
+        entrance.x = entrance.target;
+        entrance.v = 0;
+      }
+      applyEntrance(entrance, clamp(entrance.x));
+    });
+  }
+
+  // Where an element sits in the page ignoring any entrance transform on it or its ancestors.
+  function flowTop(el) {
+    let top = 0;
+    for (let node = el; node; node = node.offsetParent) top += node.offsetTop;
+    return top;
+  }
+
+  // Each starts as it reaches the screen and is finished once it is wholly on it, left to right, so a stacked phone layout gets the same.
+  function flipIn(el, icon, column) {
+    addEntrance(() => {
+      const end = Math.max(0.35, (vh - el.offsetHeight - 8) / vh);
+      return { top: flowTop(el), from: end + 0.25 - column() * 0.04, to: end };
+    }, [
+      track(el, [
+        { opacity: 0, transform: 'perspective(800px) rotateX(-80deg)', offset: 0 },
+        { opacity: 1, offset: 0.3 },
+        { opacity: 1, transform: 'none', offset: 1 },
+      ], 0, 760),
+      track(icon, [{ opacity: 0, transform: 'scale(.4) rotate(-14deg)' }, { opacity: 1, transform: 'none' }], 440, 559, EASE_LAND),
+    ]);
+  }
+
+  function setupEntrances() {
+    document.querySelectorAll('.case').forEach((file) => {
+      const spec = file.querySelector('.case-spec');
+      const panel = file.querySelector('.case-file');
+      addEntrance(() => ({ top: docTop(file), from: 0.95, to: 0.45 }), spec ? [
+        track(spec, [{ opacity: 0, transform: 'translateY(calc(1.5*var(--u))) rotate(-2.5deg) scale(.96)' }, { opacity: 1, transform: 'none' }], 0, 1000, EASE_LAND),
+      ] : []);
+      // The panel expands sideways out of its own centre.
+      addEntrance(() => ({ top: docTop(panel), from: 0.95, to: 0.3 }), [track(panel, stretch('X'), 0, 700, 'linear')]);
+      // Its cards flip down from their top edge, as the flip buttons do, then the icon lands.
+      panel.querySelectorAll('.feat, .trophies li').forEach((card) => {
+        const first = card.parentElement.firstElementChild;
+        flipIn(card, card.querySelector('.feat-ico, .sticker'), () => Math.round((card.offsetLeft - first.offsetLeft) / Math.max(1, card.offsetWidth)));
+      });
+    });
+
+    // The finale: the panel stretches down, then the plane takes off from its title.
+    const finale = document.querySelector('.panel--pink');
+    if (finale) {
+      const plane = finale.querySelector('.contact-title .ltr-sticker');
+      addEntrance(() => ({ top: flowTop(finale), from: 0.95, to: 0.3 }), [
+        track(finale, stretch('Y'), 0, 460, 'linear'),
+        ...(plane ? [track(plane, [
+          { opacity: 0, transform: 'translate(-70%, 70%) scale(.45) rotate(-10deg)', offset: 0 },
+          { opacity: 1, offset: 0.25 },
+          { opacity: 1, transform: 'none', offset: 1 },
+        ], 380, 619, 'cubic-bezier(.22,1,.36,1)')] : []),
+      ]);
+    }
+
+    // The spines stretch up one by one like a shelf being stocked, then the open drawer slides out and pushes them along.
+    const tools = document.querySelector('.tools');
+    if (tools) {
+      addEntrance(() => ({ top: docTop(tools), from: 0.95, to: 0.3 }), [...tools.querySelectorAll('.tool')].map((drawer, index) => track(
+        drawer,
+        stretch('Y'),
+        index * 60,
+        480,
+        'linear',
+      )), (p) => {
+        const slide = range(p, 0.5, 0.85);
+        tools.style.setProperty('--shelf', (slide * slide * (3 - 2 * slide)).toFixed(4));
+        tools.style.setProperty('--art', range(p, 0.72, 0.92).toFixed(3));
+        tools.style.setProperty('--rows', range(p, 0.78, 1).toFixed(3));
+        tools.classList.toggle('is-scrubbing', p < 1);
+      });
+    }
+
+    // Each step stretches up off the floor in turn, then its drawing drops down and lands on it. A phone stacks the steps, so each waits for its own turn.
+    const stairs = document.querySelector('.edu-stairs');
+    document.querySelectorAll('.edu').forEach((step, index) => {
+      // Timed from the floor they stand on, not their tops: the first step starts as its own top comes on screen, and all three finish with the stairs in view.
+      addEntrance(() => (vw > 820
+        ? { top: docTop(stairs) + stairs.offsetHeight, from: 1.2 - index * 0.07, to: 0.93 - index * 0.07 }
+        : { top: docTop(stairs) + step.offsetTop - stairs.offsetTop + step.offsetHeight, from: 1.1, to: 0.8 }), [
+        track(step, stretch('Y'), 0, 760, 'linear'),
+        track(step.querySelector('.edu-art'), [
+          { opacity: 0, transform: 'translateY(-30%) rotate(-5deg)', offset: 0 },
+          { opacity: 1, offset: 0.2 },
+          { opacity: 1, transform: 'none', offset: 1 },
+        ], 560, 439, EASE_LAND),
+      ]);
+    });
   }
 
   function measure() {
@@ -391,13 +529,17 @@
       scrubHeight = scrubEl.offsetHeight;
     }
     crestRibbons.forEach((ribbon) => { ribbon.top = docTop(ribbon.crest); });
+    entrances.forEach((entrance) => Object.assign(entrance, entrance.place()));
     if (bust) {
       bustTop = docTop(bust);
       bustHeight = bust.offsetHeight || 1;
     }
-    if (footWord) {
-      footTop = docTop(footWord);
-      footHeight = footWord.offsetHeight || 1;
+    if (footWord) footTop = docTop(footWord);
+    if (rubber.bars.length) {
+      rubber.top = docTop(rubber.space);
+      rubber.height = rubber.space.offsetHeight;
+      rubber.barHeight = rubber.bars[0].offsetHeight || 12;
+      rubber.pull = Math.max((COARSE ? vh * 0.28 : rubber.height) - rubber.barHeight, 0);
     }
     if (dock) dockH = dock.offsetHeight || 52;
     unit = parseFloat(getComputedStyle(document.body).fontSize) || 16;
@@ -405,6 +547,95 @@
     // Lenis caches the page height; keep it honest whenever the layout changes.
     lenis?.resize();
     lastY = -1;
+  }
+
+  // ---- The rubberband at the very end of the page, from the reference's footer ----
+  const COARSE = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const RELEASE_DELAY = 100;
+  const rubber = { bars: [], strip: null, space: null, top: 0, height: 0, weights: [], pull: 0, barHeight: 12, shown: -1, timer: 0, returning: false, pulling: false, originY: 0, raf: 0 };
+
+  function stretchBars(progress) {
+    if (progress === rubber.shown) return;
+    rubber.shown = progress;
+    rubber.bars.forEach((bar, index) => {
+      bar.style.transform = `scaleY(${(1 + (progress * rubber.pull * rubber.weights[index]) / rubber.barHeight).toFixed(3)})`;
+    });
+  }
+
+  function springBack() {
+    clearTimeout(rubber.timer);
+    if (rubber.returning || window.scrollY + vh <= rubber.top + 1) return;
+    rubber.returning = true;
+    const done = () => { rubber.returning = false; };
+    if (lenis) lenis.scrollTo(rubber.top - vh, { duration: 0.8, easing: (t) => (t === 1 ? 1 : 1 - 2 ** (-10 * t)), force: true, onComplete: done });
+    else {
+      window.scrollTo({ top: rubber.top - vh, behavior: 'smooth' });
+      done();
+    }
+  }
+
+  function atPageEnd() {
+    return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+  }
+
+  // Touch has no room to scroll past the end, so a pull at the bottom stretches the bars with growing resistance.
+  function bindTouchPull() {
+    window.addEventListener('touchstart', (event) => {
+      rubber.pulling = false;
+      rubber.originY = event.touches[0].clientY;
+    }, { passive: true });
+    window.addEventListener('touchmove', (event) => {
+      const pulled = rubber.originY - event.touches[0].clientY;
+      if (!rubber.pulling) {
+        if (pulled <= 0 || !atPageEnd()) {
+          rubber.originY = event.touches[0].clientY;
+          return;
+        }
+        cancelAnimationFrame(rubber.raf);
+        rubber.pulling = true;
+        rubber.originY = event.touches[0].clientY;
+        rubber.strip.setAttribute('data-pinned', '');
+        return;
+      }
+      event.preventDefault();
+      stretchBars(1 - Math.exp((-Math.max(pulled, 0) * 0.75) / Math.max(1, rubber.pull)));
+    }, { passive: false });
+    const release = () => {
+      if (!rubber.pulling) return;
+      rubber.pulling = false;
+      const from = rubber.shown;
+      const start = performance.now();
+      const settle = (now) => {
+        const t = Math.min(1, (now - start) / 900);
+        stretchBars(t === 1 ? 0 : from * 2 ** (-10 * t) * Math.cos(t * 28));
+        if (t < 1) rubber.raf = requestAnimationFrame(settle);
+        else rubber.strip.removeAttribute('data-pinned');
+      };
+      rubber.raf = requestAnimationFrame(settle);
+    };
+    window.addEventListener('touchend', release, { passive: true });
+    window.addEventListener('touchcancel', release, { passive: true });
+  }
+
+  function setupRubberband() {
+    rubber.strip = document.querySelector('[data-foot-bars]');
+    rubber.space = document.querySelector('[data-foot-space]');
+    rubber.bars = rubber.strip ? [...rubber.strip.children] : [];
+    if (!rubber.bars.length || !rubber.space) return;
+    const middle = (rubber.bars.length - 1) / 2;
+    rubber.weights = rubber.bars.map((bar, index) => 0.2 + 0.8 * (1 - Math.abs(index - middle) / middle));
+    if (COARSE) {
+      bindTouchPull();
+      return;
+    }
+    const held = () => {
+      rubber.returning = false;
+      clearTimeout(rubber.timer);
+      rubber.timer = setTimeout(springBack, RELEASE_DELAY);
+    };
+    window.addEventListener('wheel', held, { passive: true });
+    window.addEventListener('keyup', springBack);
+    window.addEventListener('pointerup', springBack);
   }
 
   function setFootWord(on) {
@@ -421,7 +652,6 @@
   function paint() {
     const y = window.scrollY;
     if (y === lastY) return;
-    const velocity = lastY < 0 ? 0 : y - lastY;
     lastY = y;
 
     if (dock && vw > 640) {
@@ -454,23 +684,24 @@
       // the view, which rushes text as small as ours; this also finishes with the first line still clear of the buttons.
       paintScrub(scrubItems, clamp((y + vh * 0.85 - scrubTop) / Math.max(1, scrubHeight + vh * 0.3)));
     }
-    // The word ends the document, so it must trigger within its own height or it never would.
-    if (footItems.length) setFootWord(y + vh - Math.min(vh * 0.3, footHeight * 0.6) > footTop);
-
-    if (tickerAnim) {
-      const target = clamp(1 + Math.abs(velocity) * 0.25, 1, 9);
-      tickerRate += (target - tickerRate) * 0.12;
-      tickerAnim.playbackRate = tickerRate;
+    entrances.forEach((entrance) => {
+      entrance.target = clamp((y + vh * entrance.from - entrance.top) / Math.max(1, vh * (entrance.from - entrance.to)));
+    });
+    // As the reference: on once its top is 30% up the view, and it plays back if you scroll away above that.
+    if (footItems.length) setFootWord(y + vh * 0.7 > footTop);
+    if (rubber.bars.length && !COARSE) {
+      const progress = clamp((y + vh - rubber.top) / Math.max(1, rubber.height));
+      rubber.strip.toggleAttribute('data-pinned', progress > 0);
+      stretchBars(progress);
     }
   }
 
+  let lastFrame = 0;
   function loop(time) {
     if (lenis) lenis.raf(time);
     paint();
-    if (tickerAnim && tickerRate > 1.01 && window.scrollY === lastY) {
-      tickerRate += (1 - tickerRate) * 0.08;
-      tickerAnim.playbackRate = tickerRate;
-    }
+    stepEntrances(Math.min(0.05, (time - lastFrame) / 1000));
+    lastFrame = time;
     requestAnimationFrame(loop);
   }
 
@@ -490,7 +721,7 @@
       });
     }, { rootMargin: '0px 0px -10% 0px' });
     document.querySelectorAll('[data-fade], [data-stagger]').forEach((el) => reveal.observe(el));
-    document.querySelectorAll('.bio [data-kinetic-title], .case [data-kinetic-title]').forEach((el) => reveal.observe(el));
+    document.querySelectorAll('.bio [data-kinetic-title]').forEach((el) => reveal.observe(el));
     document.querySelectorAll('[data-stagger]').forEach((el) => {
       [...el.children].forEach((child, index) => child.style.setProperty('--i', String(index)));
     });
@@ -533,15 +764,21 @@
     scrubItems = scrubEl ? buildChars(scrubEl) : [];
     footItems = footWord ? buildChars(footWord).map((item) => ({ span: item.span })) : [];
     setupFloors();
+    setupEntrances();
+    setupRubberband();
     root.classList.add('motion-ready');
     measure();
     paint();
+    // Opening the page part-way down shows the entrances already at that point rather than playing them through.
+    entrances.forEach((entrance) => {
+      entrance.x = entrance.target;
+      applyEntrance(entrance, entrance.target);
+    });
     requestAnimationFrame(() => requestAnimationFrame(() => {
       document.querySelector('.hero [data-kinetic-title]')?.classList.add('revealed');
-      document.querySelectorAll('.fp [data-kinetic-title]').forEach((title) => title.classList.add('revealed'));
+      document.querySelectorAll('.fp [data-kinetic-title], .case [data-kinetic-title], .contact [data-kinetic-title]').forEach((title) => title.classList.add('revealed'));
     }));
 
-    if (ticker?.getAnimations) tickerAnim = ticker.getAnimations()[0] || null;
     if (typeof window.Lenis === 'function') {
       lenis = new window.Lenis({ autoRaf: false, anchors: true, lerp: 0.11 });
       window.lenis = lenis;
