@@ -1,5 +1,5 @@
 // Service Worker для базового офлайн-режима
-const CACHE_NAME = 'portfolio-v2.11.1';
+const CACHE_NAME = 'portfolio-v2.12.0';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -11,8 +11,6 @@ const urlsToCache = [
   '/js/ui.js',
   '/js/motion.js',
   '/js/vendor/lenis.js',
-  '/assets/images/finly-showcase.jpg',
-  '/assets/images/finly-goals.jpg',
   '/assets/images/reel-poster.jpg',
   '/assets/fonts/roboto-flex-extra-condensed-700.woff2',
   '/assets/fonts/archivo-latin-700-normal.woff2',
