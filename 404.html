@@ -7,7 +7,6 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/webp" sizes="512x512" href="/assets/images/favicon.webp">
   <link rel="stylesheet" href="/css/site.css">
-  <script src="/js/theme.js"></script>
   <style>
     .lost{min-height:100vh;min-height:100lvh;display:grid;place-items:center;text-align:center;padding:84px var(--gut) 40px}
     .lost-core{display:grid;justify-items:center;gap:clamp(14px,2.4lvh,26px)}
@@ -16,20 +15,12 @@
     .lost-title{font:400 clamp(38px,5vw,76px)/1 var(--display);text-transform:uppercase}
     .lost-desc{max-width:52ch}
     .lost-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
-    .lost-bar{position:fixed;top:12px;right:12px;z-index:60;display:flex;gap:6px;padding:6px;background:#000;color:#fff;border-radius:6px}
-    .lost-bar .theme-toggle{height:32px}
     .lost-brand{position:fixed;top:24px;left:18px;z-index:60;font:400 24px/1 var(--serif);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;display:flex;align-items:center;gap:.5em}
     .lost-brand svg{width:1em;height:1.12em}
   </style>
 </head>
-<body class="dark-theme">
+<body>
   <a class="lost-brand" href="/"><svg aria-hidden="true"><use href="/assets/logo.svg#logo"></use></svg>A. Makedonskiy</a>
-  <div class="lost-bar">
-    <button class="theme-toggle" type="button" aria-label="Toggle theme">
-      <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/assets/icons.svg#icon-02"></use></svg>
-      <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/assets/icons.svg#icon-03"></use></svg>
-    </button>
-  </div>
 
   <main class="lost">
     <div class="lost-core">

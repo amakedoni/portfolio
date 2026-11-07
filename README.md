@@ -6,11 +6,11 @@ Static personal portfolio for [amakedoni.com](https://amakedoni.com/). The site 
 
 - `index.html` - one-page portfolio markup.
 - `css/site.css` - all styles, including the self-hosted `@font-face` rules. `404.html` shares it.
-- `js/ui.js` - menu, contact form, skills filter, GitHub panel.
+- `js/ui.js` - menu, contact form, tool drawers, GitHub panel.
 - `js/motion.js` - scroll scenes, letter-built titles and stickers. Everything it hides or pins is keyed on `.motion-ready`, so content is complete without it.
 - `js/vendor/lenis.js` - vendored [Lenis](https://github.com/darkroomengineering/lenis) smooth scrolling (MIT). Named without `.min` because `.gitignore` excludes `*.min.js`.
-- `js/theme.js` - theme persistence.
 - `assets/images/bust.webp` - the About portrait, printed from `photo-alt.jpg` by `scripts/build-portrait.py` (needs numpy, opencv-python-headless and pillow).
+- `assets/images/floor-*.webp` - the photos in the floor shapes, AI-generated and illustrative rather than records of real events or hardware.
 - `assets/stickers.svg` - generated illustration sprite. The crest is in `scripts/build-stickers.cjs`; every other drawing is in `scripts/sticker-art/`, one file per site section.
 - `assets/videos/reel.mp4` - the reel, generated with Gemini. The video stream is the untouched original (`-c:v copy -an -movflags +faststart`): do not re-encode it. `assets/images/reel-poster.jpg` is its still.
 - `assets/logo.svg` - the helmet mark.

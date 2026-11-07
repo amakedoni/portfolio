@@ -165,9 +165,21 @@ test('the interface scales with the screen like the reference', async () => {
   }
 });
 
+test('each floor shape shows its own photo', async () => {
+  const { context, page } = await openPage();
+  const photos = await page.evaluate(() => [...document.querySelectorAll('.fp-media image')].map((image) => image.getAttribute('href')));
+  assert.equal(photos.length, 4);
+  assert.equal(new Set(photos).size, 4, 'No floor repeats a photo');
+  for (const photo of photos) {
+    const response = await page.request.get(`${origin}${photo}`);
+    assert.ok(response.ok(), `${photo} should load`);
+  }
+  await context.close();
+});
+
 test('essential content stays visible without JavaScript', async () => {
   const { context, page } = await openPage({ javaScriptEnabled: false });
-  for (const selector of ['h1', '#about .scrub', '.fp-title', '.case', '.ticket', '.edu', '#contact-form', '.foot-word']) {
+  for (const selector of ['h1', '.creed .scrub', '.fp-title', '.case', '.tool', '.edu', '#contact-form', '.foot-word']) {
     assert.ok(await page.locator(selector).first().isVisible(), `${selector} should be visible`);
   }
   assert.match(await page.locator('h1').innerText(), /ENGINEERING/i);
@@ -393,33 +405,323 @@ test('reduced motion gets final states with nothing animating', { timeout: 10000
   await context.close();
 });
 
-test('skill tabs filter tickets and report their pressed state', async () => {
+test('tool drawers open one at a time and report their state', async () => {
   const { context, page } = await openPage();
-  const shown = () => page.locator('.ticket:visible').count();
-  assert.equal(await shown(), 5);
-  await page.locator('.tab[data-cat="ml"]').click();
-  assert.equal(await page.locator('.tab[data-cat="ml"]').getAttribute('aria-pressed'), 'true');
-  assert.equal(await page.locator('.tab[data-cat="all"]').getAttribute('aria-pressed'), 'false');
-  assert.equal(await shown(), 1);
-  assert.equal(await page.locator('.ticket:visible').getAttribute('data-cat'), 'ml');
-  await page.locator('.tab[data-cat="all"]').click();
-  assert.equal(await shown(), 5);
-  const meters = await page.locator('.ticket meter').count();
-  assert.equal(meters, 15);
+  const expanded = () => page.locator('.tool-spine[aria-expanded="true"]').count();
+  assert.equal(await page.locator('.tool').count(), 5);
+  assert.equal(await page.locator('.tool-list > li').count(), 16);
+  assert.equal(await expanded(), 1);
+  await page.locator('.tool[data-cat="ml"] .tool-spine').click();
+  assert.equal(await expanded(), 1);
+  assert.equal(await page.locator('.tool[data-cat="ml"] .tool-spine').getAttribute('aria-expanded'), 'true');
+  assert.ok(await page.locator('#tool-ml').isVisible());
+  await page.waitForTimeout(800);
+  assert.equal(await page.locator('#tool-lang').isVisible(), false);
   await context.close();
 });
 
-test('education cards fill with colour and bring in their marquee on hover', async () => {
+test('tools show where they were used rather than scores, and tags reach real case studies', async () => {
   const { context, page } = await openPage();
-  const card = page.locator('.edu').first();
-  const poster = card.locator('.edu-poster');
-  await jumpTo(page, await docTop(page, '#education'));
-  const before = await poster.evaluate((el) => getComputedStyle(el).backgroundColor);
-  await poster.hover();
-  await page.waitForFunction(() => getComputedStyle(document.querySelector('.edu .mq')).opacity === '1');
-  const background = await poster.evaluate((el) => getComputedStyle(el).backgroundColor);
-  assert.notEqual(background, before);
-  assert.equal(parseColor(background).join(), parseColor('#ff3d8b').join());
+  const state = await page.evaluate(() => ({
+    scores: document.querySelectorAll('.tool meter, .tool .mq').length,
+    tags: [...document.querySelectorAll('.tool-tag')].map((tag) => Boolean(document.querySelector(tag.getAttribute('href')))),
+    devops: [...document.querySelectorAll('.tool[data-cat="ops"] .tool-name')].map((name) => name.textContent),
+    frontend: [...document.querySelectorAll('.tool[data-cat="fe"] .tool-name')].map((name) => name.textContent),
+  }));
+  assert.equal(state.scores, 0);
+  assert.ok(state.tags.length > 0 && state.tags.every(Boolean), 'Every tag links to a case study on the page');
+  assert.ok(!state.devops.includes('React Native') && state.devops.includes('GitHub Actions'));
+  assert.ok(state.frontend.includes('React Native'));
+  await context.close();
+});
+
+test('tool drawers stack on a phone and stay on screen', async () => {
+  const { context, page } = await openPage({ viewport: { width: 390, height: 844 } });
+  await page.locator('.tool[data-cat="back"] .tool-spine').click();
+  assert.ok(await page.locator('#tool-back').isVisible());
+  assert.equal(await page.locator('#tool-lang').isVisible(), false);
+  const right = await page.locator('#tool-back').evaluate((el) => el.getBoundingClientRect().right);
+  assert.ok(right <= 390, `The open drawer ran to ${right}`);
+  await context.close();
+});
+
+test('education climbs as a staircase from the first study to today', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const steps = await page.locator('.edu').evaluateAll((items) => items.map((el) => {
+    const box = el.getBoundingClientRect();
+    return { top: box.top, bottom: box.bottom, colour: getComputedStyle(el).backgroundColor, degree: el.querySelector('.edu-degree').textContent };
+  }));
+  assert.equal(steps.length, 3);
+  assert.match(steps[0].degree, /Pre-University/);
+  assert.match(steps[2].degree, /Applied Mathematics/);
+  assert.ok(steps[0].top > steps[1].top && steps[1].top > steps[2].top, 'Each step rises above the last');
+  assert.ok(Math.abs(steps[0].bottom - steps[2].bottom) <= 1, 'The steps share a floor');
+  assert.equal(new Set(steps.map((step) => step.colour)).size, 3, 'Each step has its own colour at rest');
+  assert.equal(await page.locator('.mq').count(), 0);
+  await context.close();
+});
+
+test('case files, tools and education follow the scroll position in both directions', { timeout: 20000 }, async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const read = () => page.evaluate(() => ({
+    panel: getComputedStyle(document.querySelector('.case-file')).transform,
+    spine: getComputedStyle(document.querySelector('.tool:nth-child(3)')).opacity,
+    shelf: document.querySelector('.tools').style.getPropertyValue('--shelf'),
+    step: getComputedStyle(document.querySelector('.edu')).transform,
+    art: getComputedStyle(document.querySelector('.edu-art')).opacity,
+  }));
+  const settle = () => page.waitForTimeout(900);
+  const before = await read();
+  assert.match(before.panel, /^matrix\(0\.04/, 'The panel waits squashed sideways');
+  assert.match(before.step, /^matrix\(1, 0, 0, 0\.04/, 'The steps wait squashed flat');
+  assert.equal(before.spine, '0');
+  assert.equal(before.art, '0');
+
+  const middle = await docTop(page, '.tools') - 900 * 0.6;
+  await jumpTo(page, middle);
+  await settle();
+  const partway = await read();
+  assert.ok(Number(partway.spine) >= 0 && Number(partway.shelf) < 1, `Tools should be mid-way, got ${JSON.stringify(partway)}`);
+
+  await jumpTo(page, await docTop(page, '.edu-stairs'));
+  await settle();
+  const after = await read();
+  assert.equal(after.panel, 'none', 'Finished entrances leave the page styles in charge');
+  assert.equal(after.spine, '1');
+  assert.equal(after.shelf, '1.0000');
+  assert.equal(after.step, 'none');
+  assert.equal(after.art, '1');
+
+  await jumpTo(page, middle);
+  await settle();
+  assert.deepEqual(await read(), partway, 'Scrolling back returns to the same frame');
+  await jumpTo(page, 0);
+  await settle();
+  assert.deepEqual(await read(), before, 'Scrolling all the way up plays them fully in reverse');
+  await context.close();
+});
+
+test('project cards move into place with the scroll instead of snapping on and off', { timeout: 30000 }, async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  for (const selector of ['#case-finly .feat', '#case-recognition .trophies li']) {
+    const top = await docTop(page, selector);
+    const seen = [];
+    for (const fraction of [1.05, 0.98, 0.92, 0.86, 0.8, 0.5]) {
+      await jumpTo(page, top - 900 * fraction);
+      await page.waitForTimeout(900);
+      seen.push(await page.locator(selector).first().evaluate((el) => {
+        const style = getComputedStyle(el);
+        return `${style.opacity}|${style.transform}`;
+      }));
+    }
+    assert.ok(new Set(seen).size >= 4, `${selector} should pass through in-between frames, got ${seen.join(' ; ')}`);
+    assert.equal(seen[seen.length - 1], '1|none', `${selector} should finish in place`);
+    await jumpTo(page, top - 900 * 0.92);
+    await page.waitForTimeout(900);
+    const back = await page.locator(selector).first().evaluate((el) => `${getComputedStyle(el).opacity}|${getComputedStyle(el).transform}`);
+    assert.equal(back, seen[2], `${selector} should reverse to the same frame`);
+  }
+  await context.close();
+});
+
+test('the stairs start as the first step comes on screen and finish in view', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const box = await page.locator('.edu-stairs').evaluate((el) => ({ top: el.getBoundingClientRect().top + scrollY, height: el.offsetHeight }));
+  const floor = box.top + box.height;
+  const steps = () => page.locator('.edu').evaluateAll((items) => items.map((el) => getComputedStyle(el).opacity));
+  await jumpTo(page, floor - 900 * 1.25);
+  await page.waitForTimeout(900);
+  assert.deepEqual(await steps(), ['0', '0', '0'], 'Nothing shows before the first step reaches the screen');
+  await jumpTo(page, floor - 900 * 1.08);
+  await page.waitForTimeout(900);
+  assert.equal((await steps())[0], '1', 'The first step is rising while its top is on screen');
+  await jumpTo(page, floor - 900 * 0.76);
+  await page.waitForTimeout(900);
+  const finished = await page.locator('.edu').evaluateAll((items) => items.map((el) => getComputedStyle(el).transform));
+  assert.deepEqual(finished, ['none', 'none', 'none'], 'All three steps finish with the staircase on screen');
+  await context.close();
+});
+
+test('big elements spread their motion over many small frames instead of jumping', { timeout: 20000 }, async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  await page.mouse.move(1420, 500);
+  const box = await page.locator('.edu-stairs').evaluate((el) => ({ top: el.getBoundingClientRect().top + scrollY, height: el.offsetHeight }));
+  await jumpTo(page, box.top + box.height - 900 * 1.3);
+  await page.waitForTimeout(900);
+  await page.evaluate(() => {
+    const step = document.querySelector('.edu:nth-child(3)');
+    window.recording = [];
+    const tick = () => {
+      if (!window.recording) return;
+      window.recording.push({ top: step.getBoundingClientRect().top, y: window.scrollY });
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+  for (let notch = 0; notch < 5; notch += 1) {
+    await page.mouse.wheel(0, 100);
+    await page.waitForTimeout(140);
+  }
+  await page.waitForTimeout(1000);
+  const frames = await page.evaluate(() => { const list = window.recording; window.recording = null; return list; });
+  const moves = frames.slice(1).map((frame, index) => Math.abs(frame.top - frames[index].top + frame.y - frames[index].y)).filter((move) => move > 0.05);
+  assert.ok(moves.length >= 25, `The step moved over only ${moves.length} frames`);
+  assert.ok(Math.max(...moves) <= 60, `The step jumped ${Math.max(...moves).toFixed(0)}px in one frame`);
+  await context.close();
+});
+
+test('a drawer can still be opened by hand once the shelf has finished entering', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  await jumpTo(page, await docTop(page, '.tools') - 100);
+  await page.waitForTimeout(900);
+  await page.locator('.tool[data-cat="back"] .tool-spine').click();
+  await page.waitForTimeout(900);
+  const width = await page.locator('.tool[data-cat="back"]').evaluate((el) => el.getBoundingClientRect().width);
+  const first = await page.locator('.tool[data-cat="lang"]').evaluate((el) => el.getBoundingClientRect().width);
+  assert.ok(width > 500 && first < 120, `Backend should be open: ${width} against ${first}`);
+  await context.close();
+});
+
+test('a resting pointer opens no drawer as the page scrolls, but moving it does', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const openNow = () => page.locator('.tool.open').getAttribute('data-cat');
+  await page.mouse.move(720, 500);
+  const top = await docTop(page, '.tools');
+  for (let y = top - 900; y <= top - 100; y += 100) {
+    await jumpTo(page, y);
+    await page.waitForTimeout(40);
+  }
+  await page.waitForTimeout(900);
+  assert.equal(await openNow(), 'lang', 'Scrolling alone leaves the first drawer open');
+  const backend = await page.locator('.tool[data-cat="back"]').boundingBox();
+  await page.mouse.move(backend.x + backend.width / 2, backend.y + 300, { steps: 4 });
+  await page.waitForTimeout(200);
+  assert.equal(await openNow(), 'back');
+  await context.close();
+});
+
+test('the GitHub panel appears without a GPU layer for every cell', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  await page.waitForFunction(() => document.querySelectorAll('.git-cell').length > 0);
+  const client = await context.newCDPSession(page);
+  await client.send('DOM.enable');
+  let layers = 0;
+  let peak = 0;
+  client.on('LayerTree.layerTreeDidChange', (event) => {
+    if (!event.layers) return;
+    layers = event.layers.length;
+    peak = Math.max(peak, layers);
+  });
+  await client.send('LayerTree.enable');
+  await jumpTo(page, await docTop(page, '#github') - 900 * 1.3);
+  await page.waitForTimeout(800);
+  const before = layers;
+  peak = layers;
+  await jumpTo(page, await docTop(page, '#github') - 300);
+  await page.waitForFunction(() => document.getElementById('git-cells').classList.contains('in'));
+  await page.waitForTimeout(700);
+  assert.ok(peak - before < 30, `Layers went from ${before} to ${peak}`);
+  await context.close();
+});
+
+test('the contact finale enters with the scroll and finishes in place', { timeout: 20000 }, async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const read = () => page.evaluate(() => ({
+    panel: getComputedStyle(document.querySelector('.panel--pink')).transform,
+    plane: getComputedStyle(document.querySelector('.contact-title .ltr-sticker')).opacity,
+    letter: getComputedStyle(document.querySelector('.contact-title .ltr-in')).transform,
+    row: getComputedStyle(document.querySelector('.ch')).opacity,
+    size: parseFloat(getComputedStyle(document.querySelector('.contact-title')).fontSize),
+  }));
+  const before = await read();
+  assert.match(before.panel, /^matrix\(1, 0, 0, 0\.04/);
+  assert.equal(before.plane, '0');
+  assert.equal(before.letter, 'none', 'The title letters do not animate on their own');
+  assert.equal(before.row, '1', 'The rows do not animate on their own');
+  assert.ok(before.size > 150, `The title should be giant, got ${before.size}px`);
+  await jumpTo(page, await page.evaluate(() => document.documentElement.scrollHeight));
+  await page.waitForTimeout(1000);
+  const after = await read();
+  assert.deepEqual({ panel: after.panel, plane: after.plane }, { panel: 'none', plane: '1' });
+  await jumpTo(page, 0);
+  await page.waitForTimeout(1000);
+  assert.deepEqual(await read(), before, 'Scrolling back plays it in reverse');
+  await context.close();
+});
+
+test('the footer ends on bars that stretch past the end of the page and spring back', { timeout: 20000 }, async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const heights = () => page.locator('.foot-bars i').evaluateAll((bars) => bars.map((bar) => Math.round(bar.getBoundingClientRect().height)));
+  assert.equal((await heights()).length, 7);
+  const end = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
+  await jumpTo(page, end - 160);
+  await page.waitForTimeout(150);
+  const stretched = await heights();
+  assert.ok(stretched[3] > stretched[1] && stretched[1] > stretched[0], `The middle bar should be tallest: ${stretched}`);
+  assert.equal(await page.locator('.foot-bars').evaluate((el) => getComputedStyle(el).position), 'fixed');
+  const barBottom = await page.locator('.foot-bars').evaluate((el) => el.getBoundingClientRect().bottom);
+  assert.equal(Math.round(barBottom), 900, 'Pinned to the bottom of the screen');
+  await page.mouse.wheel(0, 40);
+  await page.waitForTimeout(1500);
+  const rest = await heights();
+  assert.ok(rest.every((height) => height <= 14), `The bars should spring back: ${rest}`);
+  const scrolled = await page.evaluate(() => scrollY + innerHeight - document.querySelector('.foot-space').getBoundingClientRect().top - scrollY);
+  assert.ok(scrolled <= 2, 'The page returns to the top of the stretch room');
+  await context.close();
+});
+
+test('reduced motion leaves the bars still with no extra scroll room', async () => {
+  const { context, page } = await openPage({ reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
+  assert.equal(await page.locator('.foot-space').isVisible(), false);
+  assert.equal(await page.locator('.foot-bars i').first().isVisible(), true);
+  await context.close();
+});
+
+test('contact rows turn to a coloured face on hover, like the menu rows', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  await jumpTo(page, await page.evaluate(() => document.querySelector('.channels').getBoundingClientRect().top + scrollY - 300));
+  await page.waitForTimeout(900);
+  for (const href of ['mailto:aleximlord@gmail.com', 'tel:+79255053027']) {
+    await page.locator(`.ch[href="${href}"]`).hover();
+    await page.waitForFunction((link) => {
+      const box = document.querySelector(`.ch[href="${link}"] .ch-box`);
+      return Math.abs(new DOMMatrix(getComputedStyle(box).transform).m22) < 0.1;
+    }, href);
+  }
+  await context.close();
+});
+
+test('contact rows fit on small phones', async () => {
+  for (const width of [320, 390]) {
+    const { context, page } = await openPage({ viewport: { width, height: 800 } });
+    const overflowing = await page.locator('.ch-face').evaluateAll((faces) => faces.filter((face) => face.scrollWidth > face.clientWidth + 1).map((face) => face.textContent));
+    assert.deepEqual(overflowing, [], `${width}px`);
+    await context.close();
+  }
+});
+
+test('the big drawings keep moving while the page scrolls', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  await page.evaluate(() => document.documentElement.classList.add('lenis-scrolling'));
+  await jumpTo(page, await docTop(page, '.tools') - 100);
+  const states = await page.evaluate(() => ['.tool.open .tool-art .sticker', '.edu-art .sticker', '.contact-title .ltr-sticker'].map((selector) => getComputedStyle(document.querySelector(selector)).animationPlayState));
+  assert.deepEqual(states.slice(0, 1), ['running']);
+  await jumpTo(page, await docTop(page, '.edu-stairs') - 300);
+  assert.equal(await page.locator('.edu-art .sticker').first().evaluate((el) => getComputedStyle(el).animationPlayState), 'running');
+  await jumpTo(page, await docTop(page, '#contact'));
+  assert.equal(await page.locator('.contact-title .ltr-sticker').evaluate((el) => getComputedStyle(el).animationPlayState), 'running');
+  await context.close();
+});
+
+test('reduced motion skips the entrances and shows the sections as they end', async () => {
+  const { context, page } = await openPage({ reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
+  const state = await page.evaluate(() => ({
+    feat: getComputedStyle(document.querySelector('.case .feat')).visibility,
+    clip: getComputedStyle(document.querySelector('.edu')).clipPath,
+    art: getComputedStyle(document.querySelector('.edu-art')).opacity,
+    tool: getComputedStyle(document.querySelector('.tool')).transform,
+  }));
+  assert.deepEqual(state, { feat: 'visible', clip: 'none', art: '1', tool: 'none' });
   await context.close();
 });
 
@@ -427,9 +729,9 @@ test('every slot on the page has its own illustration', async () => {
   const { context, page } = await openPage();
   const ids = await page.evaluate(() => [...document.querySelectorAll('main use[href*="stickers.svg"], footer use[href*="stickers.svg"]')]
     .map((use) => use.getAttribute('href').split('#')[1]));
-  // Laurels are a mirrored pair; everything else appears once.
+  // Laurels are a mirrored pair and the crest appears twice on purpose; everything else appears once.
   const counts = {};
-  ids.filter((id) => id !== 's-laurel').forEach((id) => { counts[id] = (counts[id] || 0) + 1; });
+  ids.filter((id) => id !== 's-laurel' && !id.startsWith('s-crest-')).forEach((id) => { counts[id] = (counts[id] || 0) + 1; });
   const repeated = Object.entries(counts).filter(([, n]) => n > 1);
   assert.deepEqual(repeated, [], `Repeated stickers: ${JSON.stringify(repeated)}`);
   assert.ok(ids.length >= 26, `Expected at least 26 placed illustrations, found ${ids.length}`);
@@ -484,7 +786,7 @@ test('the crest ribbons slide out with scroll and shake, while its body stays st
   assert.ok(angles.size > 1, 'Ribbons should shake');
   for (const angle of angles) assert.ok(['-0.5', '0', '0.5'].includes(angle), `Unexpected angle ${angle}`);
 
-  const body = await page.locator('.crest > use').getAttribute('transform');
+  const body = await page.locator('.crest > use').first().getAttribute('transform');
   assert.equal(body, null, 'The body must not move with the ribbons');
   await context.close();
 });
@@ -545,55 +847,71 @@ test('MAI Tablets links to both of its repositories', async () => {
   await context.close();
 });
 
-test('the crest and quote hold still together, then the bio fades in over them', { timeout: 60000 }, async () => {
-  for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 640 }, { width: 390, height: 844 }]) {
-    const { context, page } = await openPage({ viewport });
-    const read = () => page.evaluate(() => {
-      const quote = document.querySelector('.scrub');
+test('the crest appears alone after the reel, and again after the floors with the text', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const order = await page.evaluate(() => {
+    const before = (a, b) => Boolean(document.querySelector(a).compareDocumentPosition(document.querySelector(b)) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const crests = document.querySelectorAll('.crest');
+    return {
+      count: crests.length,
+      firstThenBio: crests[0].nextElementSibling.classList.contains('bio'),
+      textInAbout: document.querySelectorAll('#about .kicker, #about .scrub').length,
+      floorsThenCreed: before('[data-floors]', '.creed'),
+      creedThenCases: before('.creed', '.cases'),
+      creedOrder: [...document.querySelector('.creed').children].map((el) => el.classList[0]),
+      ids: [...document.querySelectorAll('[id]')].map((el) => el.id),
+      stack: document.querySelector('[data-about-stack]'),
+    };
+  });
+  assert.equal(order.count, 2);
+  assert.ok(order.firstThenBio, 'The bio follows the first crest directly');
+  assert.equal(order.textInAbout, 0, 'No text follows the first crest');
+  assert.ok(order.floorsThenCreed && order.creedThenCases, 'The second crest sits between the floors and the project files');
+  assert.deepEqual(order.creedOrder, ['crest', 'about-head']);
+  assert.equal(new Set(order.ids).size, order.ids.length, 'Ids must stay unique');
+  assert.equal(order.stack, null);
+
+  // Nothing holds, shrinks or fades any more, and both crests slide their ribbons out as they arrive.
+  const places = await page.evaluate(() => [...document.querySelectorAll('.crest')].map((el) => el.getBoundingClientRect().top + scrollY));
+  for (const [index, top] of places.entries()) {
+    await page.evaluate((to) => window.scrollTo(0, to), top - 100);
+    await page.waitForTimeout(1200);
+    const state = await page.evaluate((i) => {
+      const crest = document.querySelectorAll('.crest')[i];
       return {
-        share: document.querySelectorAll('.scrub .ch-s.on').length / document.querySelectorAll('.scrub .ch-s').length,
-        y: scrollY,
-        top: quote.getBoundingClientRect().top,
-        crest: document.querySelector('.crest').getBoundingClientRect().top,
-        quoteBottom: quote.getBoundingClientRect().bottom,
-        vh: innerHeight,
-        ribbon: Math.abs(parseFloat(document.querySelector('[data-crest-ribbon] g').getAttribute('transform').match(/translate\(([-\d.]+)/)[1])),
-        text: Number(getComputedStyle(document.querySelector('.about-stack')).opacity),
-        bio: Number(getComputedStyle(document.querySelector('.bio')).opacity),
-        dock: document.querySelector('.dock').getBoundingClientRect().bottom,
-        bar: document.querySelector('.bar-row').getBoundingClientRect().bottom,
-        overflow: document.documentElement.scrollWidth - innerWidth,
+        top: crest.getBoundingClientRect().top,
+        ribbon: Math.abs(parseFloat(crest.querySelector('[data-crest-ribbon] g').getAttribute('transform').match(/translate\(([-\d.]+)/)[1])),
+        bio: getComputedStyle(document.querySelector('.bio')).opacity,
       };
-    });
-    const start = await page.evaluate(() => document.querySelector('.scrub').getBoundingClientRect().top + scrollY);
-    assert.equal((await read()).bio, 0, 'The bio is hidden to begin with');
-    const states = [];
-    for (let y = start - viewport.height; y < start + viewport.height * 2.4; y += 40) {
-      await page.evaluate((to) => window.scrollTo(0, to), y);
-      await page.waitForTimeout(170);
-      states.push(await read());
-    }
-    const done = states.find((state) => state.share === 1);
-    assert.ok(done, 'The quote must finish');
-    assert.equal(done.bio, 0, 'The bio must not have started when the quote finishes');
-    const barLine = viewport.width > 640 ? done.dock : done.bar;
-    assert.ok(done.crest >= barLine - 1, `The crest should sit clear of the bar, top ${done.crest}, bar ${barLine}`);
-    assert.ok(done.quoteBottom <= done.vh, `The quote should fit on screen, bottom ${done.quoteBottom}`);
-    assert.ok(done.ribbon < 1, `The ribbons should be fully out while holding, still ${done.ribbon} in`);
-    const held = states.filter((state) => state.share === 1 && state.text === 1);
-    assert.ok(held.at(-1).y - done.y >= viewport.height * 0.15, `The finished text should be held for a while, got ${held.at(-1).y - done.y}px`);
-    const tops = held.map((state) => state.top);
-    assert.ok(Math.max(...tops) - Math.min(...tops) < 2, `The text must not move while held, moved ${Math.max(...tops) - Math.min(...tops)}px`);
-    const crests = held.map((state) => state.crest);
-    assert.ok(Math.max(...crests) - Math.min(...crests) < 2, `The crest must not move while held, moved ${Math.max(...crests) - Math.min(...crests)}px`);
-    // The bio fades, rather than jumping, and is fully there by the end.
-    const fading = states.filter((state) => state.bio > 0 && state.bio < 1);
-    assert.ok(fading.length >= 4, `The bio should fade over several steps, got ${fading.length}`);
-    assert.equal(states.at(-1).bio, 1);
-    assert.equal(states.at(-1).text, 0, 'The text has gone once the bio has arrived');
-    assert.equal(states.at(-1).overflow, 0);
-    await context.close();
+    }, index);
+    assert.ok(Math.abs(state.top - 100) < 2, `Crest ${index} should scroll normally, top ${state.top}`);
+    assert.ok(state.ribbon < 20, `Crest ${index} ribbons should be out, still ${state.ribbon} in`);
+    assert.equal(state.bio, '1');
   }
+  await context.close();
+});
+
+test('the quote fills in slowly, letter by letter, and finishes on screen', { timeout: 30000 }, async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const read = () => page.evaluate(() => {
+    const all = document.querySelectorAll('.scrub .ch-s').length;
+    return { share: document.querySelectorAll('.scrub .ch-s.on').length / all, y: scrollY, top: document.querySelector('.scrub').getBoundingClientRect().top, dock: document.querySelector('.dock').getBoundingClientRect().bottom };
+  });
+  const start = await page.evaluate(() => document.querySelector('.scrub').getBoundingClientRect().top + scrollY);
+  let first = null;
+  let done = null;
+  for (let y = start - 900; y < start + 400 && done === null; y += 30) {
+    await page.evaluate((to) => window.scrollTo(0, to), y);
+    await page.waitForTimeout(250);
+    const state = await read();
+    if (state.share > 0 && first === null) first = state.y;
+    if (state.share === 1) done = state;
+  }
+  assert.ok(done, 'The quote must finish');
+  assert.ok(done.y - first >= 900 * 0.5, `The quote took only ${done.y - first}px of scroll`);
+  assert.ok(done.top > done.dock, `The first line should still be clear of the buttons, top ${done.top}, buttons ${done.dock}`);
+  assert.equal(await page.locator('.crest-link, [data-ink]').count(), 0, 'The pen, leaves and ink are gone');
+  await context.close();
 });
 
 test('a parked button flips in front of the top bar', async () => {
@@ -665,20 +983,21 @@ test('contact fields have persistent labels and submitting shows a state', async
   await page.evaluate(() => document.getElementById('contact-form').requestSubmit());
   assert.equal(await page.locator('#contact-form').getAttribute('data-submitting'), 'true');
   assert.equal(await page.locator('#contact-form [data-submit-label]').first().textContent(), 'Opening email...');
+  assert.equal(await page.locator('[data-status-sent]').isVisible(), true, 'Submitting tells the visitor what happened and gives a fallback');
+  assert.equal(await page.locator('[data-status-ready]').isVisible(), false);
   await context.close();
 });
 
-test('the site opens black whatever the OS prefers, and a light choice persists', async () => {
-  const { context, page } = await openPage();
-  await page.waitForFunction(() => document.body.classList.contains('dark-theme'));
-  assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), 'rgb(11, 11, 11)');
-  await page.evaluate(() => { document.querySelector('.theme-toggle').click(); });
-  await page.waitForFunction(() => !document.body.classList.contains('dark-theme'));
+test('the site is always black, with no way to change it', async () => {
+  const { context, page } = await openPage({ colorScheme: 'light' });
+  await page.evaluate(() => localStorage.setItem('theme', 'light'));
   await page.reload({ waitUntil: 'load' });
   await page.waitForFunction(() => document.documentElement.classList.contains('motion-ready'));
-  assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), 'rgb(255, 255, 255)');
-  const ink = await page.evaluate(() => getComputedStyle(document.querySelector('.hero-title')).color);
-  assert.ok(contrast(parseColor(ink), [255, 255, 255]) >= 7);
+  assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), 'rgb(11, 11, 11)', 'An old saved choice changes nothing');
+  assert.equal(await page.locator('.theme-toggle').count(), 0);
+  await page.goto(`${origin}/404.html`, { waitUntil: 'load' });
+  assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), 'rgb(11, 11, 11)');
+  assert.equal(await page.locator('.theme-toggle').count(), 0);
   await context.close();
 });
 
@@ -745,7 +1064,7 @@ test('a tour of the page produces no script errors', { timeout: 20000 }, async (
   }
   await page.locator('.menu-toggle').click();
   await page.keyboard.press('Escape');
-  await page.locator('.tab[data-cat="ops"]').click();
+  await page.locator('.tool[data-cat="ops"] .tool-spine').click();
   await page.waitForTimeout(800);
   assert.deepEqual(errors, []);
   await context.close();

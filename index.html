@@ -57,7 +57,7 @@
 }
 </script>
 </head>
-<body class="dark-theme">
+<body>
 
 <a href="#about" class="skip-link">Skip to content</a>
 
@@ -77,7 +77,6 @@
         <li class="mi"><a class="mi-row" href="#github" style="--c:var(--violet);--dir:1"><span class="mi-box"><span class="mi-face"><span class="mi-label">GitHub</span><span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span><span class="mi-face mi-face--alt" aria-hidden="true"><span class="mi-label">GitHub</span><span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span></span></a></li>
         <li class="mi" data-accordion><button class="mi-row" type="button" aria-expanded="false" aria-controls="m-resume" style="--c:var(--ultra);--dir:-1"><span class="mi-box"><span class="mi-face"><span class="mi-label">Resume</span><span class="mi-icon"><svg class="i-plus" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6h7M6 2.5v7" stroke="currentColor" stroke-width="1.4"/></svg><svg class="i-minus" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6h7" stroke="currentColor" stroke-width="1.4"/></svg></span></span><span class="mi-face mi-face--alt" aria-hidden="true"><span class="mi-label">Resume</span><span class="mi-icon"><svg class="i-plus" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6h7M6 2.5v7" stroke="currentColor" stroke-width="1.4"/></svg><svg class="i-minus" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6h7" stroke="currentColor" stroke-width="1.4"/></svg></span></span></span></button><ul class="mi-sub" id="m-resume"><li><a href="resume.pdf" download="resume.pdf">PDF</a></li><li><a href="resume.docx" download="resume.docx">DOCX</a></li></ul></li>
         <li class="mi"><a class="mi-row" href="#contact" style="--c:var(--pink);--dir:1"><span class="mi-box"><span class="mi-face"><span class="mi-label">Contact</span><span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span><span class="mi-face mi-face--alt" aria-hidden="true"><span class="mi-label">Contact</span><span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span></span></a></li>
-        <li class="mi mi--settings"><span class="mi-settings-label">Theme</span><button class="theme-toggle" type="button" aria-label="Toggle theme"><svg class="moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/assets/icons.svg#icon-02"></use></svg><svg class="sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><use href="/assets/icons.svg#icon-03"></use></svg></button></li>
       </ul>
     </div>
   </nav>
@@ -113,7 +112,6 @@
 </div>
 
 <section id="about" class="about">
-  <div class="about-stack" data-about-stack>
   <svg class="crest" viewBox="0 0 1880 460" role="img" aria-label="Personal coat of arms: a Corinthian helmet over a shield with a rocket, a CubeSat, a neural network and code brackets, between two columns, on ribbons reading Alexander Makedonskiy" data-crest>
     <defs>
       <clipPath id="crest-clip-left"><rect width="668" height="460"></rect></clipPath>
@@ -123,11 +121,6 @@
     <g clip-path="url(#crest-clip-right)" data-crest-ribbon="-668" data-crest-pivot="1546"><g><use href="/assets/stickers.svg#s-crest-right" width="1880" height="460"></use></g></g>
     <use href="/assets/stickers.svg#s-crest-body" width="1880" height="460"></use>
   </svg>
-  <div class="about-head">
-    <h2 class="kicker">A builder with a curious mind.</h2>
-    <blockquote class="scrub" data-scrub>"Strong technical solutions live at the intersection of fundamentals and creative thinking."</blockquote>
-  </div>
-  </div>
   <div class="bio">
     <figure class="bio-bust" data-bust>
       <div class="bio-print"><img src="/assets/images/bust.webp" alt="Alexander Makedonskiy, printed as a halftone bust wearing a laurel wreath" loading="lazy" decoding="async" width="1330" height="1581"><svg class="sticker bio-wreath" aria-hidden="true"><use href="/assets/stickers.svg#s-wreath"></use></svg></div>
@@ -164,7 +157,7 @@
       <p class="fp-sub" data-piece-words>Offline-first finance PWA with on-device machine learning.</p>
       <a class="flip" href="#case-finly" style="--flip:var(--gold);--dir:1"><span class="flip-box"><span class="flip-face">Explore</span><span class="flip-face flip-face--alt" aria-hidden="true">Explore</span></span></a>
     </div>
-    <div class="fp-media fp-media--finly" data-panel-media><div class="fp-tilt" data-tilt><svg class="sticker" role="img" aria-label="Finly on a phone: a balance of 183,843 roubles, spending by category, a receipt, coins, and badges for offline use, on-device machine learning and biometrics"><use href="/assets/stickers.svg#s-finly-floor"></use></svg></div></div>
+    <div class="fp-media fp-media--finly" data-panel-media><div class="fp-tilt" data-tilt><svg class="fp-shape" viewBox="-3 -3 406 406" aria-hidden="true"><mask id="fp-mask-finly" maskUnits="userSpaceOnUse" x="-3" y="-3" width="406" height="406"><path d="M200 0A200 200 0 1 1 200 400A200 200 0 1 1 200 0Z" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round"/></mask><path d="M200 0A200 200 0 1 1 200 400A200 200 0 1 1 200 0Z" fill="#000" stroke="#000" stroke-width="6" stroke-linejoin="round"/><image href="/assets/images/floor-finly.webp" x="-3" y="-3" width="406" height="406" preserveAspectRatio="xMidYMid slice" mask="url(#fp-mask-finly)"/></svg></div></div>
   </article>
   <article class="fp fp--tablets" data-panel data-bg="var(--tangerine)" style="--bg:var(--tangerine)">
     <div class="fp-body">
@@ -173,7 +166,7 @@
       <p class="fp-sub" data-piece-words>Medication adherence platform.</p>
       <a class="flip" href="#case-tablets" style="--flip:var(--gold);--dir:1"><span class="flip-box"><span class="flip-face">Explore</span><span class="flip-face flip-face--alt" aria-hidden="true">Explore</span></span></a>
     </div>
-    <div class="fp-media fp-media--tablets" data-panel-media><div class="fp-tilt" data-tilt><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-phone"></use></svg></div></div>
+    <div class="fp-media fp-media--tablets" data-panel-media><div class="fp-tilt" data-tilt><svg class="fp-shape" viewBox="-3 -3 406 406" aria-hidden="true"><mask id="fp-mask-tablets" maskUnits="userSpaceOnUse" x="-3" y="-3" width="406" height="406"><path d="M132 0H268A12 12 0 0 1 280 12V120H388A12 12 0 0 1 400 132V268A12 12 0 0 1 388 280H280V388A12 12 0 0 1 268 400H132A12 12 0 0 1 120 388V280H12A12 12 0 0 1 0 268V132A12 12 0 0 1 12 120H120V12A12 12 0 0 1 132 0Z" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round"/></mask><path d="M132 0H268A12 12 0 0 1 280 12V120H388A12 12 0 0 1 400 132V268A12 12 0 0 1 388 280H280V388A12 12 0 0 1 268 400H132A12 12 0 0 1 120 388V280H12A12 12 0 0 1 0 268V132A12 12 0 0 1 12 120H120V12A12 12 0 0 1 132 0Z" fill="#000" stroke="#000" stroke-width="6" stroke-linejoin="round"/><image href="/assets/images/floor-tablets.webp" x="-3" y="-3" width="406" height="406" preserveAspectRatio="xMidYMid slice" mask="url(#fp-mask-tablets)"/></svg></div></div>
   </article>
   <article class="fp fp--cubesat" data-panel data-bg="var(--ultra)" style="--bg:var(--ultra)">
     <div class="fp-body">
@@ -182,7 +175,7 @@
       <p class="fp-sub" data-piece-words>Aerospace prototype that receives, decodes and relays telemetry.</p>
       <a class="flip" href="#case-cubesat" style="--flip:var(--gold);--dir:1"><span class="flip-box"><span class="flip-face">Explore</span><span class="flip-face flip-face--alt" aria-hidden="true">Explore</span></span></a>
     </div>
-    <div class="fp-media fp-media--cubesat" data-panel-media><div class="fp-tilt" data-tilt><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-orbit"></use></svg></div></div>
+    <div class="fp-media fp-media--cubesat" data-panel-media><div class="fp-tilt" data-tilt><svg class="fp-shape" viewBox="-3 -3 406 406" aria-hidden="true"><mask id="fp-mask-cubesat" maskUnits="userSpaceOnUse" x="-3" y="-3" width="406" height="406"><path d="M200 0L400 100L400 300L200 400L0 300L0 100Z" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round"/></mask><path d="M200 0L400 100L400 300L200 400L0 300L0 100Z" fill="#000" stroke="#000" stroke-width="6" stroke-linejoin="round"/><image href="/assets/images/floor-cubesat.webp" x="-3" y="-3" width="406" height="406" preserveAspectRatio="xMidYMid slice" mask="url(#fp-mask-cubesat)"/></svg></div></div>
   </article>
   <article class="fp fp--trophy" data-panel data-bg="var(--gold)" style="--bg:var(--gold)">
     <div class="fp-body">
@@ -191,13 +184,29 @@
       <p class="fp-sub" data-piece-words>2022 — 2025 · Olympiads</p>
       <a class="flip" href="#case-recognition" style="--flip:var(--gold);--dir:1"><span class="flip-box"><span class="flip-face">Explore</span><span class="flip-face flip-face--alt" aria-hidden="true">Explore</span></span></a>
     </div>
-    <div class="fp-media fp-media--trophy" data-panel-media><div class="fp-tilt" data-tilt><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-trophy"></use></svg></div></div>
+    <div class="fp-media fp-media--trophy" data-panel-media><div class="fp-tilt" data-tilt><svg class="fp-shape" viewBox="-3 -3 406 406" aria-hidden="true"><mask id="fp-mask-trophy" maskUnits="userSpaceOnUse" x="-3" y="-3" width="406" height="406"><path d="M200 0L252 104L400 104L288 200L336 400L200 288L64 400L112 200L0 104L148 104Z" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round"/></mask><path d="M200 0L252 104L400 104L288 200L336 400L200 288L64 400L112 200L0 104L148 104Z" fill="#000" stroke="#000" stroke-width="6" stroke-linejoin="round"/><image href="/assets/images/floor-recognition.webp" x="-3" y="-3" width="406" height="406" preserveAspectRatio="xMidYMid slice" mask="url(#fp-mask-trophy)"/></svg></div></div>
   </article>
     </div>
   </div>
 
+  <div class="creed">
+  <svg class="crest" viewBox="0 0 1880 460" aria-hidden="true" data-crest>
+    <defs>
+      <clipPath id="crest-clip-left-2"><rect width="668" height="460"></rect></clipPath>
+      <clipPath id="crest-clip-right-2"><rect x="1212" width="668" height="460"></rect></clipPath>
+    </defs>
+    <g clip-path="url(#crest-clip-left-2)" data-crest-ribbon="668" data-crest-pivot="334"><g><use href="/assets/stickers.svg#s-crest-left" width="1880" height="460"></use></g></g>
+    <g clip-path="url(#crest-clip-right-2)" data-crest-ribbon="-668" data-crest-pivot="1546"><g><use href="/assets/stickers.svg#s-crest-right" width="1880" height="460"></use></g></g>
+    <use href="/assets/stickers.svg#s-crest-body" width="1880" height="460"></use>
+  </svg>
+  <div class="about-head">
+    <h2 class="kicker">A builder with a curious mind.</h2>
+    <blockquote class="scrub" data-scrub>"Strong technical solutions live at the intersection of fundamentals and creative thinking."</blockquote>
+  </div>
+  </div>
+
   <div class="cases">
-    <article class="case" id="case-finly" data-fade style="--c:var(--mint);--on-c:#00150c">
+    <article class="case" id="case-finly" style="--c:var(--mint);--on-c:#00150c">
       <aside class="case-spec">
         <p class="case-floor">Top floor</p>
         <dl class="case-fields">
@@ -230,7 +239,7 @@
         </ul>
       </div>
     </article>
-    <article class="case" id="case-tablets" data-fade style="--c:var(--tangerine);--on-c:#1f0b00">
+    <article class="case" id="case-tablets" style="--c:var(--tangerine);--on-c:#1f0b00">
       <aside class="case-spec">
         <p class="case-floor">Middle floor</p>
         <dl class="case-fields">
@@ -257,7 +266,7 @@
         </ul>
       </div>
     </article>
-    <article class="case" id="case-cubesat" data-fade style="--c:var(--ultra);--on-c:#fff">
+    <article class="case" id="case-cubesat" style="--c:var(--ultra);--on-c:#fff">
       <aside class="case-spec">
         <p class="case-floor">Ground floor</p>
         <dl class="case-fields">
@@ -283,7 +292,7 @@
         </ul>
       </div>
     </article>
-    <article class="case case--trophy" id="case-recognition" data-fade style="--c:var(--gold);--on-c:#241a00">
+    <article class="case case--trophy" id="case-recognition" style="--c:var(--gold);--on-c:#241a00">
       <aside class="case-spec">
         <p class="case-floor">Trophy room</p>
         <svg class="sticker case-medal" aria-hidden="true"><use href="/assets/stickers.svg#s-medal"></use></svg>
@@ -304,68 +313,66 @@
 <section id="skills" class="skills">
   <div class="section-head">
     <h2 class="kicker">Tools of the trade.</h2>
-    <div class="skills-tabs" role="group" aria-label="Filter skills">
-      <button class="tab active" type="button" data-cat="all" aria-pressed="true">All</button>
-      <button class="tab" type="button" data-cat="lang" aria-pressed="false">Languages</button>
-      <button class="tab" type="button" data-cat="back" aria-pressed="false">Backend</button>
-      <button class="tab" type="button" data-cat="ops" aria-pressed="false">DevOps</button>
-      <button class="tab" type="button" data-cat="ml" aria-pressed="false">ML &amp; Data</button>
-      <button class="tab" type="button" data-cat="fe" aria-pressed="false">Frontend &amp; PWA</button>
-    </div>
   </div>
-  <div class="tickets" data-lenis-prevent-horizontal tabindex="0" role="group" aria-label="Skills by category">
-    <article class="ticket" data-cat="lang" style="--poster:var(--pink);--poster-ink:#3d001b">
-      <div class="ticket-poster"><div class="mq" aria-hidden="true" data-repeat="Languages"></div><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-snake"></use></svg></div>
-      <h3 class="ticket-title">Languages</h3>
-      <ul class="levels"><li><span>Python</span><meter min="0" max="100" value="90"></meter><b>90</b></li><li><span>C / C++</span><meter min="0" max="100" value="70"></meter><b>70</b></li><li><span>TypeScript</span><meter min="0" max="100" value="65"></meter><b>65</b></li></ul>
+  <div class="tools" data-tools>
+    <article class="tool open" data-cat="lang" style="--poster:var(--pink);--poster-ink:#3d001b">
+      <h3 class="tool-head"><button class="tool-spine" type="button" aria-expanded="true" aria-controls="tool-lang"><span>Languages</span></button></h3>
+      <div class="tool-body" id="tool-lang">
+        <div class="tool-art"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-snake"></use></svg></div>
+        <ul class="tool-list"><li><span class="tool-name">Python</span><span class="tool-note">Backends, machine learning and telemetry tooling.</span><span class="tool-tags"><a class="tool-tag" href="#case-tablets">MAI Tablets</a><a class="tool-tag" href="#case-cubesat">CubeSat</a></span></li><li><span class="tool-name">C / C++</span><span class="tool-note">Firmware and embedded logic.</span><span class="tool-tags"><a class="tool-tag" href="#case-cubesat">CubeSat</a></span></li><li><span class="tool-name">TypeScript</span><span class="tool-note">Full offline-first applications.</span><span class="tool-tags"><a class="tool-tag" href="#case-finly">Finly</a></span></li></ul>
+      </div>
     </article>
-    <article class="ticket" data-cat="back" style="--poster:var(--tangerine);--poster-ink:#3a1500">
-      <div class="ticket-poster"><div class="mq" aria-hidden="true" data-repeat="Backend"></div><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-database"></use></svg></div>
-      <h3 class="ticket-title">Backend</h3>
-      <ul class="levels"><li><span>FastAPI</span><meter min="0" max="100" value="85"></meter><b>85</b></li><li><span>PostgreSQL</span><meter min="0" max="100" value="80"></meter><b>80</b></li><li><span>SQLAlchemy</span><meter min="0" max="100" value="75"></meter><b>75</b></li></ul>
+    <article class="tool" data-cat="back" style="--poster:var(--tangerine);--poster-ink:#3a1500">
+      <h3 class="tool-head"><button class="tool-spine" type="button" aria-expanded="false" aria-controls="tool-back"><span>Backend</span></button></h3>
+      <div class="tool-body" id="tool-back">
+        <div class="tool-art"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-database"></use></svg></div>
+        <ul class="tool-list"><li><span class="tool-name">FastAPI</span><span class="tool-note">API design for client-server systems.</span><span class="tool-tags"><a class="tool-tag" href="#case-tablets">MAI Tablets</a></span></li><li><span class="tool-name">PostgreSQL</span><span class="tool-note">Database design and optimisation.</span><span class="tool-tags"><a class="tool-tag" href="#case-tablets">MAI Tablets</a></span></li><li><span class="tool-name">SQLAlchemy</span><span class="tool-note">Async data layer, with Alembic migrations.</span><span class="tool-tags"><a class="tool-tag" href="#case-tablets">MAI Tablets</a></span></li></ul>
+      </div>
     </article>
-    <article class="ticket" data-cat="ops" style="--poster:var(--ultra);--poster-ink:#c9c6ff">
-      <div class="ticket-poster"><div class="mq" aria-hidden="true" data-repeat="DevOps"></div><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-container"></use></svg></div>
-      <h3 class="ticket-title">DevOps</h3>
-      <ul class="levels"><li><span>Docker</span><meter min="0" max="100" value="80"></meter><b>80</b></li><li><span>Git</span><meter min="0" max="100" value="88"></meter><b>88</b></li><li><span>React Native</span><meter min="0" max="100" value="72"></meter><b>72</b></li></ul>
+    <article class="tool" data-cat="ops" style="--poster:var(--ultra);--poster-ink:#c9c6ff">
+      <h3 class="tool-head"><button class="tool-spine" type="button" aria-expanded="false" aria-controls="tool-ops"><span>DevOps</span></button></h3>
+      <div class="tool-body" id="tool-ops">
+        <div class="tool-art"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-container"></use></svg></div>
+        <ul class="tool-list"><li><span class="tool-name">Docker</span><span class="tool-note">Containerised backend services.</span><span class="tool-tags"><a class="tool-tag" href="#case-tablets">MAI Tablets</a></span></li><li><span class="tool-name">Git</span><span class="tool-note">Version control on team projects.</span><span class="tool-tags"><a class="tool-tag" href="#case-finly">Finly</a><a class="tool-tag" href="#case-tablets">MAI Tablets</a></span></li><li><span class="tool-name">GitHub Actions</span><span class="tool-note">CI/CD: 3 workflows and 345+ tests.</span><span class="tool-tags"><a class="tool-tag" href="#case-finly">Finly</a></span></li></ul>
+      </div>
     </article>
-    <article class="ticket" data-cat="ml" style="--poster:var(--gold);--poster-ink:#3d2c00">
-      <div class="ticket-poster"><div class="mq" aria-hidden="true" data-repeat="ML &amp; Data"></div><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-brain"></use></svg></div>
-      <h3 class="ticket-title">ML &amp; Data</h3>
-      <ul class="levels"><li><span>TensorFlow</span><meter min="0" max="100" value="75"></meter><b>75</b></li><li><span>Pandas / NumPy</span><meter min="0" max="100" value="82"></meter><b>82</b></li><li><span>scikit-learn</span><meter min="0" max="100" value="70"></meter><b>70</b></li></ul>
+    <article class="tool" data-cat="ml" style="--poster:var(--gold);--poster-ink:#3d2c00">
+      <h3 class="tool-head"><button class="tool-spine" type="button" aria-expanded="false" aria-controls="tool-ml"><span>ML &amp; Data</span></button></h3>
+      <div class="tool-body" id="tool-ml">
+        <div class="tool-art"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-brain"></use></svg></div>
+        <ul class="tool-list"><li><span class="tool-name">TensorFlow</span><span class="tool-note">Keras models, and TensorFlow.js on the device.</span><span class="tool-tags"><a class="tool-tag" href="#case-finly">Finly</a></span></li><li><span class="tool-name">Pandas / NumPy</span><span class="tool-note">Data preparation, analysis and visualisation.</span></li><li><span class="tool-name">scikit-learn</span><span class="tool-note">Classification and data analysis.</span></li></ul>
+      </div>
     </article>
-    <article class="ticket" data-cat="fe" style="--poster:var(--mint);--poster-ink:#00321c">
-      <div class="ticket-poster"><div class="mq" aria-hidden="true" data-repeat="Frontend &amp; PWA"></div><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-cursor"></use></svg></div>
-      <h3 class="ticket-title">Frontend &amp; PWA</h3>
-      <ul class="levels"><li><span>React</span><meter min="0" max="100" value="78"></meter><b>78</b></li><li><span>Tailwind CSS</span><meter min="0" max="100" value="72"></meter><b>72</b></li><li><span>PWA / Workbox</span><meter min="0" max="100" value="70"></meter><b>70</b></li></ul>
+    <article class="tool" data-cat="fe" style="--poster:var(--mint);--poster-ink:#00321c">
+      <h3 class="tool-head"><button class="tool-spine" type="button" aria-expanded="false" aria-controls="tool-fe"><span>Frontend &amp; PWA</span></button></h3>
+      <div class="tool-body" id="tool-fe">
+        <div class="tool-art"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-cursor"></use></svg></div>
+        <ul class="tool-list"><li><span class="tool-name">React</span><span class="tool-note">Interfaces for offline-first web apps.</span><span class="tool-tags"><a class="tool-tag" href="#case-finly">Finly</a></span></li><li><span class="tool-name">React Native</span><span class="tool-note">Cross-platform mobile client, with Expo.</span><span class="tool-tags"><a class="tool-tag" href="#case-tablets">MAI Tablets</a></span></li><li><span class="tool-name">Tailwind CSS</span><span class="tool-note">Interface styling, with Radix UI.</span><span class="tool-tags"><a class="tool-tag" href="#case-finly">Finly</a></span></li><li><span class="tool-name">PWA / Workbox</span><span class="tool-note">Works without a network, on IndexedDB.</span><span class="tool-tags"><a class="tool-tag" href="#case-finly">Finly</a></span></li></ul>
+      </div>
     </article>
   </div>
-  <div class="ticker" aria-hidden="true" data-ticker><div class="ticker-track"><span>Python ✺ JavaScript ✺ TypeScript ✺ C ✺ C++ ✺ Git ✺ GitHub ✺ GitLab ✺ GitHub Actions ✺ GitLab CI ✺ HTML5 ✺ Docker ✺ Kubernetes ✺ React ✺ React Router ✺ React Hook Form ✺ Vite ✺ Webpack ✺ Node.js ✺ NPM ✺ FastAPI ✺ Nginx ✺ MySQL ✺ Redis ✺ NumPy ✺ Pandas ✺ Matplotlib ✺ TensorFlow ✺ Keras ✺ PyTorch ✺ scikit‑learn ✺ AWS ✺ Google Cloud ✺ Vercel ✺ Cloudflare ✺ Swagger ✺ WireGuard ✺ Figma ✺ JWT ✺ CMake ✺&nbsp;</span><span>Python ✺ JavaScript ✺ TypeScript ✺ C ✺ C++ ✺ Git ✺ GitHub ✺ GitLab ✺ GitHub Actions ✺ GitLab CI ✺ HTML5 ✺ Docker ✺ Kubernetes ✺ React ✺ React Router ✺ React Hook Form ✺ Vite ✺ Webpack ✺ Node.js ✺ NPM ✺ FastAPI ✺ Nginx ✺ MySQL ✺ Redis ✺ NumPy ✺ Pandas ✺ Matplotlib ✺ TensorFlow ✺ Keras ✺ PyTorch ✺ scikit‑learn ✺ AWS ✺ Google Cloud ✺ Vercel ✺ Cloudflare ✺ Swagger ✺ WireGuard ✺ Figma ✺ JWT ✺ CMake ✺&nbsp;</span></div></div>
 </section>
 
 <section id="education" class="education">
   <div class="section-head"><h2 class="kicker">Trained in rigour.</h2></div>
-  <div class="edu-grid">
-    <article class="edu" style="--poster:var(--pink);--poster-ink:#3d001b">
-      <div class="edu-poster"><div class="mq" aria-hidden="true" data-repeat="NRU MAI"></div><div class="edu-diamond"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-compass"></use></svg></div></div>
-      <p class="edu-period">2025 — Present</p>
-      <h3 class="edu-degree">Applied Mathematics &amp; Computer Science</h3>
-      <p class="edu-inst">NRU MAI</p>
-      <p class="edu-desc">Higher mathematics, Python, fundamental computer science, computing-system architecture.</p>
+  <div class="edu-stairs">
+    <article class="edu" style="--poster:var(--gold);--poster-ink:#3d2c00">
+      <div class="edu-art"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-books"></use></svg></div>
+      <h3 class="edu-degree">Pre-University Programme</h3>
+      <p class="edu-tags"><span class="edu-tag">2021 — 2025</span><span class="edu-tag">NRNU MEPhI</span></p>
+      <p class="edu-desc">Advanced preparation in mathematics, computer science, and physics — the foundation for everything that came after.</p>
     </article>
     <article class="edu" style="--poster:var(--mint);--poster-ink:#00321c">
-      <div class="edu-poster"><div class="mq" aria-hidden="true" data-repeat="NRNU MEPhI · INTEL Institute"></div><div class="edu-diamond"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-robot"></use></svg></div></div>
-      <p class="edu-period">2022 — 2025</p>
+      <div class="edu-art"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-robot"></use></svg></div>
       <h3 class="edu-degree">Machine Learning &amp; Data Analysis</h3>
-      <p class="edu-inst">NRNU MEPhI · INTEL Institute</p>
+      <p class="edu-tags"><span class="edu-tag">2022 — 2025</span><span class="edu-tag">NRNU MEPhI · INTEL Institute</span></p>
       <p class="edu-desc">Applied ML — regression (Random Forest), classification (KNN, RF), clustering (K-Means), visualisation with Matplotlib &amp; Seaborn.</p>
     </article>
-    <article class="edu" style="--poster:var(--gold);--poster-ink:#3d2c00">
-      <div class="edu-poster"><div class="mq" aria-hidden="true" data-repeat="NRNU MEPhI"></div><div class="edu-diamond"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-books"></use></svg></div></div>
-      <p class="edu-period">2021 — 2025</p>
-      <h3 class="edu-degree">Pre-University Programme</h3>
-      <p class="edu-inst">NRNU MEPhI</p>
-      <p class="edu-desc">Advanced preparation in mathematics, computer science, and physics — the foundation for everything that came after.</p>
+    <article class="edu" style="--poster:var(--pink);--poster-ink:#3d001b">
+      <div class="edu-art"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-compass"></use></svg></div>
+      <h3 class="edu-degree">Applied Mathematics &amp; Computer Science</h3>
+      <p class="edu-tags"><span class="edu-tag">2025 — Present</span><span class="edu-tag">NRU MAI</span></p>
+      <p class="edu-desc">Higher mathematics, Python, fundamental computer science, computing-system architecture.</p>
     </article>
   </div>
 </section>
@@ -393,18 +400,17 @@
 </section>
 
 <section id="contact" class="contact">
-  <div class="panel panel--pink" data-fade>
-    <svg class="sticker panel-sticker panel-sticker--plane" aria-hidden="true"><use href="/assets/stickers.svg#s-plane"></use></svg>
-    <h2 class="panel-title">Let's build something.</h2>
+  <div class="panel panel--pink">
+    <h2 class="panel-title contact-title" data-kinetic-title data-sticker-set="contact" data-swap="B"><span class="line">Let's build</span><span class="line">something.</span></h2>
     <div class="contact-grid">
       <div class="contact-left">
         <h3 class="contact-sub">Got a project in mind?</h3>
         <p>Open to interesting work in product engineering, ML tooling, and offline-first PWAs. Drop a line via the form, or pick your favourite channel below.</p>
         <div class="channels">
-          <a class="ch" href="mailto:aleximlord@gmail.com"><span class="ch-l">Email</span><span class="ch-v">aleximlord@gmail.com</span></a>
-          <a class="ch" href="tel:+79255053027"><span class="ch-l">Phone</span><span class="ch-v">+7 925 505 30 27</span></a>
-          <a class="ch" href="https://t.me/makedoni0" target="_blank" rel="noopener"><span class="ch-l">Telegram</span><span class="ch-v">@makedoni0</span></a>
-          <a class="ch" href="https://github.com/amakedoni" target="_blank" rel="noopener"><span class="ch-l">GitHub</span><span class="ch-v">amakedoni</span></a>
+          <a class="ch" href="mailto:aleximlord@gmail.com" style="--c:var(--gold);--dir:1"><span class="ch-box"><span class="ch-face"><span class="ch-l">Email</span><span class="ch-v">aleximlord@gmail.com<span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span></span><span class="ch-face ch-face--alt" aria-hidden="true"><span class="ch-l">Email</span><span class="ch-v">aleximlord@gmail.com<span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span></span></span></a>
+          <a class="ch" href="tel:+79255053027" style="--c:var(--mint);--dir:-1"><span class="ch-box"><span class="ch-face"><span class="ch-l">Phone</span><span class="ch-v">+7 925 505 30 27<span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span></span><span class="ch-face ch-face--alt" aria-hidden="true"><span class="ch-l">Phone</span><span class="ch-v">+7 925 505 30 27<span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span></span></span></a>
+          <a class="ch" href="https://t.me/makedoni0" target="_blank" rel="noopener" style="--c:#fff;--dir:1"><span class="ch-box"><span class="ch-face"><span class="ch-l">Telegram</span><span class="ch-v">@makedoni0<span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span></span><span class="ch-face ch-face--alt" aria-hidden="true"><span class="ch-l">Telegram</span><span class="ch-v">@makedoni0<span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span></span></span></a>
+          <a class="ch" href="https://github.com/amakedoni" target="_blank" rel="noopener" style="--c:var(--tangerine);--dir:-1"><span class="ch-box"><span class="ch-face"><span class="ch-l">GitHub</span><span class="ch-v">amakedoni<span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span></span><span class="ch-face ch-face--alt" aria-hidden="true"><span class="ch-l">GitHub</span><span class="ch-v">amakedoni<span class="mi-icon"><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M3 2v5h9M9 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></span></span></span></a>
         </div>
       </div>
       <form class="cform" id="contact-form">
@@ -413,8 +419,9 @@
         <label for="contact-email">Your email</label>
         <input id="contact-email" type="email" name="email" autocomplete="email" required />
         <label for="contact-message">Tell me about your project</label>
-        <textarea id="contact-message" name="message" rows="4" placeholder="Tell me about your project — what are you building, when do you need it, and what does success look like?" required></textarea>
+        <textarea id="contact-message" name="message" rows="4" placeholder="What are you building, when do you need it, and what does success look like?" required></textarea>
         <button class="flip flip--submit" type="submit" style="--flip:var(--gold)" aria-live="polite"><span class="flip-box"><span class="flip-face" data-submit-label>Send message</span><span class="flip-face flip-face--alt" aria-hidden="true" data-submit-label>Send message</span></span></button>
+        <p class="cform-note" role="status"><span data-status-ready>Opens your email app with this message filled in.</span><span data-status-sent hidden>Your email app should have opened with this message. Nothing happened? Write to <a href="mailto:aleximlord@gmail.com">aleximlord@gmail.com</a>.</span></p>
       </form>
     </div>
   </div>
@@ -423,21 +430,58 @@
 </main>
 
 <footer class="foot">
-  <div class="foot-row">
-    <div class="foot-links">
-      <a href="https://github.com/amakedoni" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://t.me/makedoni0" target="_blank" rel="noopener">Telegram</a>
-      <a href="https://m.vk.com/amakedoni" target="_blank" rel="noopener">VK</a>
-      <a href="mailto:aleximlord@gmail.com">Email</a>
-    </div>
-    <button class="scroll-to-top" type="button">Back to top</button>
-    <div class="foot-meta"><span>© 2026 A. Makedonskiy</span><br><span>Crafted in Moscow · v2026.1</span></div>
-  </div>
   <p class="foot-word" data-foot-word aria-hidden="true">Makedonskiy</p>
+  <div class="foot-grid">
+    <div class="foot-col foot-col--wide">
+      <p class="foot-head">Contact</p>
+      <ul>
+        <li><a href="mailto:aleximlord@gmail.com">aleximlord@gmail.com</a></li>
+        <li><a href="tel:+79255053027">+7 925 505 30 27</a></li>
+        <li>Moscow</li>
+      </ul>
+    </div>
+    <nav class="foot-col" aria-label="Projects">
+      <p class="foot-head">Work</p>
+      <ul>
+        <li><a href="#case-finly">Finly</a></li>
+        <li><a href="#case-tablets">MAI Tablets</a></li>
+        <li><a href="#case-cubesat">CubeSat</a></li>
+        <li><a href="#case-recognition">Recognition</a></li>
+      </ul>
+    </nav>
+    <nav class="foot-col" aria-label="Sections">
+      <p class="foot-head">Explore</p>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Tools of the trade</a></li>
+        <li><a href="#education">Trained in rigour</a></li>
+        <li><a href="#github">Open-source pulse</a></li>
+      </ul>
+    </nav>
+    <nav class="foot-col" aria-label="Elsewhere">
+      <p class="foot-head">Elsewhere</p>
+      <ul>
+        <li><a href="https://github.com/amakedoni" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://t.me/makedoni0" target="_blank" rel="noopener">Telegram</a></li>
+        <li><a href="https://m.vk.com/amakedoni" target="_blank" rel="noopener">VK</a></li>
+        <li><a href="resume.pdf" target="_blank" rel="noopener">Resume</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="foot-legal">
+    <span>© 2026 A. Makedonskiy</span>
+    <button class="scroll-to-top" type="button">Back to top</button>
+    <span>Crafted in Moscow · v2026.1</span>
+  </div>
+  <div class="foot-strip" data-foot-strip aria-hidden="true">
+    <div class="foot-bars" data-foot-bars>
+      <i style="--c:#ff2a00"></i><i style="--c:var(--tangerine)"></i><i style="--c:var(--gold)"></i><i style="--c:var(--pink)"></i><i style="--c:var(--violet)"></i><i style="--c:var(--ultra)"></i><i style="--c:var(--mint)"></i>
+    </div>
+  </div>
+  <div class="foot-space" data-foot-space aria-hidden="true"></div>
 </footer>
 
 <script src="js/ui.js"></script>
-<script src="js/theme.js" defer></script>
 <script src="js/vendor/lenis.js" defer></script>
 <script src="js/motion.js" defer></script>
 </body>
