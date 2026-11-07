@@ -42,6 +42,14 @@ module.exports = (stickers, kit, t) => {
   } };
 
   // The link from the crest to the text: a flourish grown down from the motto, and the pen that draws it.
+  // The stem, carrying everything, narrowing towards the nib, with a knop where each pair of branches leaves it.
+  stickers['crest-stem'] = { box: [0, 0, 600, 400], draw() {
+    let o = toWhite(line([[300, 0], [300, 120], [300, 260], [300, 396]], 13, { tipA: 0.001, tipB: 0.5, min: 0.16, steps: 2 }));
+    [[40, 11], [142, 9], [226, 7]].forEach(([y, r]) => { o += circle(300, y, r, C.white, 3); });
+    return o;
+  } };
+
+  // The finished flourish, for anyone without scroll motion. With it, js/motion.js grows the same branches live.
   stickers['crest-flourish'] = { box: [0, 0, 600, 400], draw() {
     let o = '';
     const { curl, crestLeaf, crestStar, spiral } = kit;
@@ -64,11 +72,7 @@ module.exports = (stickers, kit, t) => {
       o += crestStar(X(238), 44, 8) + crestStar(X(172), 150, 6) + crestStar(X(108), 232, 5);
       for (const [x, y, r] of [[212, 118, 3], [240, 74, 2.4], [150, 216, 2.6], [120, 276, 2.2]]) o += toWhite(dot(X(x), y, r));
     }
-    // The stem, carrying everything, narrowing towards the nib.
-    o += toWhite(line([[300, 0], [300, 120], [300, 260], [300, 396]], 13, { tipA: 0.001, tipB: 0.5, min: 0.16, steps: 2 }));
-    // Knops on the stem where each pair of tendrils leaves it.
-    [[40, 11], [142, 9], [226, 7]].forEach(([y, r]) => { o += circle(300, y, r, C.white, 3); });
-    return o;
+    return o + stickers['crest-stem'].draw();
   } };
 
   stickers['crest-pen'] = { box: [0, 0, 120, 260], draw() {

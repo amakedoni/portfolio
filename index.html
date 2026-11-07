@@ -123,13 +123,17 @@
     <use href="/assets/stickers.svg#s-crest-body" width="1880" height="460"></use>
   </svg>
   <svg class="crest-link" viewBox="0 0 600 400" aria-hidden="true" data-crest-link>
-    <defs><clipPath id="crest-link-clip"><rect width="600" height="400" data-crest-link-reveal></rect></clipPath></defs>
-    <g clip-path="url(#crest-link-clip)"><use href="/assets/stickers.svg#s-crest-flourish" width="600" height="400"></use></g>
-    <g data-crest-link-pen transform="translate(0 140)"><use href="/assets/stickers.svg#s-crest-pen" x="240" width="120" height="260"></use></g>
+    <use class="crest-link-still" href="/assets/stickers.svg#s-crest-flourish" width="600" height="400"></use>
+    <g class="crest-link-live" data-crest-link-branches></g>
+    <use class="crest-link-live" href="/assets/stickers.svg#s-crest-stem" width="600" height="400"></use>
+    <use href="/assets/stickers.svg#s-crest-pen" x="240" y="140" width="120" height="260" data-crest-link-pen></use>
+    <circle class="crest-link-live crest-link-drop" cx="300" cy="400" r="0" data-crest-link-drop></circle>
   </svg>
-  <div class="about-head">
-    <h2 class="kicker" data-scrub>A builder with a curious mind.</h2>
-    <blockquote class="scrub" data-scrub data-scrub-quote>"Strong technical solutions live at the intersection of fundamentals and creative thinking."</blockquote>
+  <div class="ink-stage" data-ink-stage>
+  <div class="about-head" data-ink>
+    <h2 class="kicker">A builder with a curious mind.</h2>
+    <blockquote class="scrub">"Strong technical solutions live at the intersection of fundamentals and creative thinking."</blockquote>
+  </div>
   </div>
   <div class="bio">
     <figure class="bio-bust" data-bust>
