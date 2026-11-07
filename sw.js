@@ -1,5 +1,5 @@
 // Service Worker для базового офлайн-режима
-const CACHE_NAME = 'portfolio-v2.12.0';
+const CACHE_NAME = 'portfolio-v2.15.1';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -19,6 +19,7 @@ const urlsToCache = [
   '/assets/fonts/libre-franklin-latin-400-normal.woff2',
   '/assets/stickers.svg',
   '/assets/images/bust.webp',
+  '/assets/images/ink-blot.webp',
   '/assets/logo.svg',
   '/assets/data/github.json',
   '/js/theme.js',

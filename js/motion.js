@@ -196,16 +196,6 @@
     return order.map((span, index) => ({ span, at: (index + 1) / order.length, on: false }));
   }
 
-  function paintScrub(items, progress) {
-    items.forEach((item) => {
-      const on = progress >= item.at;
-      if (on !== item.on) {
-        item.on = on;
-        item.span.classList.toggle('on', on);
-      }
-    });
-  }
-
   function fitFootWord(el, text) {
     const width = [...text.toLocaleUpperCase()].reduce((sum, char) => sum + advance(char, 'Forum'), 0);
     if (width > 0) el.style.setProperty('--fit', (width * 1.02).toFixed(3));
@@ -338,6 +328,143 @@
     });
   }
 
+  // ---- The text under the flourish: ink spreading from the nib, through a mask ----
+  function setupInk() {
+    if (!inkBlock) return;
+    const layer = document.createElement('div');
+    layer.className = 'ink-layer';
+    layer.append(...inkBlock.childNodes);
+    inkBlock.append(layer);
+    // Spare copies are plain and hidden from assistive technology, so the real headings stay the only ones.
+    for (const name of ['dim', 'wet']) {
+      const copy = document.createElement('div');
+      copy.className = `ink-copy ink-copy--${name}`;
+      copy.setAttribute('aria-hidden', 'true');
+      [...layer.children].forEach((source) => {
+        const line = document.createElement('div');
+        line.className = source.className;
+        line.textContent = source.textContent;
+        copy.append(line);
+      });
+      inkBlock.append(copy);
+    }
+    new Image().src = '/assets/images/ink-blot.webp';
+  }
+
+  function setInk(progress) {
+    inkBlock.classList.toggle('inked', progress >= 1);
+    inkBlock.dataset.ink = progress.toFixed(3);
+    inkBlock.style.setProperty('--ink-size', `${(progress * inkReach).toFixed(1)}px`);
+    // The wet rim runs a little ahead, and is there from the first moment the ink touches the text.
+    inkBlock.style.setProperty('--ink-wet', `${(Math.min(1, progress * 1.1 + (progress > 0 ? 0.015 : 0)) * inkReach).toFixed(1)}px`);
+  }
+
+  // ---- The flourish under the crest: fern fiddleheads that unroll from the stem as you scroll ----
+  const smooth = (t) => t * t * (3 - 2 * t);
+  const mix = (a, b, t) => a + (b - a) * t;
+  const STEM_X = 300;
+  const LEAF = 'M0 0Q.42 .3 1 0Q.42 -.3 0 0Z';
+  const VEINS = 'M.06 0L.9 0M.3 0L.42 .12M.3 0L.42 -.12M.55 0L.66 .09M.55 0L.66 -.09';
+  const BRANCH_TIERS = [
+    { y: 40, length: 268, width: 15, leaf: 46, leaves: [[0.17, 1], [0.27, -1], [0.38, 1], [0.49, -1]], stars: [[238, 44, 8], [212, 118, 3], [240, 74, 2.4]] },
+    { y: 142, length: 186, width: 12, leaf: 36, leaves: [[0.2, 1], [0.33, -1], [0.47, 1]], stars: [[172, 150, 6], [150, 216, 2.6]] },
+    { y: 226, length: 118, width: 9, leaf: 25, leaves: [[0.24, 1], [0.42, -1]], stars: [[108, 232, 5], [120, 276, 2.2]] },
+  ];
+
+  // One centre line for a branch at openness t: 0 is a tight coil against the stem, 1 a long sweep ending in a small volute.
+  function branchCurve(length, t) {
+    const count = 64;
+    const start = mix(1.3, 0.72, t);
+    const flatten = 0.72 * t;
+    const coil = mix(19, 9.4, t);
+    const power = mix(1.35, 7.5, t);
+    const points = [];
+    let x = 0;
+    let y = 0;
+    for (let i = 0; i <= count; i += 1) {
+      const u = i / count;
+      const heading = start - flatten * Math.min(1, u * 1.6) - coil * u ** power;
+      points.push({ x, y, heading, u });
+      x += Math.cos(heading) * (length / count);
+      y += Math.sin(heading) * (length / count);
+    }
+    return points;
+  }
+
+  function buildCrestBranches() {
+    if (!crestBranchLayer) return;
+    const make = (name, className) => {
+      const el = document.createElementNS(SVG_NS, name);
+      el.setAttribute('class', className);
+      return el;
+    };
+    BRANCH_TIERS.forEach((tier, index) => {
+      [1, -1].forEach((side) => {
+        const branch = { tier, index, side, body: make('path', 'crest-link-body'), rib: make('path', 'crest-link-rib'), leaves: [], stars: [] };
+        crestBranchLayer.append(branch.body, branch.rib);
+        tier.leaves.forEach(([u, flank]) => {
+          const group = make('g', 'crest-link-leaf-group');
+          const blade = make('path', 'crest-link-leaf');
+          const veins = make('path', 'crest-link-vein');
+          blade.setAttribute('d', LEAF);
+          veins.setAttribute('d', VEINS);
+          group.append(blade, veins);
+          crestBranchLayer.append(group);
+          branch.leaves.push({ group, u, flank });
+        });
+        tier.stars.forEach(([x, y, r]) => {
+          const star = make('path', 'crest-link-leaf');
+          star.setAttribute('d', r > 4 ? 'M0 -1L.2 -.2L1 0L.2 .2L0 1L-.2 .2L-1 0L-.2 -.2Z' : 'M0 -1A1 1 0 0 1 0 1A1 1 0 0 1 0 -1Z');
+          crestBranchLayer.append(star);
+          branch.stars.push({ star, x: STEM_X + side * x, y, r });
+        });
+        crestBranches.push(branch);
+      });
+    });
+    unfurlBranches(0);
+  }
+
+  // Everything comes from one number, so scrolling back rolls it all up again.
+  function unfurlBranches(progress) {
+    crestLink.dataset.unfurled = progress.toFixed(3);
+    crestBranches.forEach(({ tier, index, side, body, rib, leaves, stars }) => {
+      // The top tier leads, and the ones below follow it down the stem.
+      const open = smooth(clamp((progress - index * 0.14) / 0.72));
+      const curve = branchCurve(tier.length, open);
+      const at = (p) => [STEM_X + side * p.x, tier.y + p.y];
+      const widthAt = (u) => tier.width * mix(0.6, 1, open) * (1 - 0.74 * u) * Math.min(1, 0.45 + u * 9);
+      const outer = [];
+      const inner = [];
+      curve.forEach((p) => {
+        const half = widthAt(p.u) / 2;
+        const [x, y] = at(p);
+        const nx = -Math.sin(p.heading) * side;
+        const ny = Math.cos(p.heading);
+        outer.push(`${(x + nx * half).toFixed(1)} ${(y + ny * half).toFixed(1)}`);
+        inner.unshift(`${(x - nx * half).toFixed(1)} ${(y - ny * half).toFixed(1)}`);
+      });
+      body.setAttribute('d', `M${outer.join('L')}L${inner.join('L')}Z`);
+      rib.setAttribute('d', `M${curve.filter((p) => p.u > 0.03 && p.u < 0.97).map((p) => at(p).map((n) => n.toFixed(1)).join(' ')).join('L')}`);
+      rib.setAttribute('stroke-width', (tier.width * 0.15).toFixed(2));
+      // Leaves ride the stem and open in a wave from base to tip, folded along it until their turn.
+      leaves.forEach(({ group, u, flank }) => {
+        const leafOpen = smooth(clamp((open - u * 0.62) / 0.38));
+        const p = curve[Math.round(u * (curve.length - 1))];
+        const [x, y] = at(p);
+        const angle = p.heading + flank * mix(0.1, 0.82, leafOpen);
+        const direction = side > 0 ? angle : Math.PI - angle;
+        const size = tier.leaf * mix(0.26, 1, leafOpen);
+        const degrees = (direction * 180) / Math.PI;
+        group.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${degrees.toFixed(1)}) scale(${size.toFixed(1)})`);
+      });
+      // Sparks only as a branch finishes opening.
+      const spark = smooth(clamp((open - 0.72) / 0.28));
+      stars.forEach(({ star, x, y, r }) => {
+        star.setAttribute('transform', `translate(${x} ${y}) scale(${(r * spark).toFixed(2)})`);
+      });
+    });
+  }
+
   // ---- Boot ----
   const crest = document.querySelector('[data-crest]');
   const bust = document.querySelector('[data-bust]');
@@ -348,11 +475,16 @@
     pivot: el.dataset.crestPivot,
   })) : [];
   const dock = document.querySelector('[data-dock]');
-  const scrubEl = document.querySelector('[data-scrub]');
+  const inkBlock = document.querySelector('[data-ink]');
+  const inkStage = document.querySelector('[data-ink-stage]');
+  const crestLink = document.querySelector('[data-crest-link]');
+  const crestBranchLayer = crestLink?.querySelector('[data-crest-link-branches]');
+  const crestBranches = [];
+  const crestLinkPen = crestLink?.querySelector('[data-crest-link-pen]');
+  const crestLinkDrop = crestLink?.querySelector('[data-crest-link-drop]');
   const footWord = document.querySelector('[data-foot-word]');
   const ticker = document.querySelector('[data-ticker] .ticker-track');
 
-  let scrubItems = [];
   let footItems = [];
   let footOn = false;
   let footTimers = [];
@@ -360,8 +492,11 @@
   let vw = window.innerWidth;
   let floorsTop = 0;
   let floorsHeight = 1;
-  let scrubTop = 0;
-  let scrubHeight = 1;
+  let inkStageTop = 0;
+  let inkHold = 0;
+  let inkReach = 1;
+  let linkTop = 0;
+  let linkHeight = 1;
   let crestTop = 0;
   let bustTop = 0;
   let bustHeight = 1;
@@ -387,9 +522,16 @@
       floorsHeight = floorsEl.offsetHeight;
     }
     panels.forEach((panel) => { panel.height = panel.media?.offsetHeight || 1; });
-    if (scrubEl) {
-      scrubTop = docTop(scrubEl);
-      scrubHeight = scrubEl.offsetHeight;
+    if (inkBlock) {
+      const box = inkBlock.getBoundingClientRect();
+      inkStageTop = inkStage.getBoundingClientRect().top + window.scrollY;
+      inkHold = parseFloat(getComputedStyle(inkStage).paddingBottom) || 0;
+      // The side of the mask image at which its blot, an ellipse 0.46 wide and 0.93 tall, clears the block's far corners.
+      inkReach = Math.hypot(box.width / 2 / 0.46, box.height / 0.93) / 0.8;
+    }
+    if (crestLink) {
+      linkTop = docTop(crestLink);
+      linkHeight = crestLink.getBoundingClientRect().height || 1;
     }
     if (crest) crestTop = docTop(crest);
     if (bust) {
@@ -448,9 +590,29 @@
       const risen = clamp((y + vh - bustTop) / (vh * 0.9));
       bust.style.setProperty('--bust-y', ((1 - risen) ** 3 * bustHeight * 0.55).toFixed(1));
     }
-    if (scrubItems.length) {
-      // From the text's top entering 15% up the view to its bottom clearing 10% up the view.
-      paintScrub(scrubItems, clamp((y + vh * 0.85 - scrubTop) / Math.max(1, scrubHeight - vh * 0.05)));
+    // One chain: the branches open as the pen slides in, a drop falls from the nib, then ink spreads through the text.
+    const linkStart = linkTop - vh * 0.78;
+    const linkEnd = linkTop + linkHeight - vh * 0.5;
+    if (crestBranches.length) {
+      const unfurled = clamp((y - linkStart) / Math.max(1, linkEnd - linkStart));
+      unfurlBranches(unfurled);
+      // The pen comes out from behind the crest, along the stem, and settles before the branches finish.
+      const slid = 1 - (1 - clamp(unfurled / 0.62)) ** 3;
+      crestLinkPen.setAttribute('transform', `translate(0 ${((slid - 1) * 400).toFixed(1)})`);
+    }
+    if (inkBlock) {
+      // The text is held below the bar for the stage's extra height, and the ink finishes just as it lets go.
+      const inkStick = inkStageTop - (vw > 640 ? dockParked + dockH : dockParked) - 16;
+      const inkEnd = inkStick + inkHold;
+      inkBlock.style.transform = `translateY(${clamp(y - inkStick, 0, inkHold).toFixed(1)}px)`;
+      const inked = clamp((y - linkEnd) / Math.max(1, inkEnd - linkEnd));
+      setInk(inked);
+      if (crestLinkDrop) {
+        const swell = clamp((y - (linkEnd - vh * 0.1)) / (vh * 0.1));
+        const fall = clamp(inked / 0.05);
+        crestLinkDrop.setAttribute('r', (5.5 * swell * (1 - fall)).toFixed(2));
+        crestLinkDrop.setAttribute('cy', (403 + fall * fall * 36).toFixed(1));
+      }
     }
     // The word ends the document, so it must trigger within its own height or it never would.
     if (footItems.length) setFootWord(y + vh - Math.min(vh * 0.3, footHeight * 0.6) > footTop);
@@ -528,7 +690,8 @@
       return;
     }
 
-    scrubItems = scrubEl ? buildChars(scrubEl) : [];
+    setupInk();
+    buildCrestBranches();
     footItems = footWord ? buildChars(footWord).map((item) => ({ span: item.span })) : [];
     setupFloors();
     root.classList.add('motion-ready');

@@ -545,6 +545,73 @@ test('MAI Tablets links to both of its repositories', async () => {
   await context.close();
 });
 
+test('the pen slides in as branches unroll, then ink spreads slowly from the top centre', { timeout: 30000 }, async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const read = () => page.evaluate(() => {
+    const block = document.querySelector('[data-ink]');
+    const bud = document.querySelector('[data-crest-link-branches] .crest-link-body').getBBox();
+    const style = getComputedStyle(block.querySelector('.ink-layer'));
+    return {
+      unfurled: Number(document.querySelector('[data-crest-link]').dataset.unfurled),
+      pen: Number(document.querySelector('[data-crest-link-pen]').getAttribute('transform').match(/translate\(0 ([-\d.]+)/)[1]),
+      reach: bud.x + bud.width - 300,
+      ink: Number(block.dataset.ink),
+      size: parseFloat(block.style.getPropertyValue('--ink-size')),
+      mask: style.maskImage || style.webkitMaskImage,
+      position: style.maskPosition || style.webkitMaskPosition,
+      inked: block.classList.contains('inked'),
+    };
+  });
+  const first = await read();
+  assert.equal(first.unfurled, 0);
+  assert.equal(first.ink, 0);
+  assert.equal(first.size, 0, 'No ink before the pen has finished');
+  assert.equal(first.pen, -400, 'The pen starts hidden behind the crest');
+  assert.ok(first.reach > 8 && first.reach < 90, `A bud should already show against the stem, reached ${first.reach}`);
+  assert.match(first.mask, /ink-blot/);
+  assert.match(first.position, /^50% 0/, 'Ink starts at the top centre');
+
+  const link = await page.evaluate(() => document.querySelector('.crest-link').getBoundingClientRect().top + scrollY);
+  let inkStarted = null;
+  let inkDone = null;
+  let lastReach = first.reach;
+  let biggestJump = 0;
+  let lastPen = first.pen;
+  for (let y = link - 900; y < link + 1800; y += 40) {
+    await page.evaluate((to) => window.scrollTo(0, to), y);
+    await page.waitForTimeout(40);
+    const state = await read();
+    biggestJump = Math.max(biggestJump, state.reach - lastReach);
+    lastReach = state.reach;
+    assert.ok(state.pen >= lastPen, 'The pen only moves down as you scroll down');
+    lastPen = state.pen;
+    if (state.ink > 0) {
+      assert.equal(state.unfurled, 1, 'The branches finish before the ink begins');
+      assert.equal(state.pen, 0, 'The pen has arrived before the ink begins');
+      if (inkStarted === null) inkStarted = y;
+    }
+    if (state.inked && inkDone === null) inkDone = y;
+  }
+  assert.ok(lastReach > 170, `The top branches should open wide, reached ${lastReach}`);
+  assert.ok(biggestJump < 40, `Branches should grow smoothly, jumped ${biggestJump}`);
+  assert.ok(inkDone !== null, 'The ink must finish');
+  assert.ok(inkDone - inkStarted >= 900 * 0.7, `The ink took only ${inkDone - inkStarted}px of scroll`);
+  // The whole block stays on screen and clear of the bar until the ink has finished.
+  const held = await page.evaluate(async (to) => {
+    window.scrollTo(0, to);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    return { top: document.querySelector('[data-ink]').getBoundingClientRect().top, bar: document.querySelector('.bar-row').getBoundingClientRect().bottom, ink: Number(document.querySelector('[data-ink]').dataset.ink) };
+  }, await page.evaluate(() => { const stage = document.querySelector('[data-ink-stage]'); return stage.getBoundingClientRect().top + scrollY + parseFloat(getComputedStyle(stage).paddingBottom) - 200; }));
+  assert.ok(held.ink > 0.8 && held.ink <= 1, `Expected the ink nearly done, got ${held.ink}`);
+  assert.ok(held.top > held.bar, `The text should still be clear of the bar, top ${held.top}, bar ${held.bar}`);
+  await page.evaluate((to) => window.scrollTo(0, to), link + 1800);
+  await page.waitForTimeout(1500);
+  const end = await read();
+  assert.equal(end.mask, 'none', 'With the ink finished, the mask comes off');
+  assert.equal(await page.locator('[data-ink] h2').count(), 1, 'Copies must not duplicate the heading');
+  await context.close();
+});
+
 test('a parked button flips in front of the top bar', async () => {
   const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
   await page.evaluate(() => window.scrollTo(0, 1600));
