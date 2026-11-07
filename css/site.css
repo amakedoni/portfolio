@@ -207,7 +207,9 @@ html.lenis,html.lenis body{height:auto}
 .dock .flip{display:block;--face:3.5em}
 .dock .flip-face{padding-inline:.3em;white-space:normal;text-align:center;line-height:1.1}
 .motion-ready .dock{bottom:auto;top:0;transform:translateY(var(--dock-y,0));will-change:transform}
-@media (max-width:640px){
+/* On a phone, upright or on its side, the buttons sit under the hero and scroll away with it: parked under the bar they
+   would take a third of a landscape screen. js/motion.js parks them on the same condition. */
+@media (max-width:640px),(max-height:500px){
   .dock,.motion-ready .dock{position:absolute;top:calc(100lvh - 62px);bottom:auto;transform:none}
 }
 
@@ -247,6 +249,12 @@ html.lenis,html.lenis body{height:auto}
 .hero-side--r{right:var(--gut)}
 @media (max-width:900px){
   .hero-side{top:calc(5*var(--u));translate:none}
+}
+/* A phone on its side: the hero fits in one screen, between the bar and the buttons under it. */
+@media (max-height:500px) and (min-width:641px){
+  .hero{padding:64px var(--gut) 72px}
+  .hero-title{font-size:min(calc(14vw*var(--d)),calc((100vw - 2*var(--gut-title))/var(--fit,5.4)),17lvh)}
+  .hero-side{top:50%;translate:0 -50%}
 }
 @media (max-width:640px){
   /* The title takes the full width, with two big stickers standing on it instead of six small ones around it. */
@@ -660,6 +668,10 @@ html.lenis,html.lenis body{height:auto}
   .tool-tag::before{content:'';position:absolute;inset:-12px -2px}
   .wordmark,.bar-logo{position:relative}
   .wordmark::before,.bar-logo::before{content:'';position:absolute;inset:-10px}
+  /* Short links such as VK still get a fingertip's width. */
+  .foot-col a{min-width:44px}
+  .menu-toggle{width:44px;height:44px}
+  .scroll-to-top{display:inline-flex;align-items:center;min-height:44px}
 }
 @media (max-width:420px){.ch .mi-icon{display:none}}
 @media (max-width:360px){
