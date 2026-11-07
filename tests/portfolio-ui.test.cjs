@@ -576,9 +576,12 @@ test('a drawer can still be opened by hand once the shelf has finished entering'
   await page.waitForTimeout(900);
   await page.locator('.tool[data-cat="back"] .tool-spine').click();
   await page.waitForTimeout(900);
-  const width = await page.locator('.tool[data-cat="back"]').evaluate((el) => el.getBoundingClientRect().width);
-  const first = await page.locator('.tool[data-cat="lang"]').evaluate((el) => el.getBoundingClientRect().width);
-  assert.ok(width > 500 && first < 120, `Backend should be open: ${width} against ${first}`);
+  // Drawers keep their size and are trimmed to their spines, so measure what shows: from a drawer to the next one along.
+  const shown = await page.evaluate(() => {
+    const lefts = [...document.querySelectorAll('.tool-slide')].map((slide) => slide.getBoundingClientRect().left);
+    return { first: lefts[1] - lefts[0], backend: lefts[2] - lefts[1] };
+  });
+  assert.ok(shown.backend > 500 && shown.first < 120, `Backend should be open: ${JSON.stringify(shown)}`);
   await context.close();
 });
 
@@ -593,7 +596,7 @@ test('a resting pointer opens no drawer as the page scrolls, but moving it does'
   }
   await page.waitForTimeout(900);
   assert.equal(await openNow(), 'lang', 'Scrolling alone leaves the first drawer open');
-  const backend = await page.locator('.tool[data-cat="back"]').boundingBox();
+  const backend = await page.locator('.tool[data-cat="back"] .tool-spine').boundingBox();
   await page.mouse.move(backend.x + backend.width / 2, backend.y + 300, { steps: 4 });
   await page.waitForTimeout(200);
   assert.equal(await openNow(), 'back');
@@ -757,6 +760,48 @@ test('every drawing in the sprite is used somewhere', () => {
   assert.deepEqual(unused, []);
 });
 
+test('each drawing is its own file, cut whole from the sprite, and every reference finds one', () => {
+  const sprite = fs.readFileSync(path.join(root, 'assets', 'stickers.svg'), 'utf8');
+  const symbols = [...sprite.matchAll(/<symbol id="([^"]+)"[\s\S]*?<\/symbol>/g)];
+  const files = fs.readdirSync(path.join(root, 'assets', 'stickers')).sort();
+  assert.deepEqual(files, symbols.map(([, id]) => `${id}.svg`).sort(), 'One file per drawing, no strays');
+  for (const [symbol, id] of symbols) {
+    assert.ok(fs.readFileSync(path.join(root, 'assets', 'stickers', `${id}.svg`), 'utf8').includes(symbol), `${id} matches the sprite`);
+  }
+  const sources = ['index.html', '404.html', 'js/motion.js', 'resume/resume.html'].map((file) => fs.readFileSync(path.join(root, file), 'utf8')).join('');
+  assert.doesNotMatch(sources, /stickers\.svg#/, 'Nothing loads the whole sprite any more');
+  for (const [, id, again] of sources.matchAll(/stickers\/([a-z0-9-]+)\.svg#([a-z0-9-]+)/g)) {
+    assert.equal(id, again, `${id} points inside its own file`);
+    assert.ok(files.includes(`${id}.svg`), `${id}.svg exists`);
+  }
+});
+
+test('the first screen fetches only its own drawings, and the rest arrive as the page scrolls to them', { timeout: 30000 }, async () => {
+  // Counted from the network: the page loads more than the 250 files Resource Timing keeps by default.
+  const fetched = [];
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  page.on('response', (response) => {
+    const name = new URL(response.url()).pathname;
+    if (name.startsWith('/assets/stickers')) fetched.push(name);
+  });
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForFunction(() => document.querySelectorAll('.hero .ltr-sticker use[href]').length >= 6);
+  await page.waitForTimeout(300);
+  assert.ok(!fetched.includes('/assets/stickers.svg'), 'The whole sprite is never fetched');
+  assert.ok(!fetched.includes('/assets/stickers/s-bug.svg'), 'The GitHub bug waits until the page nears it');
+  // Within a screen and a half of the view, as js/ui.js asks: the hero's own and the About section just below it.
+  // A little slack, because the bust and its wreath rise as the page settles and were nearer when they were asked for.
+  const far = await page.evaluate((names) => names.filter((name) => {
+    const use = document.querySelector(`use[href^="${name}"]`);
+    return !use || use.ownerSVGElement.getBoundingClientRect().top > innerHeight * 3;
+  }), fetched);
+  assert.deepEqual(far, [], 'Nothing further down loads with the first screen');
+  const bug = page.waitForResponse((response) => response.url().endsWith('/assets/stickers/s-bug.svg'), { timeout: 10000 });
+  await jumpTo(page, await docTop(page, '#github'));
+  await bug;
+  await context.close();
+});
+
 test('reduced motion skips the entrances and shows the sections as they end', async () => {
   const { context, page } = await openPage({ reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
   const state = await page.evaluate(() => ({
@@ -771,8 +816,10 @@ test('reduced motion skips the entrances and shows the sections as they end', as
 
 test('every slot on the page has its own illustration', async () => {
   const { context, page } = await openPage();
-  const ids = await page.evaluate(() => [...document.querySelectorAll('main use[href*="stickers.svg"], footer use[href*="stickers.svg"]')]
-    .map((use) => use.getAttribute('href').split('#')[1]));
+  const ids = await page.evaluate(() => [...document.querySelectorAll('main use, footer use')]
+    .map((use) => use.getAttribute('href') || use.getAttribute('data-href'))
+    .filter((href) => href?.startsWith('/assets/stickers/'))
+    .map((href) => href.split('#')[1]));
   // Laurels are a mirrored pair and the crest appears twice on purpose; everything else appears once.
   const counts = {};
   ids.filter((id) => id !== 's-laurel' && !id.startsWith('s-crest-')).forEach((id) => { counts[id] = (counts[id] || 0) + 1; });

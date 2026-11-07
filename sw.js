@@ -1,5 +1,5 @@
 // Service Worker для базового офлайн-режима
-const CACHE_NAME = 'portfolio-v2.19.27';
+const CACHE_NAME = 'portfolio-v2.20.0';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -18,7 +18,13 @@ const urlsToCache = [
   '/assets/fonts/makedonskiy-special-400.woff2',
   '/assets/fonts/forum-latin-400-normal.woff2',
   '/assets/fonts/libre-franklin-latin-400-normal.woff2',
-  '/assets/stickers.svg',
+  // The first screen's drawings; the rest are cached as the page loads them.
+  '/assets/stickers/s-helmet.svg',
+  '/assets/stickers/s-gearhead.svg',
+  '/assets/stickers/s-sun.svg',
+  '/assets/stickers/s-bezier.svg',
+  '/assets/stickers/s-cubesat.svg',
+  '/assets/stickers/s-window.svg',
   '/assets/images/bust.webp',
   '/assets/images/floor-finly.webp',
   '/assets/images/floor-tablets.webp',

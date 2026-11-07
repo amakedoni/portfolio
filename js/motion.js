@@ -7,7 +7,8 @@
   const root = document.documentElement;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const STICKER_FILE = '/assets/stickers.svg';
+  // One file per drawing, cut from assets/stickers.svg by scripts/split-stickers.cjs.
+  const stickerFile = (id) => `/assets/stickers/${id}.svg#${id}`;
   const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
   const shuffle = (list) => {
     const out = [...list];
@@ -97,12 +98,13 @@
   // Sticker specs were drawn against capitals 0.859em tall; the heading face's are 0.711em.
   const STICKER_EM = 0.8465;
 
-  function createSticker(spec, n) {
+  // The hero's drawings load at once; the rest wait until they come near (js/ui.js).
+  function createSticker(spec, n, eager) {
     const svg = document.createElementNS(SVG_NS, 'svg');
     svg.setAttribute('class', `sticker ltr-sticker ltr-sticker--${spec.id}${spec.over ? ' ltr-sticker--over' : ''}`);
     svg.setAttribute('aria-hidden', 'true');
     const use = document.createElementNS(SVG_NS, 'use');
-    use.setAttribute('href', `${STICKER_FILE}#${spec.id}`);
+    use.setAttribute(eager || !window.PortfolioStickers ? 'href' : 'data-href', stickerFile(spec.id));
     svg.appendChild(use);
     svg.style.cssText = `left:${spec.x * STICKER_EM}em;top:${spec.y * STICKER_EM}em;width:${spec.w * STICKER_EM}em;height:${spec.h * STICKER_EM}em;`
       + `--delay:${spec.delay || 0}s;--n:${n};${spec.flip ? 'scale:-1 1;' : ''}`;
@@ -158,7 +160,9 @@
       if (!cells.length) return;
       const cell = cells[Math.min(cells.length - 1, Math.floor(cells.length * spec.at))];
       n += 1;
-      cell.appendChild(createSticker(spec, n));
+      const sticker = createSticker(spec, n, Boolean(title.closest('.hero')));
+      cell.appendChild(sticker);
+      if (sticker.firstChild.hasAttribute('data-href')) window.PortfolioStickers.watch(sticker.firstChild);
       if (spec.over) cell.classList.add('ltr-over');
     });
     // A title can name its letter; a chance pick is fine for the rest.
