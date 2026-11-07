@@ -12,14 +12,15 @@ Static personal portfolio for [amakedoni.com](https://amakedoni.com/). The site 
 - `assets/images/bust.webp` - the About portrait, printed from `photo-alt.jpg` by `scripts/build-portrait.py` (needs numpy, opencv-python-headless and pillow).
 - `assets/images/floor-*.webp` - the photos in the floor shapes, AI-generated and illustrative rather than records of real events or hardware.
 - `assets/stickers.svg` - generated illustration sprite. The crest is in `scripts/build-stickers.cjs`; every other drawing is in `scripts/sticker-art/`, one file per site section.
-- `assets/videos/reel.mp4` - the reel, generated with Gemini. The video stream is the untouched original (`-c:v copy -an -movflags +faststart`): do not re-encode it. `assets/images/reel-poster.jpg` is its still.
-- `assets/logo.svg` - the helmet mark.
+- `assets/videos/reel.mp4` - the reel, generated and upscaled with Gemini. The video stream is the untouched original: `scripts/remux-reel.py` only drops its sound track and moves the index to the front, as `ffmpeg -c:v copy -an -movflags +faststart` would. Do not re-encode it. `assets/images/reel-poster.jpg` is its still.
+- `assets/logo.svg` - the helmet mark. `assets/images/favicon.svg` is the same mark filling a black tile, for browser tabs, with `favicon-192.png` and `favicon-512.png` rendered from it. `apple-touch-icon.png` and `favicon-maskable-512.png` draw the mark smaller, because home screens crop icons to a rounded square or a circle.
+- `assets/images/og.jpg` - the 1200×630 share image: a screenshot of the hero, without the bar and dock. Retake it whenever the hero changes.
 - `assets/data/github.json` - generated GitHub statistics.
 - `assets/` also holds icons, images and `fonts/` (SIL OFL, see `assets/fonts/LICENSES.txt`).
 - `scripts/` - generators for the three files above.
 - `.github/workflows/github-stats.yml` - refreshes the GitHub statistics every Monday.
 - `sw.js`, `manifest.json` - offline support and PWA metadata.
-- `resume.pdf`, `resume.docx` - downloadable resume files.
+- `resume.pdf`, `resume.docx` - downloadable resume files, both generated from `resume/resume.html`: the PDF in the site's style with `node scripts/build-resume.cjs` (Playwright and Chrome, as for the tests), the editable DOCX on white paper with `python3 scripts/build-resume-docx.py` (needs `python-docx`). Edit the HTML, then run both. `resume/fonts/` holds Cyrillic faces the site's Latin subsets lack; the DOCX embeds the TTFs in `resume/fonts/ttf/`.
 - `tests/portfolio-ui.test.cjs` - browser test suite.
 - `docs/superpowers/` - design specs and historical change plans.
 
@@ -59,5 +60,5 @@ NODE_PATH=<dir>/node_modules node scripts/build-stickers.cjs <roboto-flex-instan
 - Stickers on titles are configured in `STICKERS` at the top of `js/motion.js`, with offsets in em so they scale with the type.
 - Floor text sits on saturated colour: check contrast when changing a floor's palette. The test suite enforces 4.5:1.
 - Keep `urlsToCache` aligned with files actually used by `index.html` and `404.html`.
-- Update both resume files together so PDF and DOCX downloads stay consistent.
+- Update both resume files together so PDF and DOCX downloads stay consistent: change `resume/resume.html` and rebuild both. The PDF build fails if anything runs past a page's margin.
 - The contact form opens a prepared email draft with the visitor's message; there is no backend inbox endpoint in this repository.

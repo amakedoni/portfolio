@@ -388,10 +388,10 @@
   const EASE_SLIDE = 'cubic-bezier(.65,0,.35,1)';
   const EASE_LAND = 'cubic-bezier(.34,1.45,.64,1)';
   const range = (p, start, end) => clamp((p - start) / (end - start));
-  // Starts squashed flat, expands past its size, then settles: the element itself moves, rather than being uncovered at a hidden edge.
+  // Starts squashed and fades in, expands past its size, then settles: the element itself moves, rather than being uncovered at a hidden edge.
   const stretch = (axis) => [
-    { opacity: 0, transform: `scale${axis}(.04)`, offset: 0 },
-    { opacity: 1, offset: 0.06 },
+    { opacity: 0, transform: `scale${axis}(.3)`, offset: 0 },
+    { opacity: 1, offset: 0.25 },
     { transform: `scale${axis}(1.03)`, offset: 0.85 },
     { opacity: 1, transform: 'none', offset: 1 },
   ];

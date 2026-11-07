@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 — Page Not Found | Alexander Makedonskiy</title>
   <meta name="robots" content="noindex, nofollow">
-  <link rel="icon" type="image/webp" sizes="512x512" href="/assets/images/favicon.webp">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/favicon-192.png">
   <link rel="stylesheet" href="/css/site.css">
   <style>
     .lost{min-height:100vh;min-height:100lvh;display:grid;place-items:center;text-align:center;padding:84px var(--gut) 40px}
@@ -33,7 +34,7 @@
       <p class="lost-desc">Looks like you got lost in the digital space. The page you're looking for doesn't exist or has been moved.</p>
       <div class="lost-actions">
         <a class="flip" href="/" style="--flip:var(--gold)"><span class="flip-box"><span class="flip-face">Home</span><span class="flip-face flip-face--alt" aria-hidden="true">Home</span></span></a>
-        <button class="flip" type="button" onclick="history.back()" style="--flip:var(--pink)"><span class="flip-box"><span class="flip-face">Go Back</span><span class="flip-face flip-face--alt" aria-hidden="true">Go Back</span></span></button>
+        <button class="flip" type="button" onclick="history.length > 1 ? history.back() : location.assign('/')" style="--flip:var(--pink)"><span class="flip-box"><span class="flip-face">Go Back</span><span class="flip-face flip-face--alt" aria-hidden="true">Go Back</span></span></button>
       </div>
     </div>
   </main>

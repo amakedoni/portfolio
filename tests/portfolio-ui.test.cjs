@@ -472,8 +472,8 @@ test('case files, tools and education follow the scroll position in both directi
   }));
   const settle = () => page.waitForTimeout(900);
   const before = await read();
-  assert.match(before.panel, /^matrix\(0\.04/, 'The panel waits squashed sideways');
-  assert.match(before.step, /^matrix\(1, 0, 0, 0\.04/, 'The steps wait squashed flat');
+  assert.match(before.panel, /^matrix\(0\.3,/, 'The panel waits squashed sideways');
+  assert.match(before.step, /^matrix\(1, 0, 0, 0\.3,/, 'The steps wait squashed');
   assert.equal(before.spine, '0');
   assert.equal(before.art, '0');
 
@@ -634,7 +634,7 @@ test('the contact finale enters with the scroll and finishes in place', { timeou
     size: parseFloat(getComputedStyle(document.querySelector('.contact-title')).fontSize),
   }));
   const before = await read();
-  assert.match(before.panel, /^matrix\(1, 0, 0, 0\.04/);
+  assert.match(before.panel, /^matrix\(1, 0, 0, 0\.3,/);
   assert.equal(before.plane, '0');
   assert.equal(before.letter, 'none', 'The title letters do not animate on their own');
   assert.equal(before.row, '1', 'The rows do not animate on their own');
@@ -711,6 +711,50 @@ test('the big drawings keep moving while the page scrolls', async () => {
   await jumpTo(page, await docTop(page, '#contact'));
   assert.equal(await page.locator('.contact-title .ltr-sticker').evaluate((el) => getComputedStyle(el).animationPlayState), 'running');
   await context.close();
+});
+
+test('reading text and labels stay at legible sizes', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const sizes = await page.evaluate(() => ({
+    body: parseFloat(getComputedStyle(document.body).fontSize),
+    labels: ['.case-fields dt', '.stats dt', '.git-stats dt', '.chips li', '.tool-tag', '.edu-tag', '.cform label', '.case-story dt'].map((selector) => parseFloat(getComputedStyle(document.querySelector(selector)).fontSize)),
+  }));
+  assert.ok(sizes.body >= 16, `Body text was ${sizes.body}px`);
+  assert.ok(Math.min(...sizes.labels) >= 12, `Labels went down to ${Math.min(...sizes.labels)}px`);
+  await context.close();
+});
+
+test('each built project tells its problem, decision and result', async () => {
+  const { context, page } = await openPage();
+  for (const id of ['case-finly', 'case-tablets', 'case-cubesat']) {
+    assert.deepEqual(await page.locator(`#${id} .case-story dt`).allTextContents(), ['Problem', 'Decision', 'Result'], id);
+  }
+  await context.close();
+});
+
+test('the phone hero fills the width and keeps two big stickers beside its inline sun', async () => {
+  const { context, page } = await openPage({ viewport: { width: 390, height: 844 } });
+  const state = await page.evaluate(() => ({
+    width: Math.max(...[...document.querySelectorAll('.hero-title .line-vis')].map((line) => line.getBoundingClientRect().width)),
+    shown: [...document.querySelectorAll('.hero-title .ltr-sticker')].filter((el) => getComputedStyle(el).display !== 'none').length,
+  }));
+  assert.ok(state.width >= 340, `The title was ${state.width}px wide`);
+  assert.equal(state.shown, 3);
+  await context.close();
+});
+
+test('footer links are finger-sized on touch screens', async () => {
+  const { context, page } = await openPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  const heights = await page.locator('.foot-col a').evaluateAll((links) => links.map((link) => link.getBoundingClientRect().height));
+  assert.ok(Math.min(...heights) >= 44, `Shortest link was ${Math.min(...heights)}px`);
+  await context.close();
+});
+
+test('every drawing in the sprite is used somewhere', () => {
+  const sprite = fs.readFileSync(path.join(root, 'assets', 'stickers.svg'), 'utf8');
+  const pages = ['index.html', '404.html', 'js/motion.js'].map((file) => fs.readFileSync(path.join(root, file), 'utf8')).join('');
+  const unused = [...sprite.matchAll(/<symbol id="([^"]+)"/g)].map((match) => match[1]).filter((id) => !pages.includes(id));
+  assert.deepEqual(unused, []);
 });
 
 test('reduced motion skips the entrances and shows the sections as they end', async () => {
@@ -912,6 +956,52 @@ test('the quote fills in slowly, letter by letter, and finishes on screen', { ti
   assert.ok(done.top > done.dock, `The first line should still be clear of the buttons, top ${done.top}, buttons ${done.dock}`);
   assert.equal(await page.locator('.crest-link, [data-ink]').count(), 0, 'The pen, leaves and ink are gone');
   await context.close();
+});
+
+test('the favicon is the helmet logo, and the reel starts without downloading to the end', async () => {
+  const icons = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  assert.match(icons, /rel="icon" type="image\/svg\+xml" href="\/assets\/images\/favicon\.svg"/);
+  assert.doesNotMatch(icons, /favicon\.webp/);
+  const svg = fs.readFileSync(path.join(root, 'assets', 'images', 'favicon.svg'), 'utf8');
+  const logo = fs.readFileSync(path.join(root, 'assets', 'logo.svg'), 'utf8');
+  assert.ok(svg.includes(logo.match(/d="([^"]{40})/)[1]), 'The favicon draws the same helmet as the logo');
+  const [, width] = svg.match(/scale\(([\d.]+)\)/);
+  assert.ok(Number(width) * 72 >= 512 * 0.85, 'The helmet fills most of the tab icon');
+  const reel = fs.readFileSync(path.join(root, 'assets', 'videos', 'reel.mp4'));
+  const first = reel.readUInt32BE(0);
+  assert.equal(reel.toString('latin1', first + 4, first + 8), 'moov', 'The index sits right after the header');
+});
+
+test('both resume downloads are built from the one resume page', () => {
+  const { execFileSync } = require('node:child_process');
+  const source = fs.readFileSync(path.join(root, 'resume', 'resume.html'), 'utf8');
+  const links = [...new Set([...source.matchAll(/<a [^>]*href="([^"]+)"/g)].map(([, href]) => href))];
+  const pdf = fs.readFileSync(path.join(root, 'resume.pdf'), 'latin1');
+  assert.equal(pdf.match(/\/Count (\d+)/)[1], '2', 'The PDF is two pages');
+  const boxes = [...pdf.matchAll(/\/MediaBox \[0 0 ([\d.]+) ([\d.]+)\]/g)].map(([, w, h]) => [Number(w), Number(h)]);
+  assert.ok(boxes.length && boxes.every(([w, h]) => Math.abs(w - 595) < 1 && Math.abs(h - 842) < 1), 'The PDF is A4');
+  for (const href of links) assert.ok(pdf.includes(`/URI (${href})`), `The PDF links ${href}`);
+  const docx = path.join(root, 'resume.docx');
+  const parts = execFileSync('unzip', ['-Z1', docx], { encoding: 'utf8' });
+  for (const font of ['Forum-Regular', 'Oswald-Bold', 'Roboto-Regular', 'Roboto-Bold']) assert.ok(parts.includes(`word/fonts/${font}.ttf`), `The DOCX embeds ${font}`);
+  const words = execFileSync('unzip', ['-p', docx, 'word/document.xml'], { encoding: 'utf8', maxBuffer: 1 << 24 }).replace(/<[^>]+>/g, '');
+  const lede = source.match(/<p class="lede">([^<]+)</)[1];
+  assert.ok(words.includes(lede), 'The DOCX carries the same summary as the PDF');
+  for (const [, name] of source.matchAll(/<h3 class="d case-name">([^<]+)</g)) assert.ok(words.includes(name.toUpperCase()), `The DOCX has ${name}`);
+  const rels = execFileSync('unzip', ['-p', docx, 'word/_rels/document.xml.rels'], { encoding: 'utf8' });
+  for (const href of links) assert.ok(rels.includes(`Target="${href.replace(/&/g, '&amp;')}"`), `The DOCX links ${href}`);
+});
+
+test('every absolute URL names the www host the site is served from, and the share image is a real JPG', () => {
+  // amakedoni.com only redirects to www, so a canonical or share link to it points search and social crawlers at a redirect.
+  const files = ['index.html', 'robots.txt', 'sitemap.xml'].map((file) => fs.readFileSync(path.join(root, file), 'utf8'));
+  for (const text of files) assert.doesNotMatch(text, /https:\/\/amakedoni\.com/, 'No link to the bare domain');
+  const html = files[0];
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.amakedoni\.com\/"/);
+  const image = html.match(/property="og:image" content="https:\/\/www\.amakedoni\.com\/([^"]+)"/)[1];
+  const jpg = fs.readFileSync(path.join(root, image));
+  assert.equal(jpg.readUInt16BE(0), 0xffd8, 'The share image is a JPEG, which every crawler reads');
+  assert.doesNotMatch(files[2], /#/, 'The sitemap lists pages, not fragments of one');
 });
 
 test('a parked button flips in front of the top bar', async () => {
