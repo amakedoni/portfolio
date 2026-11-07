@@ -472,8 +472,8 @@ test('case files, tools and education follow the scroll position in both directi
   }));
   const settle = () => page.waitForTimeout(900);
   const before = await read();
-  assert.match(before.panel, /^matrix\(0\.04/, 'The panel waits squashed sideways');
-  assert.match(before.step, /^matrix\(1, 0, 0, 0\.04/, 'The steps wait squashed flat');
+  assert.match(before.panel, /^matrix\(0\.3,/, 'The panel waits squashed sideways');
+  assert.match(before.step, /^matrix\(1, 0, 0, 0\.3,/, 'The steps wait squashed');
   assert.equal(before.spine, '0');
   assert.equal(before.art, '0');
 
@@ -634,7 +634,7 @@ test('the contact finale enters with the scroll and finishes in place', { timeou
     size: parseFloat(getComputedStyle(document.querySelector('.contact-title')).fontSize),
   }));
   const before = await read();
-  assert.match(before.panel, /^matrix\(1, 0, 0, 0\.04/);
+  assert.match(before.panel, /^matrix\(1, 0, 0, 0\.3,/);
   assert.equal(before.plane, '0');
   assert.equal(before.letter, 'none', 'The title letters do not animate on their own');
   assert.equal(before.row, '1', 'The rows do not animate on their own');
@@ -711,6 +711,50 @@ test('the big drawings keep moving while the page scrolls', async () => {
   await jumpTo(page, await docTop(page, '#contact'));
   assert.equal(await page.locator('.contact-title .ltr-sticker').evaluate((el) => getComputedStyle(el).animationPlayState), 'running');
   await context.close();
+});
+
+test('reading text and labels stay at legible sizes', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const sizes = await page.evaluate(() => ({
+    body: parseFloat(getComputedStyle(document.body).fontSize),
+    labels: ['.case-fields dt', '.stats dt', '.git-stats dt', '.chips li', '.tool-tag', '.edu-tag', '.cform label', '.case-story dt'].map((selector) => parseFloat(getComputedStyle(document.querySelector(selector)).fontSize)),
+  }));
+  assert.ok(sizes.body >= 16, `Body text was ${sizes.body}px`);
+  assert.ok(Math.min(...sizes.labels) >= 12, `Labels went down to ${Math.min(...sizes.labels)}px`);
+  await context.close();
+});
+
+test('each built project tells its problem, decision and result', async () => {
+  const { context, page } = await openPage();
+  for (const id of ['case-finly', 'case-tablets', 'case-cubesat']) {
+    assert.deepEqual(await page.locator(`#${id} .case-story dt`).allTextContents(), ['Problem', 'Decision', 'Result'], id);
+  }
+  await context.close();
+});
+
+test('the phone hero fills the width and keeps two big stickers beside its inline sun', async () => {
+  const { context, page } = await openPage({ viewport: { width: 390, height: 844 } });
+  const state = await page.evaluate(() => ({
+    width: Math.max(...[...document.querySelectorAll('.hero-title .line-vis')].map((line) => line.getBoundingClientRect().width)),
+    shown: [...document.querySelectorAll('.hero-title .ltr-sticker')].filter((el) => getComputedStyle(el).display !== 'none').length,
+  }));
+  assert.ok(state.width >= 340, `The title was ${state.width}px wide`);
+  assert.equal(state.shown, 3);
+  await context.close();
+});
+
+test('footer links are finger-sized on touch screens', async () => {
+  const { context, page } = await openPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  const heights = await page.locator('.foot-col a').evaluateAll((links) => links.map((link) => link.getBoundingClientRect().height));
+  assert.ok(Math.min(...heights) >= 44, `Shortest link was ${Math.min(...heights)}px`);
+  await context.close();
+});
+
+test('every drawing in the sprite is used somewhere', () => {
+  const sprite = fs.readFileSync(path.join(root, 'assets', 'stickers.svg'), 'utf8');
+  const pages = ['index.html', '404.html', 'js/motion.js'].map((file) => fs.readFileSync(path.join(root, file), 'utf8')).join('');
+  const unused = [...sprite.matchAll(/<symbol id="([^"]+)"/g)].map((match) => match[1]).filter((id) => !pages.includes(id));
+  assert.deepEqual(unused, []);
 });
 
 test('reduced motion skips the entrances and shows the sections as they end', async () => {

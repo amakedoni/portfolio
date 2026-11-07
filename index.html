@@ -139,9 +139,9 @@
     </div>
     <dl class="stats">
       <div><dd>5</dd><dt>Projects shipped</dt></div>
-      <div><dd>5×</dd><dt>Olympiad finals</dt></div>
+      <div><dd>5</dd><dt>Olympiad finals</dt></div>
       <div><dd>4+</dd><dt>Years coding</dt></div>
-      <div><dd>3×</dd><dt>Hackathon teams</dt></div>
+      <div><dd>3</dd><dt>Hackathon teams</dt></div>
     </dl>
   </div>
 </section>
@@ -227,6 +227,11 @@
             <p class="case-lead">A fully offline PWA for personal finance.</p>
           </div>
         </div>
+        <dl class="case-story">
+          <div><dt>Problem</dt><dd>Money data is private, and a budgeting app is useless the moment the network drops.</dd></div>
+          <div><dt>Decision</dt><dd>Keep everything on the device: IndexedDB and Workbox for storage, TensorFlow.js for classifying transactions.</dd></div>
+          <div><dt>Result</dt><dd>A full finance app that works with no network, backed by 345+ automated tests and CI quality gates.</dd></div>
+        </dl>
         <ul class="feats">
           <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-offline"></use></svg></span><h4>Fully offline</h4><p>IndexedDB + Service Worker via Workbox.</p></li>
           <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-ml"></use></svg></span><h4>On-device ML</h4><p>Transaction classification with TensorFlow.js.</p></li>
@@ -258,6 +263,11 @@
             <p class="case-lead">Client-server system for tracking medication intake.</p>
           </div>
         </div>
+        <dl class="case-story">
+          <div><dt>Problem</dt><dd>Patients and the people helping them need the same treatment schedule, even when one of them is offline.</dd></div>
+          <div><dt>Decision</dt><dd>An offline-first client that syncs automatically, with trusted "med-friends" paired through a QR code that expires in 3 minutes.</dd></div>
+          <div><dt>Result</dt><dd>Patients and med-friends stay in sync, with configurable reminders and access limits protecting medical data.</dd></div>
+        </dl>
         <ul class="feats">
           <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-sync"></use></svg></span><h4>Sync</h4><p>Offline-first.</p></li>
           <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-pair"></use></svg></span><h4>QR pairing</h4><p>Time-bound, for trusted "med-friends".</p></li>
@@ -284,6 +294,11 @@
             <p class="case-lead">Built a working CubeSat prototype for the Moscow Aerospace track.</p>
           </div>
         </div>
+        <dl class="case-story">
+          <div><dt>Problem</dt><dd>A satellite's onboard components have to exchange telemetry messages without anyone there to help.</dd></div>
+          <div><dt>Decision</dt><dd>Split the onboard logic into receive, decode and relay steps, with a firmware pipeline encoding the messages.</dd></div>
+          <div><dt>Result</dt><dd>A working prototype that took the project to the final of the Moscow Pre-professional Olympiad.</dd></div>
+        </dl>
         <ul class="feats feats--flow">
           <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-receive"></use></svg></span><h4>Receive</h4><p>Onboard logic takes in telemetry messages.</p></li>
           <li class="feat"><span class="feat-ico"><svg class="sticker" aria-hidden="true"><use href="/assets/stickers.svg#s-i-decode"></use></svg></span><h4>Decode</h4><p>The same logic decodes them.</p></li>
@@ -453,9 +468,9 @@
       <p class="foot-head">Explore</p>
       <ul>
         <li><a href="#about">About</a></li>
-        <li><a href="#skills">Tools of the trade</a></li>
-        <li><a href="#education">Trained in rigour</a></li>
-        <li><a href="#github">Open-source pulse</a></li>
+        <li><a href="#skills">Stack</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#github">GitHub</a></li>
       </ul>
     </nav>
     <nav class="foot-col" aria-label="Elsewhere">

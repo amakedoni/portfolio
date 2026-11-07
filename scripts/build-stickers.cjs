@@ -434,6 +434,10 @@ for (const section of ['hero', 'about', 'floors', 'cases', 'finly', 'skills', 'e
 const rendered = {};
 for (const name of Object.keys(stickers)) rendered[name] = stickers[name].draw();
 
+// No longer on the site. Still drawn above, because every drawing shares one random sequence and removing any would redraw all those after it.
+const RETIRED = new Set(['phone', 'orbit', 'trophy', 'finly-floor']);
+RETIRED.forEach((name) => delete rendered[name]);
+
 const symbols = Object.entries(rendered).map(([name, body]) => `<symbol id="s-${name}" viewBox="${stickers[name].box.join(' ')}">${body}</symbol>`).join('\n');
 const output = path.resolve(__dirname, '..', 'assets', 'stickers.svg');
 fs.writeFileSync(output, `<svg xmlns="http://www.w3.org/2000/svg">\n${symbols}\n</svg>\n`);
