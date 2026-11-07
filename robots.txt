@@ -1,13 +1,9 @@
-# robots.txt for amakedoni.com
+# robots.txt for www.amakedoni.com
 User-agent: *
 Allow: /
-
-# Sitemap
-Sitemap: https://amakedoni.com/sitemap.xml
-
-# Block access to sensitive files
-Disallow: /resume.docx
+# The DOCX is the editable copy of resume.pdf; search should find the PDF.
 Disallow: /*.docx$
+# The page the resume PDF is printed from.
+Disallow: /resume/
 
-# Crawl-delay for bots
-Crawl-delay: 1
+Sitemap: https://www.amakedoni.com/sitemap.xml

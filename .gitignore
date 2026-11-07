@@ -39,4 +39,7 @@ yarn-error.log*
 dist/
 build/
 *.min.js
-*.min.css.superpowers/
+*.min.css
+
+# Brainstorm scratch files, local only
+.superpowers/

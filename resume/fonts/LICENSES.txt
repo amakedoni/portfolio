@@ -1,0 +1,14 @@
+Fonts for the resume only. All are licensed under the SIL Open Font License, Version 1.1,
+whose full text is in assets/fonts/LICENSES.txt. Each carries Cyrillic, which the site's own Latin subsets do not.
+
+=== robotoflex-latin.woff2, robotoflex-cyrillic.woff2 (Google Fonts, variable: opsz, wdth, wght) ===
+Copyright 2017 The Roboto Flex Project Authors (https://github.com/googlefonts/roboto-flex)
+
+=== forum-latin.woff2, forum-cyrillic.woff2, ttf/Forum-Regular.ttf (Google Fonts) ===
+Copyright 2011 Denis Masharov (denis.masharov@gmail.com)
+
+=== ttf/Oswald-Bold.ttf (Google Fonts, static instance at wght 700) ===
+Copyright 2016 The Oswald Project Authors (https://github.com/googlefonts/OswaldFont)
+
+=== ttf/Roboto-Regular.ttf, ttf/Roboto-Bold.ttf (Google Fonts, static instances) ===
+Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)

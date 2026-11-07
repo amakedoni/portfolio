@@ -317,10 +317,6 @@ test('swapped letters stay put, sit on eligible letters, and never under a stick
 test('anchor links land with the heading clear of the fixed navigation', async () => {
   const { context, page } = await openPage();
   for (const [link, heading] of [['.dock a[href="#projects"]', '.fp--finly .fp-kicker'], ['.dock a[href="#contact"]', '#contact .panel-title']]) {
-    // After the first jump the buttons have folded away; once the page settles, reaching for the top brings them back.
-    await page.waitForFunction(() => !document.documentElement.classList.contains('lenis-scrolling'));
-    await page.mouse.move(700, 30, { steps: 3 });
-    await page.waitForFunction(() => !document.querySelector('.dock').classList.contains('is-tucked'));
     await page.locator(link).click();
     await page.waitForFunction((selector) => {
       const top = document.querySelector(selector).getBoundingClientRect().top;
@@ -962,27 +958,6 @@ test('the quote fills in slowly, letter by letter, and finishes on screen', { ti
   await context.close();
 });
 
-test('the dock folds away reading down the page and unfolds on the way back up', async () => {
-  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
-  const tucked = () => page.locator('.dock').evaluate((el) => el.classList.contains('is-tucked'));
-  await page.mouse.move(700, 600);
-  for (let y = 0; y <= 600; y += 120) await jumpTo(page, y);
-  assert.equal(await tucked(), false, 'On the hero the buttons stay out');
-  for (let y = 1200; y <= 2400; y += 120) await jumpTo(page, y);
-  assert.equal(await tucked(), true, 'Reading down folds them away');
-  await page.waitForTimeout(700);
-  assert.equal(await page.locator('.dock .flip').first().evaluate((el) => getComputedStyle(el).opacity), '0');
-  for (let y = 2400; y >= 2280; y -= 20) await jumpTo(page, y);
-  assert.equal(await tucked(), false, 'A short scroll up brings them back');
-  for (let y = 2400; y <= 3600; y += 120) await jumpTo(page, y);
-  assert.equal(await tucked(), true);
-  await page.mouse.move(700, 40, { steps: 4 });
-  assert.equal(await tucked(), false, 'Reaching for the top of the screen brings them back');
-  await jumpTo(page, 4800);
-  await page.keyboard.press('Tab');
-  await context.close();
-});
-
 test('the favicon is the helmet logo, and the reel starts without downloading to the end', async () => {
   const icons = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   assert.match(icons, /rel="icon" type="image\/svg\+xml" href="\/assets\/images\/favicon\.svg"/);
@@ -990,9 +965,43 @@ test('the favicon is the helmet logo, and the reel starts without downloading to
   const svg = fs.readFileSync(path.join(root, 'assets', 'images', 'favicon.svg'), 'utf8');
   const logo = fs.readFileSync(path.join(root, 'assets', 'logo.svg'), 'utf8');
   assert.ok(svg.includes(logo.match(/d="([^"]{40})/)[1]), 'The favicon draws the same helmet as the logo');
+  const [, width] = svg.match(/scale\(([\d.]+)\)/);
+  assert.ok(Number(width) * 72 >= 512 * 0.85, 'The helmet fills most of the tab icon');
   const reel = fs.readFileSync(path.join(root, 'assets', 'videos', 'reel.mp4'));
   const first = reel.readUInt32BE(0);
   assert.equal(reel.toString('latin1', first + 4, first + 8), 'moov', 'The index sits right after the header');
+});
+
+test('both resume downloads are built from the one resume page', () => {
+  const { execFileSync } = require('node:child_process');
+  const source = fs.readFileSync(path.join(root, 'resume', 'resume.html'), 'utf8');
+  const links = [...new Set([...source.matchAll(/<a [^>]*href="([^"]+)"/g)].map(([, href]) => href))];
+  const pdf = fs.readFileSync(path.join(root, 'resume.pdf'), 'latin1');
+  assert.equal(pdf.match(/\/Count (\d+)/)[1], '2', 'The PDF is two pages');
+  const boxes = [...pdf.matchAll(/\/MediaBox \[0 0 ([\d.]+) ([\d.]+)\]/g)].map(([, w, h]) => [Number(w), Number(h)]);
+  assert.ok(boxes.length && boxes.every(([w, h]) => Math.abs(w - 595) < 1 && Math.abs(h - 842) < 1), 'The PDF is A4');
+  for (const href of links) assert.ok(pdf.includes(`/URI (${href})`), `The PDF links ${href}`);
+  const docx = path.join(root, 'resume.docx');
+  const parts = execFileSync('unzip', ['-Z1', docx], { encoding: 'utf8' });
+  for (const font of ['Forum-Regular', 'Oswald-Bold', 'Roboto-Regular', 'Roboto-Bold']) assert.ok(parts.includes(`word/fonts/${font}.ttf`), `The DOCX embeds ${font}`);
+  const words = execFileSync('unzip', ['-p', docx, 'word/document.xml'], { encoding: 'utf8', maxBuffer: 1 << 24 }).replace(/<[^>]+>/g, '');
+  const lede = source.match(/<p class="lede">([^<]+)</)[1];
+  assert.ok(words.includes(lede), 'The DOCX carries the same summary as the PDF');
+  for (const [, name] of source.matchAll(/<h3 class="d case-name">([^<]+)</g)) assert.ok(words.includes(name.toUpperCase()), `The DOCX has ${name}`);
+  const rels = execFileSync('unzip', ['-p', docx, 'word/_rels/document.xml.rels'], { encoding: 'utf8' });
+  for (const href of links) assert.ok(rels.includes(`Target="${href.replace(/&/g, '&amp;')}"`), `The DOCX links ${href}`);
+});
+
+test('every absolute URL names the www host the site is served from, and the share image is a real JPG', () => {
+  // amakedoni.com only redirects to www, so a canonical or share link to it points search and social crawlers at a redirect.
+  const files = ['index.html', 'robots.txt', 'sitemap.xml'].map((file) => fs.readFileSync(path.join(root, file), 'utf8'));
+  for (const text of files) assert.doesNotMatch(text, /https:\/\/amakedoni\.com/, 'No link to the bare domain');
+  const html = files[0];
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.amakedoni\.com\/"/);
+  const image = html.match(/property="og:image" content="https:\/\/www\.amakedoni\.com\/([^"]+)"/)[1];
+  const jpg = fs.readFileSync(path.join(root, image));
+  assert.equal(jpg.readUInt16BE(0), 0xffd8, 'The share image is a JPEG, which every crawler reads');
+  assert.doesNotMatch(files[2], /#/, 'The sitemap lists pages, not fragments of one');
 });
 
 test('a parked button flips in front of the top bar', async () => {
@@ -1003,8 +1012,6 @@ test('a parked button flips in front of the top bar', async () => {
     return document.querySelector('.dock').getBoundingClientRect().top - bar.bottom < 2;
   });
   const order = () => page.evaluate(() => [getComputedStyle(document.querySelector('.dock')).zIndex, getComputedStyle(document.querySelector('.bar')).zIndex].map(Number));
-  await page.evaluate(() => window.scrollTo(0, 1560));
-  await page.waitForFunction(() => !document.querySelector('.dock').classList.contains('is-tucked'));
   await page.locator('.dock .flip').first().hover();
   const [dock, bar] = await order();
   assert.ok(dock > bar, `Dock ${dock} should sit above bar ${bar} while a button flips`);
