@@ -167,7 +167,7 @@ test('the interface scales with the screen like the reference', async () => {
 
 test('essential content stays visible without JavaScript', async () => {
   const { context, page } = await openPage({ javaScriptEnabled: false });
-  for (const selector of ['h1', '#about .scrub', '.fp-title', '.case', '.ticket', '.edu', '#contact-form', '.foot-word']) {
+  for (const selector of ['h1', '.creed .scrub', '.fp-title', '.case', '.ticket', '.edu', '#contact-form', '.foot-word']) {
     assert.ok(await page.locator(selector).first().isVisible(), `${selector} should be visible`);
   }
   assert.match(await page.locator('h1').innerText(), /ENGINEERING/i);
@@ -427,9 +427,9 @@ test('every slot on the page has its own illustration', async () => {
   const { context, page } = await openPage();
   const ids = await page.evaluate(() => [...document.querySelectorAll('main use[href*="stickers.svg"], footer use[href*="stickers.svg"]')]
     .map((use) => use.getAttribute('href').split('#')[1]));
-  // Laurels are a mirrored pair; everything else appears once.
+  // Laurels are a mirrored pair and the crest appears twice on purpose; everything else appears once.
   const counts = {};
-  ids.filter((id) => id !== 's-laurel').forEach((id) => { counts[id] = (counts[id] || 0) + 1; });
+  ids.filter((id) => id !== 's-laurel' && !id.startsWith('s-crest-')).forEach((id) => { counts[id] = (counts[id] || 0) + 1; });
   const repeated = Object.entries(counts).filter(([, n]) => n > 1);
   assert.deepEqual(repeated, [], `Repeated stickers: ${JSON.stringify(repeated)}`);
   assert.ok(ids.length >= 26, `Expected at least 26 placed illustrations, found ${ids.length}`);
@@ -484,7 +484,7 @@ test('the crest ribbons slide out with scroll and shake, while its body stays st
   assert.ok(angles.size > 1, 'Ribbons should shake');
   for (const angle of angles) assert.ok(['-0.5', '0', '0.5'].includes(angle), `Unexpected angle ${angle}`);
 
-  const body = await page.locator('.crest > use').getAttribute('transform');
+  const body = await page.locator('.crest > use').first().getAttribute('transform');
   assert.equal(body, null, 'The body must not move with the ribbons');
   await context.close();
 });
@@ -545,55 +545,71 @@ test('MAI Tablets links to both of its repositories', async () => {
   await context.close();
 });
 
-test('the crest and quote hold still together, then the bio fades in over them', { timeout: 60000 }, async () => {
-  for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 640 }, { width: 390, height: 844 }]) {
-    const { context, page } = await openPage({ viewport });
-    const read = () => page.evaluate(() => {
-      const quote = document.querySelector('.scrub');
+test('the crest appears alone after the reel, and again after the floors with the text', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const order = await page.evaluate(() => {
+    const before = (a, b) => Boolean(document.querySelector(a).compareDocumentPosition(document.querySelector(b)) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const crests = document.querySelectorAll('.crest');
+    return {
+      count: crests.length,
+      firstThenBio: crests[0].nextElementSibling.classList.contains('bio'),
+      textInAbout: document.querySelectorAll('#about .kicker, #about .scrub').length,
+      floorsThenCreed: before('[data-floors]', '.creed'),
+      creedThenCases: before('.creed', '.cases'),
+      creedOrder: [...document.querySelector('.creed').children].map((el) => el.classList[0]),
+      ids: [...document.querySelectorAll('[id]')].map((el) => el.id),
+      stack: document.querySelector('[data-about-stack]'),
+    };
+  });
+  assert.equal(order.count, 2);
+  assert.ok(order.firstThenBio, 'The bio follows the first crest directly');
+  assert.equal(order.textInAbout, 0, 'No text follows the first crest');
+  assert.ok(order.floorsThenCreed && order.creedThenCases, 'The second crest sits between the floors and the project files');
+  assert.deepEqual(order.creedOrder, ['crest', 'about-head']);
+  assert.equal(new Set(order.ids).size, order.ids.length, 'Ids must stay unique');
+  assert.equal(order.stack, null);
+
+  // Nothing holds, shrinks or fades any more, and both crests slide their ribbons out as they arrive.
+  const places = await page.evaluate(() => [...document.querySelectorAll('.crest')].map((el) => el.getBoundingClientRect().top + scrollY));
+  for (const [index, top] of places.entries()) {
+    await page.evaluate((to) => window.scrollTo(0, to), top - 100);
+    await page.waitForTimeout(1200);
+    const state = await page.evaluate((i) => {
+      const crest = document.querySelectorAll('.crest')[i];
       return {
-        share: document.querySelectorAll('.scrub .ch-s.on').length / document.querySelectorAll('.scrub .ch-s').length,
-        y: scrollY,
-        top: quote.getBoundingClientRect().top,
-        crest: document.querySelector('.crest').getBoundingClientRect().top,
-        quoteBottom: quote.getBoundingClientRect().bottom,
-        vh: innerHeight,
-        ribbon: Math.abs(parseFloat(document.querySelector('[data-crest-ribbon] g').getAttribute('transform').match(/translate\(([-\d.]+)/)[1])),
-        text: Number(getComputedStyle(document.querySelector('.about-stack')).opacity),
-        bio: Number(getComputedStyle(document.querySelector('.bio')).opacity),
-        dock: document.querySelector('.dock').getBoundingClientRect().bottom,
-        bar: document.querySelector('.bar-row').getBoundingClientRect().bottom,
-        overflow: document.documentElement.scrollWidth - innerWidth,
+        top: crest.getBoundingClientRect().top,
+        ribbon: Math.abs(parseFloat(crest.querySelector('[data-crest-ribbon] g').getAttribute('transform').match(/translate\(([-\d.]+)/)[1])),
+        bio: getComputedStyle(document.querySelector('.bio')).opacity,
       };
-    });
-    const start = await page.evaluate(() => document.querySelector('.scrub').getBoundingClientRect().top + scrollY);
-    assert.equal((await read()).bio, 0, 'The bio is hidden to begin with');
-    const states = [];
-    for (let y = start - viewport.height; y < start + viewport.height * 2.4; y += 40) {
-      await page.evaluate((to) => window.scrollTo(0, to), y);
-      await page.waitForTimeout(170);
-      states.push(await read());
-    }
-    const done = states.find((state) => state.share === 1);
-    assert.ok(done, 'The quote must finish');
-    assert.equal(done.bio, 0, 'The bio must not have started when the quote finishes');
-    const barLine = viewport.width > 640 ? done.dock : done.bar;
-    assert.ok(done.crest >= barLine - 1, `The crest should sit clear of the bar, top ${done.crest}, bar ${barLine}`);
-    assert.ok(done.quoteBottom <= done.vh, `The quote should fit on screen, bottom ${done.quoteBottom}`);
-    assert.ok(done.ribbon < 1, `The ribbons should be fully out while holding, still ${done.ribbon} in`);
-    const held = states.filter((state) => state.share === 1 && state.text === 1);
-    assert.ok(held.at(-1).y - done.y >= viewport.height * 0.15, `The finished text should be held for a while, got ${held.at(-1).y - done.y}px`);
-    const tops = held.map((state) => state.top);
-    assert.ok(Math.max(...tops) - Math.min(...tops) < 2, `The text must not move while held, moved ${Math.max(...tops) - Math.min(...tops)}px`);
-    const crests = held.map((state) => state.crest);
-    assert.ok(Math.max(...crests) - Math.min(...crests) < 2, `The crest must not move while held, moved ${Math.max(...crests) - Math.min(...crests)}px`);
-    // The bio fades, rather than jumping, and is fully there by the end.
-    const fading = states.filter((state) => state.bio > 0 && state.bio < 1);
-    assert.ok(fading.length >= 4, `The bio should fade over several steps, got ${fading.length}`);
-    assert.equal(states.at(-1).bio, 1);
-    assert.equal(states.at(-1).text, 0, 'The text has gone once the bio has arrived');
-    assert.equal(states.at(-1).overflow, 0);
-    await context.close();
+    }, index);
+    assert.ok(Math.abs(state.top - 100) < 2, `Crest ${index} should scroll normally, top ${state.top}`);
+    assert.ok(state.ribbon < 20, `Crest ${index} ribbons should be out, still ${state.ribbon} in`);
+    assert.equal(state.bio, '1');
   }
+  await context.close();
+});
+
+test('the quote fills in slowly, letter by letter, and finishes on screen', { timeout: 30000 }, async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const read = () => page.evaluate(() => {
+    const all = document.querySelectorAll('.scrub .ch-s').length;
+    return { share: document.querySelectorAll('.scrub .ch-s.on').length / all, y: scrollY, top: document.querySelector('.scrub').getBoundingClientRect().top, dock: document.querySelector('.dock').getBoundingClientRect().bottom };
+  });
+  const start = await page.evaluate(() => document.querySelector('.scrub').getBoundingClientRect().top + scrollY);
+  let first = null;
+  let done = null;
+  for (let y = start - 900; y < start + 400 && done === null; y += 30) {
+    await page.evaluate((to) => window.scrollTo(0, to), y);
+    await page.waitForTimeout(250);
+    const state = await read();
+    if (state.share > 0 && first === null) first = state.y;
+    if (state.share === 1) done = state;
+  }
+  assert.ok(done, 'The quote must finish');
+  assert.ok(done.y - first >= 900 * 0.5, `The quote took only ${done.y - first}px of scroll`);
+  assert.ok(done.top > done.dock, `The first line should still be clear of the buttons, top ${done.top}, buttons ${done.dock}`);
+  assert.equal(await page.locator('.crest-link, [data-ink]').count(), 0, 'The pen, leaves and ink are gone');
+  await context.close();
 });
 
 test('a parked button flips in front of the top bar', async () => {

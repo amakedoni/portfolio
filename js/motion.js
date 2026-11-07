@@ -324,12 +324,11 @@
 
   // The ribbons shake on their own, in steps, as the reference's do: half a degree either way every 0.3s.
   function shakeCrestRibbons() {
-    if (!crestRibbons.length) return;
-    let inView = true;
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver((entries) => { inView = entries[0].isIntersecting; }).observe(crest);
-    }
-    crestRibbons.forEach(({ el, pivot }) => {
+    crestRibbons.forEach(({ crest, el, pivot }) => {
+      let inView = true;
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => { inView = entries[0].isIntersecting; }).observe(crest);
+      }
       setTimeout(() => {
         setInterval(() => {
           if (inView) el.setAttribute('transform', `rotate(${[-0.5, 0, 0.5][Math.floor(Math.random() * 3)]} ${pivot} 230)`);
@@ -339,18 +338,17 @@
   }
 
   // ---- Boot ----
-  const crest = document.querySelector('[data-crest]');
   const bust = document.querySelector('[data-bust]');
-  const crestRibbons = crest ? [...crest.querySelectorAll('[data-crest-ribbon]')].map((el) => ({
+  const crestRibbons = [...document.querySelectorAll('[data-crest-ribbon]')].map((el) => ({
+    crest: el.closest('[data-crest]'),
+    top: 0,
     el,
     slide: el.firstElementChild,
     offset: Number(el.dataset.crestRibbon),
     pivot: el.dataset.crestPivot,
-  })) : [];
+  }));
   const dock = document.querySelector('[data-dock]');
   const scrubEl = document.querySelector('[data-scrub]');
-  const aboutStack = document.querySelector('[data-about-stack]');
-  const bioCard = document.querySelector('.bio');
   const footWord = document.querySelector('[data-foot-word]');
   const ticker = document.querySelector('[data-ticker] .ticker-track');
 
@@ -363,13 +361,7 @@
   let floorsTop = 0;
   let floorsHeight = 1;
   let scrubTop = 0;
-  let stackPinAt = 0;
-  let stackStick = 0;
-  let stackExtra = 0;
-  let stackHeight = 1;
-  let stackScale = 1;
   let scrubHeight = 1;
-  let crestTop = 0;
   let bustTop = 0;
   let bustHeight = 1;
   let footTop = 0;
@@ -389,20 +381,6 @@
   function measure() {
     vh = window.innerHeight;
     vw = window.innerWidth;
-    if (aboutStack && bust) {
-      // The crest and text hold still together, so the page needs room to scroll past them. Measured first, because this
-      // moves everything below, and with the hold's transform off so that every position read here is the natural one.
-      aboutStack.style.transform = '';
-      const dockBottom = (document.querySelector('.bar-row')?.getBoundingClientRect().bottom ?? 66) + (dock && vw > 640 ? dock.offsetHeight : 0);
-      stackHeight = aboutStack.getBoundingClientRect().height || 1;
-      // On a short screen the pair shrinks just enough to sit between the bar and the bottom edge.
-      stackScale = Math.min(1, (vh - dockBottom - 32) / stackHeight);
-      stackStick = Math.max(dockBottom + 16, (vh - stackHeight * stackScale) / 2);
-      stackPinAt = docTop(aboutStack) - stackStick;
-      // The bust first shows at the bottom of the view 60% of a screen after they pin.
-      stackExtra = Math.max(0, stackPinAt + vh * 1.6 - (docTop(bust) - stackExtra));
-      aboutStack.style.marginBottom = `calc(var(--section) + ${stackExtra.toFixed(1)}px)`;
-    }
     if (floorsEl) {
       floorsTop = docTop(floorsEl);
       floorsHeight = floorsEl.offsetHeight;
@@ -412,7 +390,7 @@
       scrubTop = docTop(scrubEl);
       scrubHeight = scrubEl.offsetHeight;
     }
-    if (crest) crestTop = docTop(crest);
+    crestRibbons.forEach((ribbon) => { ribbon.top = docTop(ribbon.crest); });
     if (bust) {
       bustTop = docTop(bust);
       bustHeight = bust.offsetHeight || 1;
@@ -427,7 +405,6 @@
     // Lenis caches the page height; keep it honest whenever the layout changes.
     lenis?.resize();
     lastY = -1;
-    if (aboutStack) paint();
   }
 
   function setFootWord(on) {
@@ -461,23 +438,11 @@
     }
     if (crestRibbons.length) {
       // Tucked in by their own width when the crest enters the view, power2.out from there. The reference runs on until
-      // its crest has left; these ribbons carry the name, so they finish as the crest pins and stay readable while it holds.
-      const eased = 1 - (1 - clamp((y + vh - crestTop) / Math.max(1, vh - stackStick))) ** 2;
-      crestRibbons.forEach(({ slide, offset }) => slide.setAttribute('transform', `translate(${(offset * (1 - eased)).toFixed(1)} 0)`));
-    }
-    if (aboutStack && bust) {
-      // The crest and text stay exactly where they are while you scroll, and dissolve as the bust comes up to meet them.
-      const fadeStart = bustTop - (stackStick + stackHeight * stackScale) - vh * 0.04;
-      const fadeEnd = fadeStart + vh * 0.26;
-      const held = clamp(y - stackPinAt, 0, Math.max(0, fadeEnd - stackPinAt));
-      const scale = 1 + (stackScale - 1) * clamp((y - (stackPinAt - vh * 0.3)) / (vh * 0.3));
-      aboutStack.style.transform = `translateY(${held.toFixed(1)}px) scale(${scale.toFixed(4)})`;
-      const gone = clamp((y - fadeStart) / (fadeEnd - fadeStart));
-      aboutStack.style.opacity = (1 - gone * gone * (3 - 2 * gone)).toFixed(3);
-      aboutStack.style.visibility = gone >= 1 ? 'hidden' : '';
-      // The bio fades in over the same scroll as it rises.
-      const shown = clamp((y + vh - bustTop) / (vh * 0.42));
-      bioCard.style.opacity = (shown * shown * (3 - 2 * shown)).toFixed(3);
+      // its crest has left; these ribbons carry the name, so they finish as the crest reaches the top and stay readable.
+      crestRibbons.forEach(({ slide, offset, top }) => {
+        const eased = 1 - (1 - clamp((y + vh - top) / vh)) ** 2;
+        slide.setAttribute('transform', `translate(${(offset * (1 - eased)).toFixed(1)} 0)`);
+      });
     }
     if (bust) {
       // The bust rises out of its plinth as it comes into view, settled by the time it nearly fills the screen.
@@ -485,9 +450,9 @@
       bust.style.setProperty('--bust-y', ((1 - risen) ** 3 * bustHeight * 0.55).toFixed(1));
     }
     if (scrubItems.length) {
-      // From the text's top entering 15% up the view until a third of a screen after it pins, so it finishes standing still.
-      const scrubStart = scrubTop - vh * 0.85;
-      paintScrub(scrubItems, clamp((y - scrubStart) / Math.max(1, stackPinAt + vh * 0.35 - scrubStart)));
+      // From the text's top entering 15% up the view to its bottom reaching 55% down it. The reference ends this at 10% up
+      // the view, which rushes text as small as ours; this also finishes with the first line still clear of the buttons.
+      paintScrub(scrubItems, clamp((y + vh * 0.85 - scrubTop) / Math.max(1, scrubHeight + vh * 0.3)));
     }
     // The word ends the document, so it must trigger within its own height or it never would.
     if (footItems.length) setFootWord(y + vh - Math.min(vh * 0.3, footHeight * 0.6) > footTop);
@@ -514,7 +479,7 @@
     const pause = new IntersectionObserver((entries) => {
       entries.forEach((entry) => entry.target.classList.toggle('is-off', !entry.isIntersecting));
     }, { rootMargin: '10% 0px' });
-    document.querySelectorAll('.hero, .reel, .about, .floors-sticky, .cases, .skills, .education, .panel, .foot')
+    document.querySelectorAll('.hero, .reel, .about, .floors-sticky, .creed, .cases, .skills, .education, .panel, .foot')
       .forEach((section) => pause.observe(section));
 
     const reveal = new IntersectionObserver((entries, observer) => {
