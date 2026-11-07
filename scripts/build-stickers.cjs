@@ -425,7 +425,7 @@ stickers['crest-body'] = { box: crestBox, draw() {
 
 // ---- The detailed illustrations, section by section ----
 const art = {
-  C, INK, shape, line, solid, dot, circle, ink, fill, catmull, smooth, hatch, between, textOn, spiral, curl, crestLeaf, crestStar,
+  C, INK, shape, line, solid, dot, circle, ink, fill, catmull, smooth, hatch, between, textOn,
 };
 const tools = require('./sticker-art/tools.cjs')(art);
 for (const section of ['hero', 'about', 'floors', 'cases', 'finly', 'skills', 'education']) require(`./sticker-art/${section}.cjs`)(stickers, art, tools);

@@ -289,39 +289,15 @@ body:not(.dark-theme) .reel-video{mix-blend-mode:normal;clip-path:inset(1.3% 2.3
 /* On phones the ribbons run off both edges so the shield stays readable. */
 @media (max-width:767px){.crest{--crest-w:170vw;margin-top:calc(var(--crest-w)*.2447*-.14)}}
 /* White engraving on the dark page; the same drawing inverted on the light one. */
-body:not(.dark-theme) .crest,body:not(.dark-theme) .crest-link{filter:invert(1)}
-.crest-link-live{display:none}
-.motion-ready .crest-link-live{display:inline}
-.motion-ready .crest-link-still{display:none}
-.crest-link-drop{fill:#fff}
-.crest-link-body{fill:#fff}
-.crest-link-rib{fill:none;stroke:#000;stroke-linecap:round}
-.crest-link-leaf{fill:#fff}
-.crest-link-vein{fill:none;stroke:#000;stroke-width:1.5;stroke-linecap:round;vector-effect:non-scaling-stroke}
-.crest-link{display:block;position:relative;z-index:2;width:clamp(230px,34vw,calc(100lvh*.62));height:auto;aspect-ratio:600/400;margin:calc(-1.5*var(--u)) auto 0;overflow:visible}
-/* The kicker and quote are revealed by an ink blot growing from the nib, top centre, through a mask. A faint copy waits
-   underneath, and a half-strength copy leads the solid edge slightly, like the wet rim of a spreading stain. */
-.ink-copy{position:absolute;inset:0;padding:inherit;pointer-events:none}
-.ink-copy--dim{opacity:.17}
-.ink-copy--wet{opacity:.55}
-.motion-ready [data-ink]>.ink-layer,.ink-copy--wet{
-  -webkit-mask-image:url('/assets/images/ink-blot.webp');mask-image:url('/assets/images/ink-blot.webp');
-  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:50% 0;mask-position:50% 0;
-  -webkit-mask-size:var(--ink-size,0) var(--ink-size,0);mask-size:var(--ink-size,0) var(--ink-size,0);
-}
-.ink-copy--wet{-webkit-mask-size:var(--ink-wet,0) var(--ink-wet,0);mask-size:var(--ink-wet,0) var(--ink-wet,0)}
-/* The text holds still while the ink spreads, then scrolls on: the extra height of the stage is how long it holds. */
-.motion-ready .ink-stage{padding-bottom:60lvh;margin-bottom:var(--section)}
-.motion-ready .about-head{margin-bottom:0;will-change:transform}
-/* Once it has covered everything the mask comes off, so the text is simply text. */
-.motion-ready [data-ink].inked>.ink-layer{-webkit-mask-image:none;mask-image:none}
-.motion-ready [data-ink].inked>.ink-copy{display:none}
-.about-head{position:relative;padding:calc(.75*var(--u)) var(--gut) 0;text-align:center;margin-bottom:var(--section)}
+body:not(.dark-theme) .crest{filter:invert(1)}
+.about-head{padding:calc(2*var(--u)) var(--gut) 0;text-align:center;margin-bottom:var(--section)}
 .about-head .kicker{margin-bottom:.45em}
 .scrub{font:400 calc(7vw*var(--d))/.847 var(--display);text-transform:uppercase;max-width:70vw;margin-inline:auto;word-spacing:-.065em;letter-spacing:0}
 @media (max-width:767px){.scrub{font-size:calc(38px*var(--d));max-width:none}
   .fp .fp-title{font-size:min(calc(16.3vw*var(--d)),calc((100vw - 2*var(--gut-title))/var(--fit,6)))}
   .case{gap:calc(2*var(--u))}}
+.motion-ready .scrub .ch-s{opacity:.2}
+.motion-ready .scrub .ch-s.on{opacity:1}
 .wd{display:inline-block;white-space:nowrap}
 .ch-s{display:inline-block}
 /* The bio: a printed bust on a plinth, breaking out of the top of a red card, the name split around it. */
