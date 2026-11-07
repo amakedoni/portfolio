@@ -443,3 +443,5 @@ const output = path.resolve(__dirname, '..', 'assets', 'stickers.svg');
 fs.writeFileSync(output, `<svg xmlns="http://www.w3.org/2000/svg">\n${symbols}\n</svg>\n`);
 console.log(Object.entries(rendered).map(([name, body]) => `${name} ${(body.length / 1024).toFixed(1)}KB`).join(', '));
 console.log(`assets/stickers.svg ${(fs.statSync(output).size / 1024).toFixed(0)}KB`);
+// The pages load one file per drawing, cut from this sprite.
+require('./split-stickers.cjs');

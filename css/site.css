@@ -445,7 +445,7 @@ html.lenis,html.lenis body{height:auto}
 /* Five drawers on one screen: a tall spine of giant type, and the open one shows its poster and levels. */
 .tools{--spine:calc(6*var(--u));--tools-gap:6px;--tools-h:min(calc(100lvh - 11*var(--u)),calc(44*var(--u)));container-type:inline-size;display:grid;gap:var(--tools-gap);margin-inline:var(--gut)}
 .tool{background:var(--poster);color:var(--poster-ink);border-radius:calc(1.25*var(--u));overflow:hidden}
-.tool-head{display:contents;font:inherit}
+.tool-head,.tool-slide{display:contents;font:inherit}
 .tool-spine{
   display:flex;align-items:center;justify-content:space-between;gap:var(--u);width:100%;padding:calc(1.25*var(--u));cursor:pointer;
   font:400 calc(4.5*var(--u)*var(--d))/.847 var(--display);text-transform:uppercase;text-align:left;word-spacing:-.065em;letter-spacing:0;scroll-margin-top:calc(5.5*var(--u));
@@ -470,12 +470,25 @@ html.lenis,html.lenis body{height:auto}
 .tool-tag:hover,.tool-tag:focus-visible{background:#000;color:#fff}
 @media (hover:hover){.tool-list li:hover{background:var(--poster-ink);color:var(--poster)}}
 @media (min-width:1001px){
-  .tools.is-live{display:flex;height:var(--tools-h)}
-  .is-live .tool{flex:0 0 var(--spine);display:flex;transition:flex-basis .55s var(--fancy)}
-  .is-live .tool.open{flex-basis:calc(var(--spine) + var(--shelf,1)*(100cqw - 5*var(--spine) - 4*var(--tools-gap)))}
+  /* No drawer ever changes size, so opening one moves no layout and shifts nothing. Each is laid out at its open width
+     and moved only with translate, which the compositor runs: the rounded frame slides to where the drawer's visible
+     edge should be, and the slide inside it moves back by the same amount, so the drawer stays put while its frame opens
+     or trims it back to its spine. --i is its place and --open the open one's, both set by js/ui.js; the drawers after
+     the open one sit a body's width further along. --k is how far open it is. */
+  .tools.is-live{--w:calc(100cqw - 5*var(--spine) - 4*var(--tools-gap));position:relative;height:var(--tools-h);overflow-x:clip}
+  .is-live .tool{
+    --k:0;position:absolute;inset:0 auto 0 0;width:calc(var(--spine) + var(--w));background:none;pointer-events:none;
+    translate:calc(var(--i,0)*(var(--spine) + var(--tools-gap)) + clamp(0,var(--i,0) - var(--open,0),1)*var(--shelf,1)*var(--w) - (1 - var(--k))*var(--w)) 0;
+    transition:translate .55s var(--fancy);
+  }
+  .is-live .tool.open{--k:var(--shelf,1)}
+  .is-live .tool-slide{
+    display:flex;height:100%;background:var(--poster);border-radius:calc(1.25*var(--u));pointer-events:auto;
+    translate:calc((1 - var(--k))*var(--w)) 0;transition:translate .55s var(--fancy);
+  }
   .is-live .tool-spine{flex:none;flex-direction:row-reverse;writing-mode:vertical-rl;rotate:180deg;width:var(--spine);height:100%;padding:calc(1.25*var(--u)) 0;white-space:nowrap}
   /* The body keeps its full width while the drawer moves, so nothing reflows on the way. */
-  .is-live .tool-body{flex:none;width:calc(100cqw - 5*var(--spine) - 4*var(--tools-gap));height:100%}
+  .is-live .tool-body{flex:none;width:var(--w);height:100%}
   .is-live .tool-art{aspect-ratio:auto;min-height:0}
   .is-live .tool:not(.open) .tool-body{visibility:hidden;transition:visibility 0s .55s}
 }
@@ -621,7 +634,7 @@ html.lenis,html.lenis body{height:auto}
 .tool-list li:nth-child(2){--n:1}
 .tool-list li:nth-child(3){--n:2}
 .tool-list li:nth-child(4){--n:3}
-.tools.is-scrubbing .tool{transition:none}
+.tools.is-scrubbing .tool,.tools.is-scrubbing .tool-slide{transition:none}
 .motion-ready .tool.open .tool-art{opacity:var(--art,1);scale:calc(.6 + .4*var(--art,1))}
 .motion-ready .tool.open .tool-list li>*{opacity:clamp(0,var(--rows,1)*4 - var(--n,0),1)}
 /* Opening a drawer by hand is a press, not a scroll, so that one still plays on a timer. */
@@ -657,7 +670,7 @@ html.lenis,html.lenis body{height:auto}
 }
 @media (prefers-reduced-motion:reduce){
   .sticker,.fp .ltr{animation:none}
-  .flip,.flip-box,.bar-panel,.mi,.bar-pill.open .mi,.mi-box,.mi-sub,.mi-sub li,.is-live .tool,.is-live .tool:not(.open) .tool-body,.tool-list li,.tool-tag,.ch-box,.edu-art,.foot-col a::after,.menu-toggle span,.fp-tilt{transition:none}
+  .flip,.flip-box,.bar-panel,.mi,.bar-pill.open .mi,.mi-box,.mi-sub,.mi-sub li,.is-live .tool,.is-live .tool-slide,.is-live .tool:not(.open) .tool-body,.tool-list li,.tool-tag,.ch-box,.edu-art,.foot-col a::after,.menu-toggle span,.fp-tilt{transition:none}
   .flip-box{transform:none}
   .flip-face--alt{display:none}
   .flip-face{transform:none}

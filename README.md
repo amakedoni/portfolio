@@ -52,12 +52,17 @@ node scripts/update-github-stats.mjs   # needs GITHUB_TOKEN or a logged-in gh CL
 
 # The next two need opentype.js and the @fontsource WOFF files, outside this repo:
 NODE_PATH=<dir>/node_modules node scripts/build-stickers.cjs <roboto-flex-instance.ttf>
+
+# Pages load one file per drawing from assets/stickers/, cut from assets/stickers.svg.
+# build-stickers.cjs runs this itself; run it alone after editing the sprite by hand:
+node scripts/split-stickers.cjs
 ```
 
 ## Maintenance Notes
 
 - Bump `CACHE_NAME` in `sw.js` whenever cached files change.
 - Stickers on titles are configured in `STICKERS` at the top of `js/motion.js`, with offsets in em so they scale with the type.
+- Stickers load from `assets/stickers/<id>.svg#<id>`, never from the whole sprite. In the HTML, write them as `<use data-href="…">`: `js/ui.js` fills in `href` as each comes within a screen and a half, so a visitor downloads only what they scroll to. Only the hero's six load at once, and only those are precached.
 - Floor text sits on saturated colour: check contrast when changing a floor's palette. The test suite enforces 4.5:1.
 - Keep `urlsToCache` aligned with files actually used by `index.html` and `404.html`.
 - Update both resume files together so PDF and DOCX downloads stay consistent: change `resume/resume.html` and rebuild both. The PDF build fails if anything runs past a page's margin.

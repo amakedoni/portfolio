@@ -2,6 +2,27 @@
 
 const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+// Drawings below the first screen name their file in data-href, and get it as they come within a screen and a half.
+// Each drawing is its own file (scripts/split-stickers.cjs), so a visitor who never scrolls never downloads them.
+const stickerWatch = 'IntersectionObserver' in window
+  ? new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    stickerWatch.unobserve(entry.target);
+    entry.target.querySelectorAll('use[data-href]').forEach(loadSticker);
+  }), { rootMargin: '150% 0px' })
+  : null;
+function loadSticker(use) {
+  use.setAttribute('href', use.dataset.href);
+  use.removeAttribute('data-href');
+}
+window.PortfolioStickers = {
+  watch(use) {
+    if (stickerWatch) stickerWatch.observe(use.ownerSVGElement || use);
+    else loadSticker(use);
+  },
+};
+document.querySelectorAll('use[data-href]').forEach((use) => window.PortfolioStickers.watch(use));
+
 // Menu: the panel eases open, then rows rise in; closing plays it back in reverse.
 const pill = document.querySelector('.bar-pill');
 const menuBtn = document.querySelector('.menu-toggle');
@@ -96,6 +117,10 @@ if (toolsEl) {
   const stacked = window.matchMedia('(max-width: 1000px)');
   const drawers = [...toolsEl.querySelectorAll('.tool')];
   let lastOpened = -Infinity;
+  // Their places, for the CSS that slides them along on a wide screen.
+  drawers.forEach((drawer, index) => drawer.style.setProperty('--i', String(index)));
+  const markOpen = () => toolsEl.style.setProperty('--open', String(Math.max(0, drawers.findIndex((item) => item.classList.contains('open')))));
+  markOpen();
   const openDrawer = (drawer) => {
     toolsEl.classList.add('is-used');
     drawers.forEach((item) => {
@@ -103,6 +128,7 @@ if (toolsEl) {
       item.classList.toggle('open', open);
       item.querySelector('.tool-spine').setAttribute('aria-expanded', String(open));
     });
+    markOpen();
   };
   toolsEl.classList.add('is-live');
   drawers.forEach((drawer) => {
