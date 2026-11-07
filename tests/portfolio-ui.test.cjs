@@ -1051,6 +1051,34 @@ test('every absolute URL names the www host the site is served from, and the sha
   assert.doesNotMatch(files[2], /#/, 'The sitemap lists pages, not fragments of one');
 });
 
+test('a phone on its side keeps the hero in one screen, with the buttons under the text and scrolling away', async () => {
+  for (const viewport of [{ width: 667, height: 375 }, { width: 844, height: 390 }]) {
+    const { context, page } = await openPage({ viewport, hasTouch: true, isMobile: true });
+    const hero = await page.evaluate(() => ({
+      lede: document.querySelector('.hero-lede').getBoundingClientRect().bottom,
+      dock: document.querySelector('.dock').getBoundingClientRect(),
+      height: document.querySelector('.hero').offsetHeight,
+    }));
+    assert.ok(hero.dock.top > hero.lede, `${viewport.width}: the buttons cover the text (${hero.dock.top} < ${hero.lede})`);
+    assert.ok(hero.dock.bottom <= viewport.height, `${viewport.width}: the buttons fall off the first screen`);
+    assert.ok(hero.height <= viewport.height + 1, `${viewport.width}: the hero is ${hero.height}px on a ${viewport.height}px screen`);
+    await jumpTo(page, viewport.height * 3);
+    const parked = await page.evaluate(() => document.querySelector('.dock').getBoundingClientRect().bottom);
+    assert.ok(parked < 0, `${viewport.width}: the buttons stayed on screen, taking room from the content`);
+    await context.close();
+  }
+});
+
+test('touch controls are at least a fingertip in size', async () => {
+  const { context, page } = await openPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  const small = await page.evaluate(() => ['.menu-toggle', '.scroll-to-top', '.foot-col a'].flatMap((selector) => [...document.querySelectorAll(selector)])
+    .map((el) => ({ el, box: el.getBoundingClientRect() }))
+    .filter(({ box }) => box.width < 44 || box.height < 44)
+    .map(({ el, box }) => `${el.className || el.textContent.trim()} ${Math.round(box.width)}x${Math.round(box.height)}`));
+  assert.deepEqual(small, []);
+  await context.close();
+});
+
 test('a parked button flips in front of the top bar', async () => {
   const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
   await page.evaluate(() => window.scrollTo(0, 1600));

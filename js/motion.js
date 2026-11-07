@@ -371,6 +371,8 @@
   let bustTop = 0;
   let bustHeight = 1;
   let footTop = 0;
+  // Matches the CSS that leaves the buttons under the hero on a phone, upright or on its side.
+  const dockScrolls = window.matchMedia('(max-width: 640px), (max-height: 500px)');
   let dockH = 52;
   let dockParked = 66;
   let unit = 16;
@@ -658,7 +660,7 @@
     if (y === lastY) return;
     lastY = y;
 
-    if (dock && vw > 640) {
+    if (dock && !dockScrolls.matches) {
       dock.style.setProperty('--dock-y', `${Math.max(dockParked, vh - dockH - unit - y)}px`);
     }
     if (floorsEl && panels.length) {
