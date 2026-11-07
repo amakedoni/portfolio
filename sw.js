@@ -1,10 +1,11 @@
 // Service Worker для базового офлайн-режима
-const CACHE_NAME = 'portfolio-v2.19.24';
+const CACHE_NAME = 'portfolio-v2.19.25';
 const urlsToCache = [
   '/',
   '/index.html',
   '/404.html',
-  '/assets/images/favicon.webp',
+  '/assets/images/favicon.svg',
+  '/assets/images/favicon-192.png',
   '/manifest.json',
   '/assets/icons.svg',
   '/css/site.css',

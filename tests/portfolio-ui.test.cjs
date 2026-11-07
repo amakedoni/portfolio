@@ -317,6 +317,10 @@ test('swapped letters stay put, sit on eligible letters, and never under a stick
 test('anchor links land with the heading clear of the fixed navigation', async () => {
   const { context, page } = await openPage();
   for (const [link, heading] of [['.dock a[href="#projects"]', '.fp--finly .fp-kicker'], ['.dock a[href="#contact"]', '#contact .panel-title']]) {
+    // After the first jump the buttons have folded away; once the page settles, reaching for the top brings them back.
+    await page.waitForFunction(() => !document.documentElement.classList.contains('lenis-scrolling'));
+    await page.mouse.move(700, 30, { steps: 3 });
+    await page.waitForFunction(() => !document.querySelector('.dock').classList.contains('is-tucked'));
     await page.locator(link).click();
     await page.waitForFunction((selector) => {
       const top = document.querySelector(selector).getBoundingClientRect().top;
@@ -958,6 +962,39 @@ test('the quote fills in slowly, letter by letter, and finishes on screen', { ti
   await context.close();
 });
 
+test('the dock folds away reading down the page and unfolds on the way back up', async () => {
+  const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
+  const tucked = () => page.locator('.dock').evaluate((el) => el.classList.contains('is-tucked'));
+  await page.mouse.move(700, 600);
+  for (let y = 0; y <= 600; y += 120) await jumpTo(page, y);
+  assert.equal(await tucked(), false, 'On the hero the buttons stay out');
+  for (let y = 1200; y <= 2400; y += 120) await jumpTo(page, y);
+  assert.equal(await tucked(), true, 'Reading down folds them away');
+  await page.waitForTimeout(700);
+  assert.equal(await page.locator('.dock .flip').first().evaluate((el) => getComputedStyle(el).opacity), '0');
+  for (let y = 2400; y >= 2280; y -= 20) await jumpTo(page, y);
+  assert.equal(await tucked(), false, 'A short scroll up brings them back');
+  for (let y = 2400; y <= 3600; y += 120) await jumpTo(page, y);
+  assert.equal(await tucked(), true);
+  await page.mouse.move(700, 40, { steps: 4 });
+  assert.equal(await tucked(), false, 'Reaching for the top of the screen brings them back');
+  await jumpTo(page, 4800);
+  await page.keyboard.press('Tab');
+  await context.close();
+});
+
+test('the favicon is the helmet logo, and the reel starts without downloading to the end', async () => {
+  const icons = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  assert.match(icons, /rel="icon" type="image\/svg\+xml" href="\/assets\/images\/favicon\.svg"/);
+  assert.doesNotMatch(icons, /favicon\.webp/);
+  const svg = fs.readFileSync(path.join(root, 'assets', 'images', 'favicon.svg'), 'utf8');
+  const logo = fs.readFileSync(path.join(root, 'assets', 'logo.svg'), 'utf8');
+  assert.ok(svg.includes(logo.match(/d="([^"]{40})/)[1]), 'The favicon draws the same helmet as the logo');
+  const reel = fs.readFileSync(path.join(root, 'assets', 'videos', 'reel.mp4'));
+  const first = reel.readUInt32BE(0);
+  assert.equal(reel.toString('latin1', first + 4, first + 8), 'moov', 'The index sits right after the header');
+});
+
 test('a parked button flips in front of the top bar', async () => {
   const { context, page } = await openPage({ viewport: { width: 1440, height: 900 } });
   await page.evaluate(() => window.scrollTo(0, 1600));
@@ -966,6 +1003,8 @@ test('a parked button flips in front of the top bar', async () => {
     return document.querySelector('.dock').getBoundingClientRect().top - bar.bottom < 2;
   });
   const order = () => page.evaluate(() => [getComputedStyle(document.querySelector('.dock')).zIndex, getComputedStyle(document.querySelector('.bar')).zIndex].map(Number));
+  await page.evaluate(() => window.scrollTo(0, 1560));
+  await page.waitForFunction(() => !document.querySelector('.dock').classList.contains('is-tucked'));
   await page.locator('.dock .flip').first().hover();
   const [dock, bar] = await order();
   assert.ok(dock > bar, `Dock ${dock} should sit above bar ${bar} while a button flips`);

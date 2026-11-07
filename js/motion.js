@@ -368,6 +368,11 @@
   let bustHeight = 1;
   let footTop = 0;
   let dockH = 52;
+  // Distance scrolled one way since the last change of direction, and the threshold for each response.
+  let dockRun = 0;
+  let dockLastY = 0;
+  const TUCK_AFTER = 60;
+  const SHOW_AFTER = 24;
   let dockParked = 66;
   let unit = 16;
   let lastY = -1;
@@ -649,13 +654,27 @@
     });
   }
 
+  function setDockTucked(tucked) {
+    if (dock.classList.contains('is-tucked') !== tucked) dock.classList.toggle('is-tucked', tucked);
+  }
+
   function paint() {
     const y = window.scrollY;
     if (y === lastY) return;
     lastY = y;
 
     if (dock && vw > 640) {
-      dock.style.setProperty('--dock-y', `${Math.max(dockParked, vh - dockH - unit - y)}px`);
+      const free = vh - dockH - unit - y;
+      dock.style.setProperty('--dock-y', `${Math.max(dockParked, free)}px`);
+      // Only once parked under the bar: on the hero the buttons are the way in.
+      const step = y - dockLastY;
+      dockLastY = y;
+      if (free > dockParked) setDockTucked(false);
+      else {
+        dockRun = Math.sign(step) === Math.sign(dockRun) ? dockRun + step : step;
+        if (dockRun > TUCK_AFTER) setDockTucked(true);
+        else if (dockRun < -SHOW_AFTER) setDockTucked(false);
+      }
     }
     if (floorsEl && panels.length) {
       const progress = clamp((y - floorsTop) / Math.max(1, floorsHeight - vh));
@@ -793,6 +812,10 @@
     bindTilt();
     shakeCrestRibbons();
 
+    // Reaching for the top of the screen brings the buttons back without scrolling.
+    window.addEventListener('pointermove', (event) => {
+      if (dock && event.pointerType === 'mouse' && event.clientY < dockParked + 24) setDockTucked(false);
+    }, { passive: true });
     window.addEventListener('resize', measure);
     if ('ResizeObserver' in window) new ResizeObserver(measure).observe(document.body);
     requestAnimationFrame(loop);

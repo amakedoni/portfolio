@@ -12,8 +12,8 @@ Static personal portfolio for [amakedoni.com](https://amakedoni.com/). The site 
 - `assets/images/bust.webp` - the About portrait, printed from `photo-alt.jpg` by `scripts/build-portrait.py` (needs numpy, opencv-python-headless and pillow).
 - `assets/images/floor-*.webp` - the photos in the floor shapes, AI-generated and illustrative rather than records of real events or hardware.
 - `assets/stickers.svg` - generated illustration sprite. The crest is in `scripts/build-stickers.cjs`; every other drawing is in `scripts/sticker-art/`, one file per site section.
-- `assets/videos/reel.mp4` - the reel, generated with Gemini. The video stream is the untouched original (`-c:v copy -an -movflags +faststart`): do not re-encode it. `assets/images/reel-poster.jpg` is its still.
-- `assets/logo.svg` - the helmet mark.
+- `assets/videos/reel.mp4` - the reel, generated and upscaled with Gemini. The video stream is the untouched original: `scripts/remux-reel.py` only drops its sound track and moves the index to the front, as `ffmpeg -c:v copy -an -movflags +faststart` would. Do not re-encode it. `assets/images/reel-poster.jpg` is its still.
+- `assets/logo.svg` - the helmet mark. `assets/images/favicon.svg` is the same mark on a black tile; the PNGs beside it are renders of it for browsers and home screens that need bitmaps.
 - `assets/data/github.json` - generated GitHub statistics.
 - `assets/` also holds icons, images and `fonts/` (SIL OFL, see `assets/fonts/LICENSES.txt`).
 - `scripts/` - generators for the three files above.

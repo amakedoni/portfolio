@@ -203,7 +203,12 @@ html.lenis,html.lenis body{height:auto}
 }
 /* Parked under the bar, a flipping button turns over in front of it, not behind it. */
 .dock:has(.flip:hover),.dock:has(.flip:focus-visible){z-index:61}
-.dock .flip{display:block;--face:3.5em}
+.dock .flip{display:block;--face:3.5em;transform-origin:50% 0;transition:rotate .3s var(--fancy),transform .5s var(--fancy) var(--tuck-delay,0ms),opacity .3s linear var(--tuck-delay,0ms)}
+/* Reading down the page, the buttons fold up into the bar one after another; scrolling back up unfolds them. */
+.dock .flip:nth-child(2){--tuck-delay:50ms}
+.dock .flip:nth-child(3){--tuck-delay:100ms}
+.dock.is-tucked .flip{transform:perspective(500px) rotateX(-92deg);opacity:0;pointer-events:none}
+.dock.is-tucked:focus-within .flip{transform:none;opacity:1;pointer-events:auto}
 .dock .flip-face{padding-inline:.3em;white-space:normal;text-align:center;line-height:1.1}
 .motion-ready .dock{bottom:auto;top:0;transform:translateY(var(--dock-y,0));will-change:transform}
 @media (max-width:640px){
@@ -656,7 +661,7 @@ html.lenis,html.lenis body{height:auto}
 }
 @media (prefers-reduced-motion:reduce){
   .sticker,.fp .ltr{animation:none}
-  .flip,.flip-box,.bar-panel,.mi,.bar-pill.open .mi,.mi-box,.mi-sub,.mi-sub li,.is-live .tool,.is-live .tool:not(.open) .tool-body,.tool-list li,.tool-tag,.ch-box,.edu-art,.foot-col a::after,.menu-toggle span,.fp-tilt{transition:none}
+  .flip,.flip-box,.bar-panel,.mi,.bar-pill.open .mi,.mi-box,.mi-sub,.mi-sub li,.dock .flip,.is-live .tool,.is-live .tool:not(.open) .tool-body,.tool-list li,.tool-tag,.ch-box,.edu-art,.foot-col a::after,.menu-toggle span,.fp-tilt{transition:none}
   .flip-box{transform:none}
   .flip-face--alt{display:none}
   .flip-face{transform:none}
